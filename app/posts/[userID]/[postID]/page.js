@@ -1,50 +1,43 @@
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-// ------------------------
-// 1. 静的生成用（全投稿ページをビルド時に生成）
-// ------------------------
-export async function generateStaticParams() {
-  const usersSnap = await getDocs(collection(db, "users"));
-  const paths = [];
+// fallback画像
+const fallbackProfilePhoto =
+  "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
+const fallbackOGP =
+  "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
-  for (const userDoc of usersSnap.docs) {
-    const postsSnap = await getDocs(collection(db, "users", userDoc.id, "posts"));
-    for (const postDoc of postsSnap.docs) {
-      paths.push({ userID: userDoc.id, postID: postDoc.id });
-    }
-  }
-
-  return paths; // [{ userID, postID }, ...]
-}
-
-// ------------------------
-// 2. SEO情報
-// ------------------------
+// 動的メタデータ生成（OGP用）
 export async function generateMetadata({ params }) {
   const { userID, postID } = params;
   const postRef = doc(db, "users", userID, "posts", postID);
   const postSnap = await getDoc(postRef);
 
   if (!postSnap.exists()) {
-    return { title: "投稿が見つかりません" };
+    return { title: "投稿が見つかりません | KAIWAI" };
   }
 
   const post = postSnap.data();
+
+  const ogImage = post.postPhoto || fallbackOGP;
+
   return {
-    title: post.postDescription,
-    description: post.postContent?.slice(0, 120) || "",
+    title: post.postDescription || "KAIWAI 投稿",
+    description: post.postContent || "KAIWAIの投稿",
     openGraph: {
-      title: post.postDescription,
-      description: post.postContent?.slice(0, 120) || "",
-      type: "article",
+      title: post.postDescription || "KAIWAI 投稿",
+      description: post.postContent || "KAIWAIの投稿",
+      images: [ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.postDescription || "KAIWAI 投稿",
+      description: post.postContent || "KAIWAIの投稿",
+      images: [ogImage],
     },
   };
 }
 
-// ------------------------
-// 3. 投稿ページ本体
-// ------------------------
 export default async function PostPage({ params }) {
   const { userID, postID } = params;
 
@@ -53,7 +46,11 @@ export default async function PostPage({ params }) {
   const postSnap = await getDoc(postRef);
 
   if (!postSnap.exists()) {
-    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>投稿が見つかりません</div>;
+    return (
+      <div style={{ padding: "2rem", fontSize: "1.5rem" }}>
+        投稿が見つかりません
+      </div>
+    );
   }
 
   const post = postSnap.data();
@@ -80,27 +77,32 @@ export default async function PostPage({ params }) {
   }
 
   return (
-    <div style={{
-      maxWidth: "600px",
-      margin: "2rem auto",
-      padding: "1.5rem",
-      border: "1px solid #ddd",
-      borderRadius: "12px",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-      backgroundColor: "#fff",
-      fontFamily: "Arial, sans-serif",
-      position: "relative"
-    }}>
+    <div
+      style={{
+        maxWidth: "600px",
+        margin: "2rem auto",
+        padding: "1.5rem",
+        border: "1px solid #ddd",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+        backgroundColor: "#fff",
+        fontFamily: "Arial, sans-serif",
+        position: "relative",
+      }}
+    >
       {/* 投稿者情報 */}
       {profileData && (
         <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-          {profileData.photo && (
-            <img
-              src={profileData.photo}
-              alt={profileData.name}
-              style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
-            />
-          )}
+          <img
+            src={profileData.photo || fallbackProfilePhoto}
+            alt={profileData.name || "ユーザー"}
+            style={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              marginRight: "0.75rem",
+            }}
+          />
           <span style={{ fontWeight: "500", fontSize: "1.1rem", color: "#333" }}>
             {profileData.name}
           </span>
@@ -108,9 +110,29 @@ export default async function PostPage({ params }) {
       )}
 
       {/* 投稿タイトル */}
-      <h1 style={{ fontSize: "1.1rem", fontWeight: "300", marginBottom: "2.2rem", color: "#333" }}>
+      <h1
+        style={{
+          fontSize: "1.1rem",
+          fontWeight: "300",
+          marginBottom: post.postPhoto ? "1rem" : "2.2rem",
+          color: "#333",
+        }}
+      >
         {post.postDescription}
       </h1>
+
+      {/* 投稿写真 */}
+      {post.postPhoto && (
+        <img
+          src={post.postPhoto}
+          alt="投稿画像"
+          style={{
+            width: "100%",
+            borderRadius: "8px",
+            marginBottom: "1.5rem",
+          }}
+        />
+      )}
 
       {/* 投稿本文 */}
       {post.postContent && (
@@ -121,13 +143,15 @@ export default async function PostPage({ params }) {
 
       {/* 投稿日時（右下） */}
       {formattedTime && (
-        <div style={{
-          position: "absolute",
-          bottom: "1.5rem",
-          right: "1.8em",
-          fontSize: "0.95rem",
-          color: "#888"
-        }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "1.5rem",
+            right: "1.8em",
+            fontSize: "0.95rem",
+            color: "#888",
+          }}
+        >
           {formattedTime}
         </div>
       )}
