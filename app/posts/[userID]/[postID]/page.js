@@ -155,10 +155,22 @@ export default async function PostPage({ params }) {
         </h1>
         <div style={{ display: "flex", gap: "0.25rem" }}>
           <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-            <Image src="/apple.svg" alt="App Store" width={28} height={28} />
+            <Image
+  src="/apple.svg"
+  alt="App Store"
+  width={56} // ← 実際に表示したい大きさの2倍
+  height={56}
+  style={{ width: 28, height: 28 }} // ← 表示サイズは小さく
+/>
           </a>
           <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
-            <Image src="/googleplay.svg" alt="Google Play" width={28} height={28} />
+            <Image
+  src="/googleplay.svg"
+  alt="App Store"
+  width={56} // ← 実際に表示したい大きさの2倍
+  height={56}
+  style={{ width: 28, height: 28 }} // ← 表示サイズは小さく
+/>
           </a>
         </div>
       </header>
