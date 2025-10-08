@@ -127,10 +127,10 @@ export default async function PostPage({ params }) {
 
         {/* 中央：タイトル */}
         <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem" }}>
-          <span style={{ fontSize: "1.3rem", fontWeight: "500", color: "#222" }}>
+          <span style={{ fontSize: "1.2rem", fontWeight: "600", color: "#222" }}>
             {kaiwaiName}
           </span>
-          <span style={{ fontSize: "1.1rem", fontWeight: "500", color: "#222" }}>
+          <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
             kaiwai
           </span>
         </h1>
@@ -262,7 +262,7 @@ export default async function PostPage({ params }) {
           fontWeight: "500",
           margin: 0,
           color: "#222",
-          fontFamily: "'Urbanist','Montserrat',sans-serif",
+         fontFamily: "Arial, sans-serif",
         }}
       >
         {profileData.name} の他の投稿
@@ -288,7 +288,8 @@ export default async function PostPage({ params }) {
           <div
             key={idx}
             style={{
-              padding: "1.3rem",
+              padding: "1rem",
+              paddingTop: "0rem",
               border: "1px solid #ddd",
               borderRadius: "12px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
@@ -303,6 +304,7 @@ export default async function PostPage({ params }) {
                 fontWeight: "400",
                 marginBottom: other.postPhoto ? "1rem" : "2rem",
                 color: "#333",
+                fontFamily: "'Urbanist','Montserrat',sans-serif",
               }}
             >
               {other.postDescription}
@@ -337,6 +339,7 @@ export default async function PostPage({ params }) {
                   right: "1.2rem",
                   fontSize: "0.9rem",
                   color: "#888",
+                  fontFamily: "'Urbanist','Montserrat',sans-serif",
                 }}
               >
                 {formattedOtherTime}
