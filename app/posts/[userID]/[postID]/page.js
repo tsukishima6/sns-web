@@ -1,6 +1,7 @@
 import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Image from "next/image";
+import Link from "next/link"; // ← 追加
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -23,10 +24,12 @@ export async function generateMetadata({ params }) {
 
   // 投稿者プロフィール取得
   let profileData = null;
+  let profileID = "";
   if (post.postUser_profile) {
     const profileSnap = await getDoc(post.postUser_profile);
     if (profileSnap.exists()) {
       profileData = profileSnap.data();
+      profileID = post.postUser_profile.id; // ← profileID取得
     }
   }
 
@@ -39,7 +42,6 @@ export async function generateMetadata({ params }) {
     }
   }
 
-  // description をカスタマイズ
   const description =
     `${profileData?.name || "ユーザー"}：${post.postDescription || ""} @${kaiwaiName}kaiwai`;
 
@@ -68,21 +70,19 @@ export default async function PostPage({ params }) {
   const postSnap = await getDoc(postRef);
 
   if (!postSnap.exists()) {
-    return (
-      <div style={{ padding: "2rem", fontSize: "1.5rem" }}>
-        投稿が見つかりません
-      </div>
-    );
+    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>投稿が見つかりません</div>;
   }
 
   const post = postSnap.data();
 
   // 投稿者プロフィール取得
   let profileData = null;
+  let profileID = "";
   if (post.postUser_profile) {
     const profileSnap = await getDoc(post.postUser_profile);
     if (profileSnap.exists()) {
       profileData = profileSnap.data();
+      profileID = post.postUser_profile.id; // ← profileID取得
     }
   }
 
@@ -95,7 +95,6 @@ export default async function PostPage({ params }) {
     }
   }
 
-  // 投稿日時フォーマット関数
   const formatTime = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate();
@@ -142,6 +141,7 @@ export default async function PostPage({ params }) {
             maxWidth: "960px",
             margin: "0 auto",
             padding: "0.8rem 1rem",
+            paddingTop: "1.2rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -158,38 +158,22 @@ export default async function PostPage({ params }) {
             />
           </div>
           <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 }}>
-            <span style={{ fontSize: "1.2rem", fontWeight: "600", color: "#222" }}>
-              {kaiwaiName}
-            </span>
-            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
-              kaiwai
-            </span>
+            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>{kaiwaiName}</span>
+            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>kaiwai</span>
           </h1>
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-              <img
-                src="/apple.svg"
-                alt="App Store"
-                width={56}
-                height={56}
-                style={{ width: 28, height: 28 }}
-              />
+              <img src="/apple.svg" alt="App Store" width={56} height={56} style={{ width: 28, height: 28 }} />
             </a>
             <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
-              <img
-                src="/googleplay.svg"
-                alt="Google Play"
-                width={56}
-                height={56}
-                style={{ width: 28, height: 28 }}
-              />
+              <img src="/googleplay.svg" alt="Google Play" width={56} height={56} style={{ width: 28, height: 28 }} />
             </a>
           </div>
         </div>
       </header>
 
-      {/* コンテンツ全体にヘッダー分の余白を追加 */}
-      <div style={{ paddingTop: "70px" }}>
+      {/* コンテンツ */}
+      <div style={{ paddingTop: "80px" }}>
         {/* メイン投稿カード */}
         <div
           style={{
@@ -208,26 +192,21 @@ export default async function PostPage({ params }) {
         >
           {/* 投稿者情報 */}
           {profileData && (
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img
-                src={profileData.photo || fallbackProfilePhoto}
-                alt={profileData.name || "ユーザー"}
-                style={{
-                  width: "50px",
-                  height: "54px",
-                  borderRadius: "50%",
-                  marginRight: "0.75rem",
-                }}
-              />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>
-                  {profileData.name}
-                </span>
-                <span style={{ fontSize: "0.8rem", color: "#666", fontFamily: "Urbanist" }}>
-                  @{profileData.ID || userID}
-                </span>
+            <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
+                <img
+                  src={profileData.photo || fallbackProfilePhoto}
+                  alt={profileData.name || "ユーザー"}
+                  style={{ width: "50px", height: "54px", borderRadius: "50%", marginRight: "0.75rem" }}
+                />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>{profileData.name}</span>
+                  <span style={{ fontSize: "0.8rem", color: "#666", fontFamily: "Urbanist" }}>
+                    @{profileData.ID || userID}
+                  </span>
+                </div>
               </div>
-            </div>
+            </Link>
           )}
 
           {/* 投稿タイトル */}
@@ -244,19 +223,11 @@ export default async function PostPage({ params }) {
 
           {/* 投稿写真 */}
           {post.postPhoto && (
-            <img
-              src={post.postPhoto}
-              alt="投稿画像"
-              style={{ width: "100%", borderRadius: "8px", marginBottom: "1.5rem" }}
-            />
+            <img src={post.postPhoto} alt="投稿画像" style={{ width: "100%", borderRadius: "8px", marginBottom: "1.5rem" }} />
           )}
 
           {/* 投稿本文 */}
-          {post.postContent && (
-            <p style={{ fontSize: "1.2rem", lineHeight: "1.6", color: "#555" }}>
-              {post.postContent}
-            </p>
-          )}
+          {post.postContent && <p style={{ fontSize: "1.2rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>}
 
           {/* 投稿日時 */}
           {post.timePosted && (
@@ -277,36 +248,27 @@ export default async function PostPage({ params }) {
 
         {/* 他の投稿 */}
         {profileData && (
-          <div
-            style={{
-              maxWidth: "600px",
-              margin: "2rem auto",
-              padding: "0 0.8rem",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img
-                src={profileData.photo || fallbackProfilePhoto}
-                alt={profileData.name || "ユーザー"}
-                style={{
-                  width: "42px",
-                  height: "47px",
-                  borderRadius: "50%",
-                  marginRight: "0.6rem",
-                }}
-              />
-              <h3
-                style={{
-                  fontSize: "1.0rem",
-                  fontWeight: "500",
-                  margin: 0,
-                  color: "#222",
-                  fontFamily: "Arial, sans-serif",
-                }}
-              >
-                {profileData.name} の他の投稿
-              </h3>
-            </div>
+          <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "0 0.8rem" }}>
+            <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
+                <img
+                  src={profileData.photo || fallbackProfilePhoto}
+                  alt={profileData.name || "ユーザー"}
+                  style={{ width: "42px", height: "47px", borderRadius: "50%", marginRight: "0.6rem" }}
+                />
+                <h3
+                  style={{
+                    fontSize: "1.0rem",
+                    fontWeight: "500",
+                    margin: 0,
+                    color: "#222",
+                    fontFamily: "Arial, sans-serif",
+                  }}
+                >
+                  {profileData.name} の他の投稿
+                </h3>
+              </div>
+            </Link>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               {otherPosts.map((other, idx) => {
@@ -353,9 +315,7 @@ export default async function PostPage({ params }) {
                       />
                     )}
                     {other.postContent && (
-                      <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>
-                        {other.postContent}
-                      </p>
+                      <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{other.postContent}</p>
                     )}
                     {formattedOtherTime && (
                       <div
