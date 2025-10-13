@@ -211,8 +211,8 @@ export default async function KaiwaiPage({ params }) {
                         src={post.profile.photo || fallbackProfilePhoto}
                         alt={post.profile.name || "ユーザー"}
                         style={{
-                          width: "46px",
-                          height: "46px",
+                          width: "48px",
+                          height: "48px",
                           borderRadius: "50%",
                           marginRight: "0.75rem",
                           objectFit: "cover",

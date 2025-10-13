@@ -229,7 +229,7 @@ export default async function PostPage({ params }) {
                 <img
                   src={profileData.photo || fallbackProfilePhoto}
                   alt={profileData.name || "ユーザー"}
-                  style={{ width: "55px", height: "55px", borderRadius: "50%", marginRight: "0.75rem" }}
+                  style={{ width: "55px", height: "58px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>{profileData.name}</span>
@@ -286,7 +286,7 @@ export default async function PostPage({ params }) {
                 <img
                   src={profileData.photo || fallbackProfilePhoto}
                   alt={profileData.name || "ユーザー"}
-                  style={{ width: "45px", height: "45px", borderRadius: "50%", marginRight: "0.6rem" }}
+                  style={{ width: "43px", height: "46px", borderRadius: "50%", marginRight: "0.6rem" }}
                 />
                 <h3
                   style={{

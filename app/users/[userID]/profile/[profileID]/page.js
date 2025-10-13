@@ -168,13 +168,13 @@ export default async function ProfilePage({ params }) {
           alt={profile.name || "ユーザー"}
           style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover" }}
         />
-        <h2 style={{ margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "Arial , Urbanist" , margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center" }}>
           {profile.name}
         </h2>
         <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "#666", margin: "0rem 0", textAlign: "center" }}>
           @{profile.ID}
         </p>
-        <p style={{ fontSize: "1rem", color: "#444", margin: "1.1rem 0", textAlign: "center" }}>
+        <p style={{ fontFamily: "Arial , Urbanist" , fontSize: "1rem", color: "#444", marginTop: "1.0rem", textAlign: "center" }}>
           {profile.bio && profile.bio.trim() !== "" ? profile.bio : "よろしくお願いします。"}
         </p>
       </div>
@@ -221,10 +221,10 @@ export default async function ProfilePage({ params }) {
                   }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "#333" }}>
                     {profile.name}
                   </span>
-                  <span style={{ fontSize: "1.0rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "0.9rem", color: "#666", fontFamily: "Urbanist" }}>
                     @{profile.ID || userID}
                   </span>
                 </div>
