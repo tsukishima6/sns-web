@@ -9,6 +9,18 @@ const fallbackProfilePhoto =
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
+// 日付フォーマット関数
+function formatDate(timestamp) {
+  if (!timestamp) return "";
+  const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  return `${y}年${m}月${d}日 ${hh}:${mm}`;
+}
+
 // 動的メタデータ生成
 export async function generateMetadata({ params }) {
   const { userID, profileID } = params;
@@ -23,10 +35,12 @@ export async function generateMetadata({ params }) {
 
   // kaiwai の name を取得
   let kaiwaiName = "";
+  let kaiwaiID = "";
   if (profile.kaiwai) {
     const kaiwaiSnap = await getDoc(profile.kaiwai);
     if (kaiwaiSnap.exists()) {
       kaiwaiName = kaiwaiSnap.data().name || "";
+      kaiwaiID = kaiwaiSnap.id;
     }
   }
 
@@ -60,12 +74,14 @@ export default async function ProfilePage({ params }) {
 
   const profile = profileSnap.data();
 
-  // kaiwai の name を取得（ヘッダー用）
+  // kaiwai の name と id を取得（ヘッダー用）
   let kaiwaiName = "";
+  let kaiwaiID = "";
   if (profile.kaiwai) {
     const kaiwaiSnap = await getDoc(profile.kaiwai);
     if (kaiwaiSnap.exists()) {
       kaiwaiName = kaiwaiSnap.data().name || "";
+      kaiwaiID = kaiwaiSnap.id;
     }
   }
 
@@ -82,7 +98,7 @@ export default async function ProfilePage({ params }) {
 
   return (
     <>
-      {/* 固定ヘッダー（投稿ページと同じ） */}
+      {/* 固定ヘッダー */}
       <header
         style={{
           width: "100%",
@@ -116,14 +132,16 @@ export default async function ProfilePage({ params }) {
               style={{ objectFit: "contain" }}
             />
           </div>
-          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 }}>
-            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
-              {kaiwaiName}
-            </span>
-            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
-              kaiwai
-            </span>
-          </h1>
+          <Link href={`/kaiwai/${kaiwaiID}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 }}>
+              <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
+                {kaiwaiName}
+              </span>
+              <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
+                kaiwai
+              </span>
+            </h1>
+          </Link>
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
               <img src="/apple.svg" alt="App Store" width={56} height={56} style={{ width: 28, height: 28 }} />
@@ -138,11 +156,11 @@ export default async function ProfilePage({ params }) {
       {/* プロフィール本体 */}
       <div
         style={{
-          marginTop: "6rem", // ヘッダー分
+          marginTop: "6rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "2rem 1rem",
+          padding: "0.8rem 1rem",
         }}
       >
         <img
@@ -150,13 +168,13 @@ export default async function ProfilePage({ params }) {
           alt={profile.name || "ユーザー"}
           style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover" }}
         />
-        <h2 style={{ margin: "0.2rem", marginTop: "1.4rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center" }}>
+        <h2 style={{ margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center" }}>
           {profile.name}
         </h2>
-        <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "#666", margin: "0.3rem 0", textAlign: "center" }}>
+        <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "#666", margin: "0rem 0", textAlign: "center" }}>
           @{profile.ID}
         </p>
-        <p style={{ fontSize: "1rem", color: "#444", margin: "0.2rem 0", textAlign: "center" }}>
+        <p style={{ fontSize: "1rem", color: "#444", margin: "1.1rem 0", textAlign: "center" }}>
           {profile.bio && profile.bio.trim() !== "" ? profile.bio : "よろしくお願いします。"}
         </p>
       </div>
@@ -195,8 +213,8 @@ export default async function ProfilePage({ params }) {
                   src={profile.photo || fallbackProfilePhoto}
                   alt={profile.name || "ユーザー"}
                   style={{
-                    width: "50px",
-                    height: "54px",
+                    width: "52px",
+                    height: "56px",
                     borderRadius: "50%",
                     marginRight: "0.75rem",
                     objectFit: "cover",
@@ -206,7 +224,7 @@ export default async function ProfilePage({ params }) {
                   <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>
                     {profile.name}
                   </span>
-                  <span style={{ fontSize: "0.8rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "1.0rem", color: "#666", fontFamily: "Urbanist" }}>
                     @{profile.ID || userID}
                   </span>
                 </div>
@@ -232,6 +250,22 @@ export default async function ProfilePage({ params }) {
               )}
               {post.postContent && (
                 <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>
+              )}
+
+              {/* 投稿日時 */}
+              {post.timePosted && (
+                <p
+                  style={{
+                    position: "absolute",
+                    right: "1rem",
+                    bottom: "0.6rem",
+                    fontSize: "1.0rem",
+                    color: "#888",
+                    fontFamily: "Urbanist",
+                  }}
+                >
+                  {formatDate(post.timePosted)}
+                </p>
               )}
             </div>
           </Link>

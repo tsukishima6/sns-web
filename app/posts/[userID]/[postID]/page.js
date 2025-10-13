@@ -197,11 +197,11 @@ export default async function PostPage({ params }) {
                 <img
                   src={profileData.photo || fallbackProfilePhoto}
                   alt={profileData.name || "ユーザー"}
-                  style={{ width: "50px", height: "54px", borderRadius: "50%", marginRight: "0.75rem" }}
+                  style={{ width: "53px", height: "60px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>{profileData.name}</span>
-                  <span style={{ fontSize: "0.8rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "1.0rem", color: "#666", fontFamily: "Urbanist" }}>
                     @{profileData.ID || userID}
                   </span>
                 </div>
