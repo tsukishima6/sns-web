@@ -1,5 +1,5 @@
 import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "../../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link"; // ← 追加
 

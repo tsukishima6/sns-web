@@ -157,7 +157,7 @@ if (kaiwai.parent) {
       </header>
 
       {/* コンテンツ */}
-      <div style={{  marginTop: "70px", paddingTop: "90px", maxWidth: "720px", margin: "0 auto", padding: "1rem" }}>
+      <div style={{  maxWidth: "720px", padding: "4.5rem 1rem" }}>
         <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: "1.0rem",marginBottom: "0.7rem", lineHeight: "1.6" }}>
           {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。<br />
           他の界隈・アカウント作成は公式アプリから
