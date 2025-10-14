@@ -1,5 +1,6 @@
 import { Urbanist, Montserrat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script"; // ← GA用に追加
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 
 const urbanist = Urbanist({
   subsets: ["latin"],
-  weight: ["400", "700"], // 必要な太さを指定
+  weight: ["400", "700"],
 });
 
 const montserrat = Montserrat({
@@ -33,6 +34,20 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-3KDYD7ZX5X"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-3KDYD7ZX5X');
+          `}
+        </Script>
       </body>
     </html>
   );
