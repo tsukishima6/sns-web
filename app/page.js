@@ -82,8 +82,8 @@ export default async function HomePage() {
             />
           </div>
 
-          <div style={{ marginLeft: "1rem", display: "flex", alignItems: "center", gap: "0.2rem" }}>
-            <h1 style={{ margin: 0, fontSize: "1.3rem", fontWeight: "500", color: "#222" }}>
+          <div style={{ marginLeft: "1.2rem", display: "flex", alignItems: "center", gap: "0.2rem" }}>
+            <h1 style={{ margin: 0, fontSize: "1.4rem", fontWeight: "500", color: "#222" }}>
               kaiwai
             </h1>
             <div
@@ -92,8 +92,9 @@ export default async function HomePage() {
                 color: "#fff",
                 borderRadius: "25px",
                 padding: "0.1rem 0.6rem",
-                fontSize: "0.8rem",
+                fontSize: "0.9rem",
                 fontWeight: "500",
+                marginLeft: "0.1rem",
               }}
             >
               web版
@@ -122,8 +123,7 @@ export default async function HomePage() {
             lineHeight: "1.6",
           }}
         >
-          界隈の数だけ、SNSがあっていい。<br />
-          国産ソーシャルネットワーク KAIWAI
+          界隈の数だけ、SNSがあっていい。
         </h2>
 
         <div
@@ -163,7 +163,7 @@ export default async function HomePage() {
                     href={`/users/${post.userID}/profile/${post.profile.id}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "0rem" }}>
                       <img
                         src={post.profile.photo || fallbackProfilePhoto}
                         alt={post.profile.name || "ユーザー"}
@@ -225,7 +225,8 @@ export default async function HomePage() {
                         background: "linear-gradient(135deg, #58b5f7, #f20089)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
-                        marginTop: "0.3rem",
+                        marginTop: "0.1rem",
+                        marginBottom: "2.2rem",
                       }}
                     >
                       @{post.kaiwaiName} kaiwai
