@@ -83,7 +83,7 @@ export default async function HomePage() {
           </div>
 
           <div style={{ marginLeft: "1rem", display: "flex", alignItems: "center", gap: "0.2rem" }}>
-            <h1 style={{ margin: 0, fontSize: "1.3rem", fontWeight: "600", color: "#222" }}>
+            <h1 style={{ margin: 0, fontSize: "1.3rem", fontWeight: "500", color: "#222" }}>
               kaiwai
             </h1>
             <div
@@ -93,7 +93,7 @@ export default async function HomePage() {
                 borderRadius: "25px",
                 padding: "0.1rem 0.6rem",
                 fontSize: "0.8rem",
-                fontWeight: "600",
+                fontWeight: "500",
               }}
             >
               web版
@@ -117,7 +117,7 @@ export default async function HomePage() {
           style={{
             textAlign: "center",
             fontWeight: 500,
-            fontSize: "1.2rem",
+            fontSize: "1.1rem",
             marginBottom: "1.3rem",
             lineHeight: "1.6",
           }}
@@ -134,7 +134,7 @@ export default async function HomePage() {
             marginBottom: "1.5rem",
           }}
         >
-          <p style={{ color: "#fff", fontSize: "1rem", lineHeight: "1.8", textAlign: "center", margin: 0 }}>
+          <p style={{ color: "#fff", fontSize: "0.9rem", lineHeight: "1.8", textAlign: "center", margin: 0 }}>
             趣味、地域、悩み、職種・・<br />
             それぞれの界隈の情報にドップリ浸かる、<br />
             新しいSNSを作りました。
@@ -163,7 +163,7 @@ export default async function HomePage() {
                     href={`/users/${post.userID}/profile/${post.profile.id}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", marginBottom: "0.6rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
                       <img
                         src={post.profile.photo || fallbackProfilePhoto}
                         alt={post.profile.name || "ユーザー"}

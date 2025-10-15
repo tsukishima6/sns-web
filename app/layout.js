@@ -1,4 +1,4 @@
-import { Urbanist, Montserrat, Geist, Geist_Mono } from "next/font/google";
+import { Urbanist, Montserrat, Shippori_Mincho, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script"; // ← GA用に追加
 
@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 
 const urbanist = Urbanist({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400" , "500", "600" , "700"],
 });
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600" , "700"],
 });
 
 export const metadata = {
