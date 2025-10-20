@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://kaiwai.vercel.app
+
+# Sitemaps
+Sitemap: https://kaiwai.vercel.app/sitemap.xml
