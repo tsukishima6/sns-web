@@ -124,22 +124,37 @@ export default async function ProfilePage({ params }) {
           }}
         >
           <div style={{ flexShrink: 0 }}>
-            <Image
-              src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
-              alt="KAIWAI Logo"
-              width={34}
-              height={34}
-              style={{ objectFit: "contain" }}
-            />
-          </div>
+      <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
+        <Image
+          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
+          alt="KAIWAI Logo"
+          width={34}
+          height={34}
+          style={{ objectFit: "contain", cursor: "pointer" }}
+        />
+      </Link>
+    </div>
           <Link href={`/kaiwai/${kaiwaiID}`} style={{ textDecoration: "none", color: "inherit" }}>
-            <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 }}>
+            <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 , marginLeft: "1rem" }}>
               <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
                 {kaiwaiName}
               </span>
               <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
                 kaiwai
               </span>
+              <div
+                style={{
+                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                  color: "#fff",
+                  borderRadius: "25px",
+                  padding: "0.1rem 0.6rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  marginLeft: "0.1rem",
+                }}
+              >
+                web版
+              </div>
             </h1>
           </Link>
           <div style={{ display: "flex", gap: "0.25rem" }}>

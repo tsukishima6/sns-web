@@ -140,18 +140,34 @@ export default async function KaiwaiPage({ params }) {
           }}
         >
           <div style={{ flexShrink: 0 }}>
-            <Image
-              src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
-              alt="KAIWAI Logo"
-              width={34}
-              height={34}
-              style={{ objectFit: "contain" }}
-            />
-          </div>
-          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 }}>
+      <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
+        <Image
+          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
+          alt="KAIWAI Logo"
+          width={34}
+          height={34}
+          style={{ objectFit: "contain", cursor: "pointer" }}
+        />
+      </Link>
+    </div>
+          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 , marginLeft: "1rem", }}>
             <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>{kaiwai.name}</span>
             <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>kaiwai</span>
+<div
+                style={{
+                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                  color: "#fff",
+                  borderRadius: "25px",
+                  padding: "0.1rem 0.6rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  marginLeft: "0.1rem",
+                }}
+              >
+                web版
+              </div>
           </h1>
+
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
               <img src="/apple.svg" alt="App Store" style={{ width: 28, height: 28 }} />
@@ -165,7 +181,7 @@ export default async function KaiwaiPage({ params }) {
 
       {/* コンテンツ */}
       <div style={{ fontFamily: "Arial, Urbanist", maxWidth: "720px", padding: "4.5rem 1rem" }}>
-        <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: "1.0rem", marginBottom: "0.7rem", lineHeight: "1.6" }}>
+        <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: "1.0rem", marginTop: "1.5rem", marginBottom: "1.5rem", lineHeight: "1.6" }}>
           {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。<br />
           他の界隈・アカウント作成はkaiwaiアプリから
         </h2>

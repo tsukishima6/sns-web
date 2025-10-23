@@ -38,9 +38,9 @@ function ParticlesBackground({ scrollY }) {
     fpsLimit: 60,
     particles: {
       number: { value: 80, density: { enable: true, area: 800 } },
-      color: { value: ["#58b5f7", "#f20089", "#8fa8a7"] },
+      color: { value: ["#2f4f4f", "#db7093", "#4682b4"] },
       shape: { type: "circle" },
-      opacity: { value: 0.55 },
+      opacity: { value: 0.75 },
       size: { value: { min: 1, max: 3 } },
       move: {
         enable: true,
@@ -52,7 +52,7 @@ function ParticlesBackground({ scrollY }) {
         enable: true,
         distance: 120,
         color: "#9aa4b2",
-        opacity: 0.25,
+        opacity: 0.65,
         width: 1,
       },
     },
@@ -270,6 +270,7 @@ export default function HomePage() {
           <div
             style={{
               background: "linear-gradient(135deg, #152635, #8fa8a7)",
+opacity: 0.85, 
               borderRadius: "25px",
               padding: "1.2rem",
               marginRight: "1.6rem",
