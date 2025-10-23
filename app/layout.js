@@ -7,9 +7,10 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistSans = Shippori Mincho({
-  variable: "--Shippori Mincho",
-  subsets: ["mincho"],
+const shipporiMincho = Shippori_Mincho({
+  variable: "--font-shippori-mincho",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
