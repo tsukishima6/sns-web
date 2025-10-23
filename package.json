@@ -9,14 +9,15 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "@tsparticles/all": "^3.9.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.9.1",
     "firebase": "^12.3.0",
     "next": "15.5.4",
     "next-sitemap": "^4.2.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-scroll-parallax": "^3.5.0",
-    "react-tsparticles": "^2.12.2",
-    "tsparticles": "^3.9.1"
+    "react-scroll-parallax": "^3.5.0"
   },
   "devDependencies": {
     "@types/react": "19.2.2",
