@@ -177,7 +177,7 @@ export default async function PostPage({ params }) {
             marginLeft: "1rem",
           }}
         >
-          <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
+          <span style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222" }}>
             {kaiwaiName}
           </span>
           <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>

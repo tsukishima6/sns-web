@@ -151,7 +151,7 @@ export default async function KaiwaiPage({ params }) {
       </Link>
     </div>
           <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 , marginLeft: "1rem", }}>
-            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>{kaiwai.name}</span>
+            <span style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222" }}>{kaiwai.name}</span>
             <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>kaiwai</span>
 <div
                 style={{
