@@ -6,6 +6,7 @@ import { collectionGroup, query, orderBy, getDocs, getDoc, limit } from "firebas
 import { db } from "../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
+import KaiwaiWordCloud from "./components/wordcloud";
 
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -295,7 +296,7 @@ opacity: 0.85,
                   gap: "1rem",
                   overflowX: "auto",
                   scrollBehavior: "smooth",
-                  paddingBottom: "1rem",
+                  paddingBottom: "0rem",
                   marginTop: "2.2rem",
                   fontFamily: "Urbanist",
                 }}
@@ -421,6 +422,9 @@ opacity: 0.85,
           </div>
         </div>
       </div>
+<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
+            <KaiwaiWordCloud />
+          </div>
     </>
   );
 }

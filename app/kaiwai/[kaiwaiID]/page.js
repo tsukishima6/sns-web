@@ -199,8 +199,7 @@ export default async function KaiwaiPage({ params }) {
           >
             {parentKaiwai.name}のサブkaiwaiです
           </p>
-        )}
-
+　　　　　)}
         {/* 投稿リスト */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           {posts.length > 0 ? (
