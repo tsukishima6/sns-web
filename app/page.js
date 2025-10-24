@@ -285,7 +285,9 @@ opacity: 0.85,
               新しいSNSを作りました。
             </p>
           </div>
-
+<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
+            <KaiwaiWordCloud />
+          </div>
           {/* 投稿カルーセル */}
           <div suppressHydrationWarning>
             {posts.length > 0 ? (
@@ -422,9 +424,6 @@ opacity: 0.85,
           </div>
         </div>
       </div>
-<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
-            <KaiwaiWordCloud />
-          </div>
     </>
   );
 }

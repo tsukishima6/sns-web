@@ -12,7 +12,7 @@ export default function KaiwaiWordCloud() {
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
       // ランダムに10件選ぶ
-      const random = all.sort(() => 0.5 - Math.random()).slice(0, 10);
+      const random = all.sort(() => 0.5 - Math.random()).slice(0, 19);
       setNames(random.map((x) => x.name));
     }
 
@@ -27,7 +27,7 @@ export default function KaiwaiWordCloud() {
   };
 
   // ランダムフォントサイズ
-  const randomFontSize = () => `${13 + Math.random() * 30}px`;
+  const randomFontSize = () => `${11 + Math.random() * 17}px`;
 
   // ランダム位置
   const randomPos = () => ({
@@ -44,7 +44,7 @@ export default function KaiwaiWordCloud() {
       style={{
         position: "relative",
         width: "100%",
-        height: "360px",
+        height: "120px",
         overflow: "hidden",
         background: "#0000000",
       }}
