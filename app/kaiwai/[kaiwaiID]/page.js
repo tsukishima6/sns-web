@@ -2,6 +2,7 @@ import { doc, getDoc, collectionGroup, query, where, orderBy, getDocs } from "fi
 import { db } from "../../../lib/firebase"; // 相対パスで確実に取る
 import Image from "next/image";
 import Link from "next/link";
+import KaiwaiWordCloud from "../../components/wordcloud";
 
 // フォールバック画像
 const fallbackProfilePhoto =
@@ -180,7 +181,7 @@ export default async function KaiwaiPage({ params }) {
       </header>
 
       {/* コンテンツ */}
-      <div style={{ fontFamily: "Arial, Urbanist", maxWidth: "720px", padding: "4.5rem 1rem" }}>
+      <div style={{ fontFamily: "Shippori Mincho, Arial, Urbanist", maxWidth: "720px", paddingTop: "4.4rem", paddingLeft: "1rem", paddingRight: "1rem", paddingBottom: "2.5rem" }}>
         <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: "1.0rem", marginTop: "1.5rem", marginBottom: "1.5rem", lineHeight: "1.6" }}>
           {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。<br />
           他の界隈・アカウント作成はkaiwaiアプリから
@@ -291,6 +292,9 @@ export default async function KaiwaiPage({ params }) {
           )}
         </div>
       </div>
+<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
+            <KaiwaiWordCloud />
+          </div>
     </>
   );
 }
