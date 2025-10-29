@@ -7,6 +7,8 @@ import { db } from "../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "./components/wordcloud";
+import BentoGallery from "./components/BentoGallery";
+
 
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -87,7 +89,6 @@ function ParticlesBackground({ scrollY }) {
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const containerRef = useRef(null);
-  const [scrollY, setScrollY] = useState(0);
 
   // Firestore から投稿取得
   useEffect(() => {
@@ -164,17 +165,11 @@ export default function HomePage() {
   }, [posts]);
 
   // スクロール量を監視
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY || 0);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <>
       {/* 背景パーティクル */}
-      <ParticlesBackground scrollY={scrollY} />
+      <ParticlesBackground />
 
       <div style={{ position: "relative", zIndex: 2 }}>
         {/* ヘッダー（変更なし） */}
@@ -250,7 +245,7 @@ export default function HomePage() {
           style={{
             fontFamily: "'Shippori Mincho', Urbanist, serif",
             maxWidth: "720px",
-            padding: "5rem 0rem 4rem",
+            padding: "4.4rem 0rem 2rem 0rem",
             margin: "0 auto",
             position: "relative",
             zIndex: 2,
@@ -302,6 +297,7 @@ opacity: 0.85,
                   paddingBottom: "0rem",
                   marginTop: "2.2rem",
                   fontFamily: "Urbanist",
+                  marginBottom: "1rem",
                 }}
               >
                 {posts.map((post) => (
@@ -425,6 +421,9 @@ opacity: 0.85,
           </div>
         </div>
       </div>
+<div style={{ marginTop: "0rem" }}>
+  <BentoGallery />
+</div>
     </>
   );
 }
