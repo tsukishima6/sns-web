@@ -6,13 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
+    "sitemap": "next-sitemap",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "@tsparticles/all": "^3.9.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
     "firebase": "^12.3.0",
+    "firebase-admin": "^13.5.0",
     "next": "15.5.4",
     "next-sitemap": "^4.2.3",
     "react": "19.1.0",
