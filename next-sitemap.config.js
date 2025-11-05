@@ -1,29 +1,18 @@
 /** @type {import('next-sitemap').IConfig} */
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-const path = require('path');
-const fs = require('fs');
+const admin = require('firebase-admin');
 
-// Firebaseサービスアカウントキーを読み込み
-const serviceAccountPath = path.resolve(__dirname, 'serviceAccountKey.json');
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error('❌ Firebase サービスアカウントキー (serviceAccountKey.json) が見つかりません。');
-  process.exit(1);
-}
-
-const serviceAccount = require(serviceAccountPath);
-
-// Firebase初期化（重複防止）
-if (!global.firebaseApp) {
-  global.firebaseApp = initializeApp({
-    credential: cert(serviceAccount),
+// Firebase初期化（Vercel環境では serviceAccountKey.json がないので環境変数から読み込む）
+if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 
-const db = getFirestore();
+const db = admin.firestore();
 
 module.exports = {
-  siteUrl: 'https://kaiwai.vercel.app',
+  siteUrl: 'https://kaiwai.vercel.app', // ← 本番URL
   generateRobotsTxt: true,
 
   additionalPaths: async (config) => {
@@ -42,7 +31,7 @@ module.exports = {
     // --- profile ページを追加 ---
     const profileSnap = await db.collectionGroup('profile').get();
     profileSnap.forEach((doc) => {
-      const userId = doc.ref.parent.parent.id;
+      const userId = doc.ref.parent.parent.id; // users/{userId}/profile/{profileId}
       urls.push({
         loc: `/users/${userId}/profile/${doc.id}`,
         changefreq: 'weekly',
@@ -53,7 +42,7 @@ module.exports = {
     // --- post ページを追加 ---
     const postSnap = await db.collectionGroup('posts').get();
     postSnap.forEach((doc) => {
-      const userId = doc.ref.parent.parent.id;
+      const userId = doc.ref.parent.parent.id; // users/{userId}/posts/{postId}
       urls.push({
         loc: `/users/${userId}/posts/${doc.id}`,
         changefreq: 'daily',
