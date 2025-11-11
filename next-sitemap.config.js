@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 
 // Firebase初期化（Vercel環境では serviceAccountKey.json がないので環境変数から読み込む）
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  const firebaseServiceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
