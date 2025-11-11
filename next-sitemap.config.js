@@ -12,8 +12,14 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 module.exports = {
-  siteUrl: 'https://kaiwai.vercel.app', // ← 本番URL
+  siteUrl: 'https://kaiwai.vercel.app',
   generateRobotsTxt: true,
+  robotsTxtOptions: {
+    additionalSitemaps: [
+      'https://kaiwai.vercel.app/sitemap.xml',
+      'https://kaiwai.vercel.app/sitemap-0.xml',
+    ],
+  },
 
   additionalPaths: async (config) => {
     const urls = [];
@@ -25,6 +31,7 @@ module.exports = {
         loc: `/kaiwai/${doc.id}`,
         changefreq: 'daily',
         priority: 0.8,
+        lastmod: new Date().toISOString(),
       });
     });
 
@@ -36,6 +43,7 @@ module.exports = {
         loc: `/users/${userId}/profile/${doc.id}`,
         changefreq: 'weekly',
         priority: 0.6,
+        lastmod: new Date().toISOString(),
       });
     });
 
@@ -47,6 +55,7 @@ module.exports = {
         loc: `/users/${userId}/posts/${doc.id}`,
         changefreq: 'daily',
         priority: 0.7,
+        lastmod: new Date().toISOString(),
       });
     });
 

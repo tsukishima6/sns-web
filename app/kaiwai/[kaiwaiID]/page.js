@@ -1,37 +1,56 @@
 import { doc, getDoc, collectionGroup, query, where, orderBy, getDocs } from "firebase/firestore";
-import { db } from "../../../lib/firebase"; // 相対パスで確実に取る
+import { db } from "../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "../../components/wordcloud";
 
-// フォールバック画像
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
-// --- generateMetadata (簡易・安全版)
+// --- generateMetadata（noindex対応版）---
 export async function generateMetadata({ params }) {
   const { kaiwaiID } = params;
+
   try {
     const kaiwaiRef = doc(db, "kaiwai", kaiwaiID);
     const kaiwaiSnap = await getDoc(kaiwaiRef);
+
     if (!kaiwaiSnap.exists()) {
       return {
         title: "KAIWAIが見つかりません",
         description: "指定された界隈は存在しません。",
+        robots: "noindex, nofollow",
       };
     }
+
     const kaiwai = kaiwaiSnap.data();
+
+    // 🔒 noindexがtrueの場合はインデックス禁止
+    if (kaiwai.noindex === true) {
+      return {
+        title: `${kaiwai.name || "KAIWAI"}｜非公開界隈`,
+        description: "この界隈はインデックス対象外です。",
+        robots: "noindex, nofollow",
+      };
+    }
+
+    // 🌏 通常インデックス許可
     return {
       title: `${kaiwai.name}界隈｜kaiwai`,
       description: `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。`,
       openGraph: { images: [fallbackOGP] },
       twitter: { card: "summary_large_image", images: [fallbackOGP] },
+      robots: "index, follow",
     };
   } catch (err) {
     console.error("generateMetadata error:", err);
-    return { title: "KAIWAI", description: "界隈ページ" };
+    return {
+      title: "KAIWAI",
+      description: "界隈ページ",
+      robots: "noindex, nofollow",
+    };
   }
 }
 
@@ -39,12 +58,13 @@ export async function generateMetadata({ params }) {
 export default async function KaiwaiPage({ params }) {
   const { kaiwaiID } = params;
 
-  // kaiwai 本体取得
   const kaiwaiRef = doc(db, "kaiwai", kaiwaiID);
   const kaiwaiSnap = await getDoc(kaiwaiRef);
+
   if (!kaiwaiSnap.exists()) {
     return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>KAIWAIが見つかりません</div>;
   }
+
   const kaiwai = kaiwaiSnap.data();
 
   // parent が DocumentReference なら追加で取得
@@ -60,7 +80,7 @@ export default async function KaiwaiPage({ params }) {
     }
   }
 
-  // collectionGroup で users/*/posts を横断して kaiwai フィールドが一致する投稿を取得
+  // 投稿取得
   let posts = [];
   try {
     const q = query(
@@ -91,19 +111,14 @@ export default async function KaiwaiPage({ params }) {
       })
     );
 
-    // 🔹 ここでフィルタリング
+    // 🔹 30日以内の投稿だけ残す
     const now = Date.now();
     const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
-
     posts = posts.filter((post) => {
-      // postUser_profile が存在しない → 除外
-      if (!post.profile) return false;
-
-      // timePosted が存在しない → 除外
-      if (!post.timePosted) return false;
-
-      // 30日以内か判定
-      const postTime = post.timePosted.seconds ? post.timePosted.seconds * 1000 : post.timePosted.toMillis?.();
+      if (!post.profile || !post.timePosted) return false;
+      const postTime = post.timePosted.seconds
+        ? post.timePosted.seconds * 1000
+        : post.timePosted.toMillis?.();
       if (!postTime) return false;
       return now - postTime <= THIRTY_DAYS;
     });
@@ -141,39 +156,43 @@ export default async function KaiwaiPage({ params }) {
           }}
         >
           <div style={{ flexShrink: 0 }}>
-      <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
-        <Image
-          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
-          alt="KAIWAI Logo"
-          width={34}
-          height={34}
-          style={{ objectFit: "contain", cursor: "pointer" }}
-        />
-      </Link>
-    </div>
-          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 , marginLeft: "1rem", }}>
+            <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
+              <Image
+                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
+                alt="KAIWAI Logo"
+                width={34}
+                height={34}
+                style={{ objectFit: "contain", cursor: "pointer" }}
+              />
+            </Link>
+          </div>
+          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0, marginLeft: "1rem" }}>
             <span style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222" }}>{kaiwai.name}</span>
             <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>kaiwai</span>
-<div
-                style={{
-                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
-                  color: "#fff",
-                  borderRadius: "25px",
-                  padding: "0.1rem 0.6rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  marginLeft: "0.1rem",
-                }}
-              >
-                web版
-              </div>
+            <div
+              style={{
+                background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                color: "#fff",
+                borderRadius: "25px",
+                padding: "0.1rem 0.6rem",
+                fontSize: "0.9rem",
+                fontWeight: "500",
+                marginLeft: "0.1rem",
+              }}
+            >
+              web版
+            </div>
           </h1>
 
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
               <img src="/apple.svg" alt="App Store" style={{ width: 28, height: 28 }} />
             </a>
-            <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src="/googleplay.svg" alt="Google Play" style={{ width: 28, height: 28 }} />
             </a>
           </div>
@@ -181,11 +200,30 @@ export default async function KaiwaiPage({ params }) {
       </header>
 
       {/* コンテンツ */}
-      <div style={{ fontFamily: "Shippori Mincho, Arial, Urbanist", maxWidth: "720px", paddingTop: "4.4rem", paddingLeft: "1rem", paddingRight: "1rem", paddingBottom: "2.5rem" }}>
-        <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: "1.0rem", marginTop: "1.5rem", marginBottom: "1.5rem", lineHeight: "1.6" }}>
+      <div
+        style={{
+          fontFamily: "Shippori Mincho, Arial, Urbanist",
+          maxWidth: "720px",
+          paddingTop: "4.4rem",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+          paddingBottom: "2.5rem",
+        }}
+      >
+        <h2
+          style={{
+            textAlign: "center",
+            fontWeight: 400,
+            fontSize: "1.0rem",
+            marginTop: "1.5rem",
+            marginBottom: "1.5rem",
+            lineHeight: "1.6",
+          }}
+        >
           {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。<br />
           他の界隈・アカウント作成はkaiwaiアプリから
         </h2>
+
         {parentKaiwai && (
           <p
             style={{
@@ -200,7 +238,8 @@ export default async function KaiwaiPage({ params }) {
           >
             {parentKaiwai.name}のサブkaiwaiです
           </p>
-　　　　　)}
+        )}
+
         {/* 投稿リスト */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           {posts.length > 0 ? (
@@ -253,6 +292,7 @@ export default async function KaiwaiPage({ params }) {
                   >
                     {post.postDescription || "（本文なし）"}
                   </h4>
+
                   {post.postPhoto && (
                     <img
                       src={post.postPhoto}
@@ -260,6 +300,7 @@ export default async function KaiwaiPage({ params }) {
                       style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
                     />
                   )}
+
                   {post.postContent && (
                     <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>
                   )}
@@ -292,9 +333,10 @@ export default async function KaiwaiPage({ params }) {
           )}
         </div>
       </div>
-<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
-            <KaiwaiWordCloud />
-          </div>
+
+      <div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
+        <KaiwaiWordCloud />
+      </div>
     </>
   );
 }
