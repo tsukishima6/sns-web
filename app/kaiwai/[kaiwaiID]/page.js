@@ -19,8 +19,8 @@ export async function generateMetadata({ params }) {
 
     if (!kaiwaiSnap.exists()) {
       return {
-        title: "KAIWAIが見つかりません",
-        description: "指定された界隈は存在しません。",
+        title: "kaiwaiが見つかりません",
+        description: "指定されたkaiwaiは存在しません。",
         robots: "noindex, nofollow",
       };
     }
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
     // 🔒 noindexがtrueの場合はインデックス禁止
     if (kaiwai.noindex === true) {
       return {
-        title: `${kaiwai.name || "KAIWAI"}｜非公開界隈`,
+        title: `${kaiwai.name || "kaiwai"}｜非公開界隈`,
         description: "この界隈はインデックス対象外です。",
         robots: "noindex, nofollow",
       };
