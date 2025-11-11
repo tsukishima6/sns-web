@@ -14,12 +14,11 @@ const db = admin.firestore();
 module.exports = {
   siteUrl: 'https://kaiwai.vercel.app',
   generateRobotsTxt: true,
-  robotsTxtOptions: {
-    additionalSitemaps: [
-      'https://kaiwai.vercel.app/sitemap.xml',
-      'https://kaiwai.vercel.app/sitemap-0.xml',
-    ],
-  },
+robotsTxtOptions: {
+  additionalSitemaps: [
+    'https://kaiwai.vercel.app/sitemap-0.xml',
+  ],
+},
 
   additionalPaths: async (config) => {
     const urls = [];
