@@ -19,16 +19,17 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+/** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: "https://kaiwai.vercel.app",
   generateRobotsTxt: true,
-
-  // robots.txtに追加サイトマップを確実に出力
   robotsTxtOptions: {
     additionalSitemaps: [
       "https://kaiwai.vercel.app/sitemap-0.xml",
     ],
   },
+};
+
 
   additionalPaths: async () => {
     const urls = [];
