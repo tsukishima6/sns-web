@@ -173,7 +173,7 @@ export default async function KaiwaiPage({ params }) {
               style={{
                 background: "linear-gradient(135deg, #152635, #8fa8a7)",
                 color: "#fff",
-                borderRadius: "25px",
+                borderRadius: "26px",
                 padding: "0.1rem 0.6rem",
                 fontSize: "0.9rem",
                 fontWeight: "500",
