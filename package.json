@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "postbuild": "next-sitemap"
-  },
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "postbuild": "next-sitemap --config next-sitemap-lite.config.js && next-sitemap --config next-sitemap.config.js"
+},
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@tsparticles/all": "^3.9.1",
