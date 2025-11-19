@@ -1,3 +1,6 @@
+console.log("🚀 Generating LITE sitemap...");
+
+
 module.exports = {
   siteUrl: "https://kaiwai.vercel.app",
   generateRobotsTxt: false, // robots.txtはここでは生成しない

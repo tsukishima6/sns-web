@@ -1,3 +1,4 @@
+console.log("🚀 Generating FULL sitemap...");
 console.log("🔥 FIREBASE_SERVICE_ACCOUNT raw:", process.env.FIREBASE_SERVICE_ACCOUNT);
 console.log("🔥 FIREBASE_SERVICE_ACCOUNT type:", typeof process.env.FIREBASE_SERVICE_ACCOUNT);
 console.log("🔥 ENV keys sample:", Object.keys(process.env).slice(0, 10));
