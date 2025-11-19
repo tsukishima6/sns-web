@@ -7,4 +7,5 @@ Host: https://kaiwai.vercel.app
 
 # Sitemaps
 Sitemap: https://kaiwai.vercel.app/sitemap.xml
-Sitemap: https://kaiwai.vercel.app/sitemap-0.xml
+Sitemap: https://kaiwai.vercel.app/sitemap-full.xml
+Sitemap: https://kaiwai.vercel.app/sitemap-lite.xml

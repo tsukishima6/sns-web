@@ -5,6 +5,7 @@ module.exports = {
   siteUrl: "https://kaiwai.vercel.app",
   generateRobotsTxt: false, // robots.txtはここでは生成しない
   outDir: "./public", // 出力先は同じでOK
+  sitemapIndexFileName: "sitemap.xml",
   sitemapFilename: "sitemap-lite.xml", // ← 軽量版のファイル名を明示！
 
   additionalPaths: async () => {
