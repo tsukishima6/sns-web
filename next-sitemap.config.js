@@ -31,7 +31,7 @@ module.exports = {
   outDir: "./public",
   sitemapFilename: "sitemap-full.xml",
   robotsTxtOptions: {
-    additionalSitemaps: ["https://kaiwai.vercel.app/sitemap-0.xml","https://kaiwai.vercel.app/sitemap-full.xml","https://kaiwai.vercel.app/sitemap-lite.xml"],
+    additionalSitemaps: ["https://kaiwai.vercel.app/sitemap-full.xml","https://kaiwai.vercel.app/sitemap-lite.xml"],
   },
 
   additionalPaths: async () => {
