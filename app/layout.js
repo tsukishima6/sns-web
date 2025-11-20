@@ -38,7 +38,7 @@ openGraph: {
     title: "kaiwai｜界隈の数だけ、SNSがあっていい",
     description:
       "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
-    url: "https://robust-lab.com", // ← あなたの本番URLに変更
+    url: "https://kaiwai.vercel.app", // ← あなたの本番URLに変更
     siteName: "kaiwai",
     images: [
       {
@@ -55,7 +55,7 @@ openGraph: {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

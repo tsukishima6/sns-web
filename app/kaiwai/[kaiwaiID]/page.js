@@ -6,6 +6,7 @@ import KaiwaiWordCloud from "../../components/wordcloud";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
+
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
@@ -62,7 +63,11 @@ export default async function KaiwaiPage({ params }) {
   const kaiwaiSnap = await getDoc(kaiwaiRef);
 
   if (!kaiwaiSnap.exists()) {
-    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>KAIWAIが見つかりません</div>;
+    return (
+      <div style={{ padding: "2rem", fontSize: "1.5rem" }}>
+        KAIWAIが見つかりません
+      </div>
+    );
   }
 
   const kaiwai = kaiwaiSnap.data();
@@ -100,7 +105,10 @@ export default async function KaiwaiPage({ params }) {
           try {
             const profileSnap = await getDoc(data.postUser_profile);
             if (profileSnap.exists()) {
-              postObj.profile = { id: profileSnap.id, ...(profileSnap.data() || {}) };
+              postObj.profile = {
+                id: profileSnap.id,
+                ...(profileSnap.data() || {}),
+              };
             }
           } catch (e) {
             console.error("profile fetch error for post", d.id, e);
@@ -114,6 +122,7 @@ export default async function KaiwaiPage({ params }) {
     // 🔹 30日以内の投稿だけ残す
     const now = Date.now();
     const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
     posts = posts.filter((post) => {
       if (!post.profile || !post.timePosted) return false;
       const postTime = post.timePosted.seconds
@@ -166,9 +175,34 @@ export default async function KaiwaiPage({ params }) {
               />
             </Link>
           </div>
-          <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0, marginLeft: "1rem" }}>
-            <span style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222" }}>{kaiwai.name}</span>
-            <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>kaiwai</span>
+
+          <h1
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: "0.2rem",
+              margin: 0,
+              marginLeft: "1rem",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "1.0rem",
+                fontWeight: "600",
+                color: "#222",
+              }}
+            >
+              {kaiwai.name}
+            </span>
+            <span
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                color: "#222",
+              }}
+            >
+              kaiwai
+            </span>
             <div
               style={{
                 background: "linear-gradient(135deg, #152635, #8fa8a7)",
@@ -185,15 +219,27 @@ export default async function KaiwaiPage({ params }) {
           </h1>
 
           <div style={{ display: "flex", gap: "0.25rem" }}>
-            <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-              <img src="/apple.svg" alt="App Store" style={{ width: 28, height: 28 }} />
+            <a
+              href="https://apps.apple.com/jp/app/kaiwai/id6469412765"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/apple.svg"
+                alt="App Store"
+                style={{ width: 28, height: 28 }}
+              />
             </a>
             <a
               href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/googleplay.svg" alt="Google Play" style={{ width: 28, height: 28 }} />
+              <img
+                src="/googleplay.svg"
+                alt="Google Play"
+                style={{ width: 28, height: 28 }}
+              />
             </a>
           </div>
         </div>
@@ -220,7 +266,8 @@ export default async function KaiwaiPage({ params }) {
             lineHeight: "1.6",
           }}
         >
-          {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。<br />
+          {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。
+          <br />
           他の界隈・アカウント作成はkaiwaiアプリから
         </h2>
 
@@ -241,7 +288,13 @@ export default async function KaiwaiPage({ params }) {
         )}
 
         {/* 投稿リスト */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
+          }}
+        >
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
@@ -261,7 +314,13 @@ export default async function KaiwaiPage({ params }) {
                   }}
                 >
                   {post.profile && (
-                    <div style={{ display: "flex", alignItems: "center", marginBottom: "0.6rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "0.6rem",
+                      }}
+                    >
                       <img
                         src={post.profile.photo || fallbackProfilePhoto}
                         alt={post.profile.name || "ユーザー"}
@@ -273,9 +332,28 @@ export default async function KaiwaiPage({ params }) {
                           objectFit: "cover",
                         }}
                       />
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "#333" }}>{post.profile.name}</span>
-                        <span style={{ fontSize: "0.9rem", color: "#666", fontFamily: "Urbanist" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "0.9rem",
+                            color: "#333",
+                          }}
+                        >
+                          {post.profile.name}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: "0.9rem",
+                            color: "#666",
+                            fontFamily: "Urbanist",
+                          }}
+                        >
                           @{post.profile.ID || post.userID}
                         </span>
                       </div>
@@ -297,12 +375,24 @@ export default async function KaiwaiPage({ params }) {
                     <img
                       src={post.postPhoto}
                       alt="投稿画像"
-                      style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
+                      style={{
+                        width: "100%",
+                        borderRadius: "8px",
+                        marginBottom: "1rem",
+                      }}
                     />
                   )}
 
                   {post.postContent && (
-                    <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        lineHeight: "1.6",
+                        color: "#555",
+                      }}
+                    >
+                      {post.postContent}
+                    </p>
                   )}
 
                   {post.timePosted && (
@@ -316,7 +406,9 @@ export default async function KaiwaiPage({ params }) {
                         fontFamily: "Urbanist",
                       }}
                     >
-                      {new Date(post.timePosted.seconds * 1000).toLocaleString("ja-JP", {
+                      {new Date(
+                        post.timePosted.seconds * 1000
+                      ).toLocaleString("ja-JP", {
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",
