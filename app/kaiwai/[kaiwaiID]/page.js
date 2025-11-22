@@ -331,7 +331,7 @@ export default async function KaiwaiPage({ params }) {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        marginBottom: "0.6rem",
+                        marginBottom: "0.0rem",
                         marginLeft: "1.0rem",
                       }}
                     >
@@ -376,9 +376,9 @@ export default async function KaiwaiPage({ params }) {
 
                   <h4
                     style={{
-                      fontSize: "1rem",
+                      fontSize: "0.9rem",
                       fontWeight: "400",
-                      marginBottom: post.postPhoto ? "0.9rem" : "2rem",
+                      marginBottom: post.postPhoto ? "0.9rem" : "1.8rem",
                       color: "#333",
                       marginLeft: "1.0rem",
                       marginRight: "1.0rem",
