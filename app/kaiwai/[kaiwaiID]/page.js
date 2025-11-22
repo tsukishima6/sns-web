@@ -1,8 +1,17 @@
-import { doc, getDoc, collectionGroup, query, where, orderBy, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collectionGroup,
+  query,
+  where,
+  orderBy,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "../../components/wordcloud";
+import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -165,7 +174,10 @@ export default async function KaiwaiPage({ params }) {
           }}
         >
           <div style={{ flexShrink: 0 }}>
-            <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
+            <Link
+              href="https://kaiwai.vercel.app/"
+              style={{ display: "inline-block" }}
+            >
               <Image
                 src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
                 alt="KAIWAI Logo"
@@ -251,8 +263,8 @@ export default async function KaiwaiPage({ params }) {
           fontFamily: "Shippori Mincho, Arial, Urbanist",
           maxWidth: "720px",
           paddingTop: "4.4rem",
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
+          paddingLeft: "0rem",
+          paddingRight: "0rem",
           paddingBottom: "2.5rem",
         }}
       >
@@ -268,7 +280,8 @@ export default async function KaiwaiPage({ params }) {
         >
           {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。
           <br />
-          他の界隈・アカウント作成はkaiwaiアプリから
+          他の界隈・アカウント作成は{" "}
+          <AppDownloadDialogTrigger /> から
         </h2>
 
         {parentKaiwai && (
@@ -292,7 +305,7 @@ export default async function KaiwaiPage({ params }) {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "1.5rem",
+            gap: "0rem",
           }}
         >
           {posts.length > 0 ? (
@@ -303,22 +316,23 @@ export default async function KaiwaiPage({ params }) {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div
-                  style={{
-                    padding: "1.3rem",
-                    border: "1px solid #ddd",
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                    backgroundColor: "#fff",
-                    fontFamily: "Arial, sans-serif",
-                    position: "relative",
-                  }}
-                >
+  style={{
+    padding: "1.3rem 0",
+    borderBottom: "1px solid #ddd",
+    backgroundColor: "transparent",
+    fontFamily: "Arial, sans-serif",
+    position: "relative",
+    width: "100%",
+  }}
+>
+
                   {post.profile && (
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         marginBottom: "0.6rem",
+                        marginLeft: "1.0rem",
                       }}
                     >
                       <img
@@ -366,6 +380,8 @@ export default async function KaiwaiPage({ params }) {
                       fontWeight: "400",
                       marginBottom: post.postPhoto ? "0.9rem" : "2rem",
                       color: "#333",
+                      marginLeft: "1.0rem",
+                      marginRight: "1.0rem",
                     }}
                   >
                     {post.postDescription || "（本文なし）"}

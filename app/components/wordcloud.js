@@ -11,8 +11,11 @@ export default function KaiwaiWordCloud() {
       const snap = await getDocs(collection(db, "kaiwai"));
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
+      // ▼ noindex が true のものを除外
+      const visible = all.filter((x) => x.noindex !== true);
+
       // ランダムに20件ほど選ぶ
-      const random = all.sort(() => 0.5 - Math.random()).slice(0, 20);
+      const random = visible.sort(() => 0.5 - Math.random()).slice(0, 20);
       setNames(random.map((x) => x.name));
     }
 
@@ -32,7 +35,7 @@ export default function KaiwaiWordCloud() {
   const generatePositions = (count) => {
     const positions = [];
     const maxAttempts = 200;
-    const containerWidth = 720; // px（親divに合わせて）
+    const containerWidth = 720;
     const containerHeight = 120;
 
     for (let i = 0; i < count; i++) {
