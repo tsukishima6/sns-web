@@ -147,7 +147,6 @@ export default async function PostPage({ params }) {
       justifyContent: "space-between",
       alignItems: "center",
       fontFamily: "'Urbanist','Montserrat',sans-serif",
-      marginRight: "1.8rem",
     }}
   >
     <div style={{ flexShrink: 0 }}>
@@ -248,7 +247,7 @@ export default async function PostPage({ params }) {
             <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
               {profileData.name}
             </span>
-            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Arial, sans-serif" }}>
               @{profileData.ID || userID}
             </span>
           </div>
@@ -289,7 +288,7 @@ export default async function PostPage({ params }) {
       color: "#888",
       fontFamily: "'Urbanist','Montserrat',sans-serif",
       textAlign: "right",   // ← 追加
-      marginRight: "1.8rem",
+      marginRight: "2.4rem",
 
     }}
   >
@@ -347,7 +346,7 @@ export default async function PostPage({ params }) {
                   <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
                     {profileData.name}
                   </span>
-                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Arial, Urbanist, sans-serif" }}>
                     @{profileData.ID || userID}
                   </span>
                 </div>
@@ -402,7 +401,7 @@ export default async function PostPage({ params }) {
                   color: "#888",
                   textAlign: "right",
                   fontFamily: "'Urbanist','Montserrat',sans-serif",
-                  marginRight: "1.8rem",
+                  marginRight: "2.4rem",
                 }}
               >
                 {formattedOtherTime}
