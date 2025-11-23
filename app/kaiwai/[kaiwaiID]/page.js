@@ -317,7 +317,7 @@ export default async function KaiwaiPage({ params }) {
               >
                 <div
   style={{
-    padding: "1.3rem 0",
+    padding: "1.1rem 0",
     borderBottom: "1px solid #ddd",
     backgroundColor: "transparent",
     fontFamily: "Arial, sans-serif",
@@ -382,6 +382,7 @@ export default async function KaiwaiPage({ params }) {
                       color: "#333",
                       marginLeft: "1.0rem",
                       marginRight: "1.0rem",
+                      marginTop: "0.9rem",
                     }}
                   >
                     {post.postDescription || "（本文なし）"}
@@ -416,7 +417,7 @@ export default async function KaiwaiPage({ params }) {
                       style={{
                         position: "absolute",
                         right: "1.2rem",
-                        bottom: "1.2rem",
+                        bottom: "0.8rem",
                         fontSize: "1.0rem",
                         color: "#888",
                         fontFamily: "Urbanist",

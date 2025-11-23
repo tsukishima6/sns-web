@@ -1,0 +1,5 @@
+/* ブラウザデフォルトの body margin をリセット */
+body {
+  margin: 0;
+  padding: 0;
+}

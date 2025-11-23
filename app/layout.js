@@ -1,4 +1,4 @@
-import { Urbanist, Montserrat, Shippori_Mincho, Geist, Geist_Mono } from "next/font/google";
+import { Urbanist, Montserrat, Shippori_Mincho, Geist, Geist_Mono, Zen_Antique, Klee_One, Wdxl_Lubrifont_JP_N } from "next/font/google";
 import "./globals.css";
 import Script from "next/script"; // ← GA用に追加
 
@@ -26,6 +26,18 @@ const urbanist = Urbanist({
 const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600" , "700"],
+});
+
+const zenAntique = Zen_Antique({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-zen-antique",
+});
+
+const kleeOne = Klee_One({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-klee-one",
 });
 
 export const metadata = {
@@ -57,8 +69,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+  className={`
+    ${geistSans.variable}
+    ${geistMono.variable}
+    ${urbanist.variable}
+    ${montserrat.variable}
+    ${shipporiMincho.variable}
+    ${zenAntique.variable}
+    ${kleeOne.variable}
+    antialiased
+  `}
+>
         {children}
 
         {/* Google Analytics */}

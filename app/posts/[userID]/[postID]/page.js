@@ -147,6 +147,7 @@ export default async function PostPage({ params }) {
       justifyContent: "space-between",
       alignItems: "center",
       fontFamily: "'Urbanist','Montserrat',sans-serif",
+      marginRight: "1.8rem",
     }}
   >
     <div style={{ flexShrink: 0 }}>
@@ -224,168 +225,196 @@ export default async function PostPage({ params }) {
       <div style={{ paddingTop: "80px" }}>
         {/* メイン投稿カード */}
         <div
-          style={{
-            maxWidth: "600px",
-            margin: "0.2rem auto",
-            marginRight: "0.6rem",
-            marginLeft: "0.6rem",
-            padding: "1.3rem",
-            border: "1px solid #ddd",
-            borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            backgroundColor: "#fff",
-            fontFamily: "Arial, sans-serif",
-            position: "relative",
-          }}
-        >
+    style={{
+      width: "100%",
+      margin: "0 auto",
+      padding: "1.3rem 1rem" ,
+      borderBottom: "1px solid #ddd",
+      backgroundColor: "transparent",
+      fontFamily: "Arial, sans-serif",
+      position: "relative",
+    }}
+  >
           {/* 投稿者情報 */}
           {profileData && (
+      <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
+          <img
+            src={profileData.photo || fallbackProfilePhoto}
+            alt={profileData.name || "ユーザー"}
+            style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
+              {profileData.name}
+            </span>
+            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+              @{profileData.ID || userID}
+            </span>
+          </div>
+        </div>
+      </Link>
+    )}
+
+          {/* 投稿タイトル */}
+          <h1
+      style={{
+        fontSize: "1rem",
+        fontWeight: "400",
+        marginBottom: post.postPhoto ? "1rem" : "1.6rem",
+        color: "#333",
+        marginLeft: "0.2rem",
+        marginRight: "1.2rem",
+      }}
+    >
+      {post.postDescription}
+    </h1>
+
+          {/* 投稿写真 */}
+    {post.postPhoto && (
+      <img src={post.postPhoto} alt="投稿画像" style={{ width: "93%", marginBottom: "1rem" }} />
+    )}
+
+    {/* 投稿本文 */}
+    {post.postContent && (
+      <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
+    )}
+
+    {/* 投稿日時 */}
+{post.timePosted && (
+  <div
+    style={{
+      marginTop: "0.5rem",
+      fontSize: "1rem",
+      color: "#888",
+      fontFamily: "'Urbanist','Montserrat',sans-serif",
+      textAlign: "right",   // ← 追加
+      marginRight: "1.8rem",
+
+    }}
+  >
+    {formatTime(post.timePosted)}
+  </div>
+)}
+  </div>
+
+        {/* 他の投稿 */}
+{profileData && (
+  <div style={{ marginTop: "2.2rem", padding: "0 0rem" }}>
+    <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
+      <div style={{ textAlign: "center", marginBottom: "1rem", cursor: "pointer" }}>
+        <h3
+          style={{
+            fontSize: "0.95rem",
+            fontWeight: "500",
+            color: "#222",
+            margin: 0,
+          }}
+        >
+          {profileData.name} の他の投稿
+        </h3>
+      </div>
+    </Link>
+
+    {/* 投稿一覧 */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+      {otherPosts.map((other, idx) => {
+        let formattedOtherTime = "";
+        if (other.timePosted) {
+          const date = other.timePosted.toDate();
+          formattedOtherTime = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+
+        return (
+          <div
+            key={idx}
+            style={{
+              padding: "1.3rem 1rem",
+              borderBottom: "1px solid #ddd",
+              backgroundColor: "transparent",
+              width: "100%",
+            }}
+          >
+            {/* 投稿者情報 */}
             <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
                 <img
                   src={profileData.photo || fallbackProfilePhoto}
                   alt={profileData.name || "ユーザー"}
-                  style={{ width: "55px", height: "60px", borderRadius: "50%", marginRight: "0.75rem" }}
+                  style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "1.0rem", color: "#333" }}>{profileData.name}</span>
-                  <span style={{ fontSize: "1.0rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
+                    {profileData.name}
+                  </span>
+                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
                     @{profileData.ID || userID}
                   </span>
                 </div>
               </div>
             </Link>
-          )}
 
-          {/* 投稿タイトル */}
-          <h1
-            style={{
-              fontSize: "1.0rem",
-              fontWeight: "300",
-              marginBottom: post.postPhoto ? "1rem" : "2.2rem",
-              color: "#333",
-            }}
-          >
-            {post.postDescription}
-          </h1>
-
-          {/* 投稿写真 */}
-          {post.postPhoto && (
-            <img src={post.postPhoto} alt="投稿画像" style={{ width: "100%", borderRadius: "8px", marginBottom: "1.5rem" }} />
-          )}
-
-          {/* 投稿本文 */}
-          {post.postContent && <p style={{ fontSize: "1.2rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>}
-
-          {/* 投稿日時 */}
-          {post.timePosted && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "1.5rem",
-                right: "1.8em",
-                fontSize: "0.95rem",
-                color: "#888",
-                fontFamily: "'Urbanist','Montserrat',sans-serif",
-              }}
+            {/* 投稿内容 */}
+            <Link
+              href={`/posts/${userID}/${other.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              {formatTime(post.timePosted)}
-            </div>
-          )}
-        </div>
+              <h4
+                style={{
+                  fontSize: "0.95rem",
+                  fontWeight: "400",
+                  marginBottom: other.postPhoto ? "1rem" : "1.5rem",
+                  color: "#333",
+                  marginRight: "1.8rem",
+                }}
+              >
+                {other.postDescription}
+              </h4>
 
-        {/* 他の投稿 */}
-        {profileData && (
-          <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "0 0.8rem" }}>
-            <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
+              {other.postPhoto && (
                 <img
-                  src={profileData.photo || fallbackProfilePhoto}
-                  alt={profileData.name || "ユーザー"}
-                  style={{ width: "43px", height: "48px", borderRadius: "50%", marginRight: "0.6rem" }}
-                />
-                <h3
+                  src={other.postPhoto}
+                  alt="投稿画像"
                   style={{
-                    fontSize: "1.0rem",
-                    fontWeight: "500",
-                    margin: 0,
-                    color: "#222",
-                    fontFamily: "Arial, sans-serif",
+                    width: "100%",
+                    marginBottom: "1rem",
+                  }}
+                />
+              )}
+
+              {other.postContent && (
+                <p
+                  style={{
+                    fontSize: "0.9rem",
+                    lineHeight: "1.6",
+                    color: "#555",
                   }}
                 >
-                  {profileData.name} の他の投稿
-                </h3>
+                  {other.postContent}
+                </p>
+              )}
+
+              {/* 🔹 投稿日時（右寄せ） */}
+              <div
+                style={{
+                  marginTop: "0.5rem",
+                  fontSize: "1rem",
+                  color: "#888",
+                  textAlign: "right",
+                  fontFamily: "'Urbanist','Montserrat',sans-serif",
+                  marginRight: "1.8rem",
+                }}
+              >
+                {formattedOtherTime}
               </div>
             </Link>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              {otherPosts.map((other, idx) => {
-                let formattedOtherTime = "";
-                if (other.timePosted) {
-                  const date = other.timePosted.toDate();
-                  const y = date.getFullYear();
-                  const m = date.getMonth() + 1;
-                  const d = date.getDate();
-                  const h = String(date.getHours()).padStart(2, "0");
-                  const min = String(date.getMinutes()).padStart(2, "0");
-                  formattedOtherTime = `${y}年${m}月${d}日 ${h}:${min}`;
-                }
-
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      padding: "1rem",
-                      paddingTop: "0rem",
-                      border: "1px solid #ddd",
-                      borderRadius: "12px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                      backgroundColor: "#fff",
-                      position: "relative",
-                    }}
-                  >
-                    <h4
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "400",
-                        marginBottom: other.postPhoto ? "1rem" : "2rem",
-                        color: "#333",
-                        fontFamily: "'Urbanist','Montserrat',sans-serif",
-                      }}
-                    >
-                      {other.postDescription}
-                    </h4>
-                    {other.postPhoto && (
-                      <img
-                        src={other.postPhoto}
-                        alt="投稿画像"
-                        style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
-                      />
-                    )}
-                    {other.postContent && (
-                      <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{other.postContent}</p>
-                    )}
-                    {formattedOtherTime && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: "1rem",
-                          right: "1.2rem",
-                          fontSize: "0.9rem",
-                          color: "#888",
-                          fontFamily: "'Urbanist','Montserrat',sans-serif",
-                        }}
-                      >
-                        {formattedOtherTime}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
           </div>
-        )}
-      </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+</div>
     </>
   );
 }

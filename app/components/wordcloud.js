@@ -10,19 +10,28 @@ export default function KaiwaiWordCloud() {
     async function fetchKaiwai() {
       const snap = await getDocs(collection(db, "kaiwai"));
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-
-      // ▼ noindex が true のものを除外
       const visible = all.filter((x) => x.noindex !== true);
-
-      // ランダムに20件ほど選ぶ
       const random = visible.sort(() => 0.5 - Math.random()).slice(0, 20);
       setNames(random.map((x) => x.name));
     }
-
     fetchKaiwai();
   }, []);
 
-  // 柔らかい色
+  // 🎨 5種類のランダムフォント
+  const randomFontFamily = () => {
+    const fonts = [
+      "'Urbanist', sans-serif",
+      "'Shippori Mincho', serif",
+      "'Montserrat', sans-serif",
+      "'Noto Sans JP', sans-serif",
+      "'Hina Mincho', serif",
+      "'Zen Antique', serif",
+      "'Klee One', cursive",
+    ];
+    return fonts[Math.floor(Math.random() * fonts.length)];
+  };
+
+  // 色・サイズ
   const randomColor = () => {
     const hues = [200, 280, 340, 30, 150];
     const hue = hues[Math.floor(Math.random() * hues.length)];
@@ -31,7 +40,7 @@ export default function KaiwaiWordCloud() {
 
   const randomFontSize = () => 11 + Math.random() * 17;
 
-  // 配置ロジック（重なり防止）
+  // 位置ロジック
   const generatePositions = (count) => {
     const positions = [];
     const maxAttempts = 200;
@@ -104,6 +113,7 @@ export default function KaiwaiWordCloud() {
               fontWeight: 500,
               whiteSpace: "nowrap",
               opacity: 0.9,
+              fontFamily: randomFontFamily(), // ← 🎯追加！
             }}
           >
             {name}
