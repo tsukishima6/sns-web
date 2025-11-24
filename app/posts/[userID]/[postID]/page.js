@@ -247,7 +247,7 @@ export default async function PostPage({ params }) {
             <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
               {profileData.name}
             </span>
-            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Arial, sans-serif" }}>
+            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
               @{profileData.ID || userID}
             </span>
           </div>
@@ -276,7 +276,7 @@ export default async function PostPage({ params }) {
 
     {/* 投稿本文 */}
     {post.postContent && (
-      <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
+      <p style={{ fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
     )}
 
     {/* 投稿日時 */}
@@ -343,10 +343,10 @@ export default async function PostPage({ params }) {
                   style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333", fontFamily: "Arial,Urbanist, sans-serif" }}>
                     {profileData.name}
                   </span>
-                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Arial, Urbanist, sans-serif" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
                     @{profileData.ID || userID}
                   </span>
                 </div>
