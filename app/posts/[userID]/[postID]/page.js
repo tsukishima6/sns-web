@@ -230,7 +230,7 @@ export default async function PostPage({ params }) {
       padding: "1.3rem 1rem" ,
       borderBottom: "1px solid #ddd",
       backgroundColor: "transparent",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: "Urbanist, sans-serif",
       position: "relative",
     }}
   >
@@ -276,7 +276,7 @@ export default async function PostPage({ params }) {
 
     {/* 投稿本文 */}
     {post.postContent && (
-      <p style={{ fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
+      <p style={{ fontFamily: "Urbanist", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
     )}
 
     {/* 投稿日時 */}
@@ -343,7 +343,7 @@ export default async function PostPage({ params }) {
                   style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333", fontFamily: "Arial,Urbanist, sans-serif" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333", fontFamily: "Urbanist" }}>
                     {profileData.name}
                   </span>
                   <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
@@ -365,6 +365,7 @@ export default async function PostPage({ params }) {
                   marginBottom: other.postPhoto ? "1rem" : "1.5rem",
                   color: "#333",
                   marginRight: "1.8rem",
+                  fontFamily: "Urbanist",
                 }}
               >
                 {other.postDescription}
