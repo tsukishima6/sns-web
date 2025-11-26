@@ -264,6 +264,7 @@ export default async function PostPage({ params }) {
         color: "#333",
         marginLeft: "0.2rem",
         marginRight: "1.2rem",
+　　　　 fontFamily: "Urbanist",
       }}
     >
       {post.postDescription}

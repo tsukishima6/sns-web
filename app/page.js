@@ -7,8 +7,7 @@ import { db } from "../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "./components/wordcloud";
-import BentoGallery from "./components/BentoGallery";
-
+import BentoGallery from "./components/BentoGallery"; 
 
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -225,18 +224,31 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "0.25rem" }}>
-              <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-                <img src="/apple.svg" alt="App Store" width={28} height={28} />
-              </a>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/googleplay.svg" alt="App Store" width={28} height={28} />
-              </a>
-            </div>
+
+<div style={{ display: "flex", gap: "0.25rem" }}>
+  <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
+    <Image
+      src="/apple.svg"
+      alt="App Store"
+      width={32}
+      height={32}
+      style={{ objectFit: "contain" }}
+    />
+  </a>
+  <a
+    href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Image
+      src="/googleplay.svg"
+      alt="Google Play"
+      width={32}
+      height={32}
+      style={{ objectFit: "contain" }}
+    />
+  </a>
+</div>
           </div>
         </header>
 
