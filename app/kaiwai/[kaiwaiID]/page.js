@@ -236,22 +236,26 @@ export default async function KaiwaiPage({ params }) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/apple_icon.svg?alt=media&token=7069d526-dd27-4c3d-8433-a3c1afa049bf"
-                alt="App Store"
-                style={{ width: 28, height: 28 }}
-              />
+              <Image
+  src="/ap.png"   // ※ 64×64 以上の画像
+  alt="App Store"
+  width={32}
+  height={32}
+  style={{ objectFit: "contain" }}
+/>
             </a>
             <a
               href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/googleplay_icon.svg?alt=media&token=99b3cd8e-af36-48dd-8474-76844c10eb33"
-                alt="Google Play"
-                style={{ width: 28, height: 28 }}
-              />
+              <Image
+  src="/gp.png"   // ※ 64×64 以上の画像
+  alt="Google Play"
+  width={32}
+  height={32}
+  style={{ objectFit: "contain" }}
+/>
             </a>
           </div>
         </div>

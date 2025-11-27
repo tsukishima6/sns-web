@@ -241,12 +241,12 @@ export default function HomePage() {
     rel="noopener noreferrer"
   >
     <Image
-      src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/googleplay_icon.svg?alt=media&token=99b3cd8e-af36-48dd-8474-76844c10eb33"
-      alt="Google Play"
-      width={32}
-      height={32}
-      style={{ objectFit: "contain" }}
-    />
+  src="/gp.png"   // ※ 64×64 以上の画像
+  alt="Google Play"
+  width={32}
+  height={32}
+  style={{ objectFit: "contain" }}
+/>
   </a>
 </div>
           </div>
