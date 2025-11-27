@@ -228,12 +228,12 @@ export default function HomePage() {
 <div style={{ display: "flex", gap: "0.25rem" }}>
   <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
     <Image
-      src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/apple_icon.svg?alt=media&token=7069d526-dd27-4c3d-8433-a3c1afa049bf"
-      alt="App Store"
-      width={32}
-      height={32}
-      style={{ objectFit: "contain" }}
-    />
+  src="/ap.png"   // ※ 64×64 以上の画像
+  alt="App Store"
+  width={32}
+  height={32}
+  style={{ objectFit: "contain" }}
+/>
   </a>
   <a
     href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
