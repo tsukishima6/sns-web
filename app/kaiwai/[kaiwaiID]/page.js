@@ -237,7 +237,7 @@ export default async function KaiwaiPage({ params }) {
               rel="noopener noreferrer"
             >
               <img
-                src="/apple.svg"
+                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/apple_icon.svg?alt=media&token=7069d526-dd27-4c3d-8433-a3c1afa049bf"
                 alt="App Store"
                 style={{ width: 28, height: 28 }}
               />
@@ -248,7 +248,7 @@ export default async function KaiwaiPage({ params }) {
               rel="noopener noreferrer"
             >
               <img
-                src="/googleplay.svg"
+                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/googleplay_icon.svg?alt=media&token=99b3cd8e-af36-48dd-8474-76844c10eb33"
                 alt="Google Play"
                 style={{ width: 28, height: 28 }}
               />

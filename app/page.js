@@ -226,20 +226,13 @@ export default function HomePage() {
 
 
 <div style={{ display: "flex", gap: "0.25rem" }}>
-  <div style={{ display: "flex", gap: "0.25rem" }}>
-  <a
-    href="https://apps.apple.com/jp/app/kaiwai/id6469412765"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img
-      src="/apple.svg"
+  <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
+    <Image
+      src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/apple_icon.svg?alt=media&token=7069d526-dd27-4c3d-8433-a3c1afa049bf"
       alt="App Store"
-      style={{
-        width: "32px",
-        height: "32px",
-        display: "block",
-      }}
+      width={32}
+      height={32}
+      style={{ objectFit: "contain" }}
     />
   </a>
   <a
@@ -247,17 +240,14 @@ export default function HomePage() {
     target="_blank"
     rel="noopener noreferrer"
   >
-    <img
-      src="/googleplay.svg"
+    <Image
+      src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/googleplay_icon.svg?alt=media&token=99b3cd8e-af36-48dd-8474-76844c10eb33"
       alt="Google Play"
-      style={{
-        width: "32px",
-        height: "32px",
-        display: "block",
-      }}
+      width={32}
+      height={32}
+      style={{ objectFit: "contain" }}
     />
   </a>
-</div>
 </div>
           </div>
         </header>
