@@ -50,7 +50,7 @@ export default function KaiwaiWordCloud() {
     for (let i = 0; i < count; i++) {
       const fontSize = randomFontSize();
       const orientation =
-        Math.random() < 0.2 ? "vertical-rl" : "horizontal-tb";
+        Math.random() < 0.35 ? "vertical-rl" : "horizontal-tb";
       let x, y;
       let attempts = 0;
       let overlap = false;
