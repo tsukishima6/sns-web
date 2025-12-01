@@ -264,7 +264,7 @@ export default async function KaiwaiPage({ params }) {
       {/* コンテンツ */}
       <div
         style={{
-          fontFamily: "Hiragino Sans , ヒラギノ角ゴ ProN , Shippori Mincho, Arial, Urbanist",
+          fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
           maxWidth: "720px",
           paddingTop: "4.4rem",
           paddingLeft: "0rem",

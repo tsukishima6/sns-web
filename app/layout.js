@@ -1,16 +1,20 @@
-import { Urbanist, Montserrat, Shippori_Mincho, Geist, Geist_Mono, Zen_Antique, Klee_One, Wdxl_Lubrifont_JP_N } from "next/font/google";
+import {
+  Urbanist,
+  Montserrat,
+  Shippori_Mincho,
+  Geist,
+  Geist_Mono,
+  Zen_Antique,
+  Klee_One,
+  Noto_Sans_JP, // ← 追加！
+} from "next/font/google";
 import "./globals.css";
-import Script from "next/script"; // ← GA用に追加
+import Script from "next/script";
 
+// 各フォントの設定
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
-
-const shipporiMincho = Shippori_Mincho({
-  variable: "--font-shippori-mincho",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -20,12 +24,20 @@ const geistMono = Geist_Mono({
 
 const urbanist = Urbanist({
   subsets: ["latin"],
-  weight: ["400" , "500", "600" , "700"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-urbanist",
 });
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "500", "600" , "700"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-montserrat",
+});
+
+const shipporiMincho = Shippori_Mincho({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-shippori-mincho",
 });
 
 const zenAntique = Zen_Antique({
@@ -40,21 +52,29 @@ const kleeOne = Klee_One({
   variable: "--font-klee-one",
 });
 
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-sans-jp",
+});
+
 export const metadata = {
   title: "kaiwai｜界隈の数だけ、SNSがあっていい",
-  description: "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
+  description:
+    "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
   icons: {
     icon: "/favicon.ico",
   },
-openGraph: {
+  openGraph: {
     title: "kaiwai｜界隈の数だけ、SNSがあっていい",
     description:
       "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
-    url: "https://kaiwai.vercel.app", // ← あなたの本番URLに変更
+    url: "https://kaiwai.vercel.app",
     siteName: "kaiwai",
     images: [
       {
-        url: "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kw.jpg?alt=media&token=dc565a57-5fab-49bf-8cee-af18dc0d77ef", // OGP画像URL
+        url:
+          "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kw.jpg?alt=media&token=dc565a57-5fab-49bf-8cee-af18dc0d77ef",
         width: 1200,
         height: 630,
         alt: "KAIWAI OGP",
@@ -69,17 +89,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ja">
       <body
-  className={`
-    ${geistSans.variable}
-    ${geistMono.variable}
-    ${urbanist.variable}
-    ${montserrat.variable}
-    ${shipporiMincho.variable}
-    ${zenAntique.variable}
-    ${kleeOne.variable}
-    antialiased
-  `}
->
+        className={`
+          ${geistSans.variable}
+          ${geistMono.variable}
+          ${urbanist.variable}
+          ${montserrat.variable}
+          ${shipporiMincho.variable}
+          ${zenAntique.variable}
+          ${kleeOne.variable}
+          ${notoSansJP.variable}   /* ← 追加！ */
+          antialiased
+        `}
+      >
         {children}
 
         {/* Google Analytics */}
