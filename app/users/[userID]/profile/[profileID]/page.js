@@ -162,8 +162,8 @@ export default async function ProfilePage({ params }) {
               <Image
   src="/ap.png"   // ※ 64×64 以上の画像
   alt="App Store"
-  width={32}
-  height={32}
+  width={28}
+  height={28}
   style={{ objectFit: "contain" }}
 />
             </a>
@@ -171,8 +171,8 @@ export default async function ProfilePage({ params }) {
               <Image
   src="/gp.png"   // ※ 64×64 以上の画像
   alt="Google Play"
-  width={32}
-  height={32}
+  width={28}
+  height={28}
   style={{ objectFit: "contain" }}
 />
             </a>

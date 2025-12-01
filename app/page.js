@@ -230,8 +230,8 @@ export default function HomePage() {
     <Image
   src="/ap.png"   // ※ 64×64 以上の画像
   alt="App Store"
-  width={32}
-  height={32}
+  width={28}
+  height={28}
   style={{ objectFit: "contain" }}
 />
   </a>
@@ -243,8 +243,8 @@ export default function HomePage() {
     <Image
   src="/gp.png"   // ※ 64×64 以上の画像
   alt="Google Play"
-  width={32}
-  height={32}
+  width={28}
+  height={28}
   style={{ objectFit: "contain" }}
 />
   </a>
@@ -285,6 +285,7 @@ opacity: 0.85,
               marginRight: "1.6rem",
               marginLeft: "1.6rem",
               marginBottom: "1.5rem",
+              fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
             }}
           >
             <p style={{ color: "#fff", fontSize: "0.9rem", lineHeight: "1.8", textAlign: "center", margin: 0 }}>
