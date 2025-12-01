@@ -264,7 +264,7 @@ export default async function KaiwaiPage({ params }) {
       {/* コンテンツ */}
       <div
         style={{
-          fontFamily: "Shippori Mincho, Arial, Urbanist",
+          fontFamily: "Hiragino Sans , ヒラギノ角ゴ ProN , Shippori Mincho, Arial, Urbanist",
           maxWidth: "720px",
           paddingTop: "4.4rem",
           paddingLeft: "0rem",
@@ -296,6 +296,8 @@ export default async function KaiwaiPage({ params }) {
               marginBottom: "1.6rem",
               backgroundColor: "#f1f1f1",
               padding: "0.8rem 1rem",
+              marginRight: "0.8rem",
+              marginLeft: "0.8rem",
               borderRadius: "25px",
               textAlign: "center",
             }}
