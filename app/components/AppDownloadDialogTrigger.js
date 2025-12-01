@@ -46,9 +46,10 @@ export default function AppDownloadDialogTrigger() {
               boxShadow: "0 4px 25px rgba(0,0,0,0.15)",
               textAlign: "center",
               position: "relative",
-              width: "90%",
+              width: "85%",
               maxWidth: "320px",
               fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+              marginBottom: "100px",
             }}
           >
 
@@ -63,7 +64,7 @@ export default function AppDownloadDialogTrigger() {
                 color: "#fff",
                 padding: "11px 15px",
                 borderRadius: "16px",
-                marginBottom: "18px",
+                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
@@ -84,7 +85,7 @@ export default function AppDownloadDialogTrigger() {
                 color: "#fff",
                 padding: "11px 15px",
                 borderRadius: "16px",
-                marginBottom: "18px",
+                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
@@ -100,7 +101,7 @@ export default function AppDownloadDialogTrigger() {
               style={{
                 display: "block",
                 width: "100%",
-                padding: "11px",
+                padding: "10px",
                 borderRadius: "16px",
                 border: "1px solid #ccc",
                 background: "white",
@@ -108,6 +109,7 @@ export default function AppDownloadDialogTrigger() {
                 fontSize: "0.9rem",
                 marginTop: "4px",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+                color: "#3f3f3f",
               }}
             >
               閉じる

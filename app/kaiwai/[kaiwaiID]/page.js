@@ -276,7 +276,7 @@ export default async function KaiwaiPage({ params }) {
           style={{
             textAlign: "center",
             fontWeight: 400,
-            fontSize: "1.0rem",
+            fontSize: "0.9rem",
             marginTop: "1.5rem",
             marginBottom: "1.5rem",
             lineHeight: "1.6",
