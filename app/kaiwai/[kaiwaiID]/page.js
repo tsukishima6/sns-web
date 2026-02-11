@@ -1,11 +1,13 @@
 import {
   doc,
   getDoc,
+  collection,
   collectionGroup,
   query,
   where,
   orderBy,
   getDocs,
+  limit,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import Image from "next/image";
@@ -96,6 +98,25 @@ export default async function KaiwaiPage({ params }) {
 
   // 投稿取得
   let posts = [];
+  // 🔹 news取得（最大5件）
+let newsList = [];
+try {
+  const newsSnap = await getDocs(
+    query(
+      collection(db, "kaiwai", kaiwaiID, "news"),
+      orderBy("time", "desc"),
+      limit(5)
+    )
+  );
+
+  newsList = newsSnap.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+  }));
+} catch (err) {
+  console.error("news fetch error:", err);
+}
+
   try {
     const q = query(
       collectionGroup(db, "posts"),
@@ -127,7 +148,6 @@ export default async function KaiwaiPage({ params }) {
         return postObj;
       })
     );
-
     // 🔹 30日以内の投稿だけ残す
     const now = Date.now();
     const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
@@ -287,6 +307,101 @@ export default async function KaiwaiPage({ params }) {
           他の界隈・アカウント作成は{" "}
           <AppDownloadDialogTrigger /> から
         </h2>
+{/* 🔹 kaiwai news */}
+{newsList.length > 0 && (
+  <div style={{ margin: "1.8rem 0" }}>
+    <h2
+      style={{
+        fontSize: "1.1rem",
+        fontWeight: 600,
+        marginBottom: "0.1rem",
+        marginLeft: "2.2rem",
+        fontFamily: "'Urbanist','Montserrat',sans-serif",
+
+        // ✅ グラデ文字
+        background: "linear-gradient(135deg, #152635, #8fa8a7)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+      }}
+    >
+      {/* ✅ 表記変更 */}
+      {kaiwai.name} 界隈news
+    </h2>
+
+    <div
+      style={{
+        display: "flex",
+        overflowX: "auto",
+        gap: "0.8rem",
+        padding: "0 1rem",
+      }}
+    >
+      {newsList.map((n) => (
+        <a
+          key={n.id}
+          href={n.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            minWidth: "220px",
+            maxWidth: "220px",
+            background: "#00000000",
+            borderRadius: "29px",
+            padding: "1.4rem",
+            textDecoration: "none",
+            color: "#222",
+            fontFamily: "'Urbanist','Montserrat',sans-serif",
+            position: "relative", // ✅ 右下sitename用
+          }}
+        >
+          {n.img && (
+            <img
+              src={n.img}
+              alt=""
+              style={{
+                width: "100%",
+                height: "120px",
+                objectFit: "cover",
+                borderRadius: "18px",
+                marginBottom: "0.6rem",
+              }}
+            />
+          )}
+
+          <h3
+            style={{
+              fontSize: "1.0rem",
+              fontWeight: 500,
+              lineHeight: "1.4",
+              margin: 0,
+              paddingBottom: "1.2rem", // ✅ sitenameと被らない余白
+            }}
+          >
+            {n.title}
+          </h3>
+
+          {/* ✅ 右下に sitename */}
+          {n.sitename && (
+            <div
+              style={{
+                position: "absolute",
+                right: "0.9rem",
+                bottom: "0.8rem",
+                fontSize: "0.95rem",
+                color: "#8fa8a7",
+                opacity: 0.95,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {n.sitename}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
 
         {parentKaiwai && (
           <p
