@@ -299,9 +299,10 @@ try {
     fontSize: "0.9rem",
     marginTop: "1.5rem",
     marginBottom: "1.5rem",
-    marginLeft: "2.2rem",
-    marginRight: "2.2rem",
+    marginLeft: "2.1rem",
+    marginRight: "2.1rem",
     lineHeight: "1.6",
+    whiteSpace: "pre-line",
   }}
 >
   {kaiwai.description}
@@ -328,7 +329,7 @@ try {
       }}
     >
       {/* ✅ 表記変更 */}
-      {kaiwai.name} 界隈news
+      {kaiwai.name}界隈news
     </h2>
 
     <div
