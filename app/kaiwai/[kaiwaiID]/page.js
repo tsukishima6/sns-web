@@ -50,8 +50,8 @@ export async function generateMetadata({ params }) {
 
     // 🌏 通常インデックス許可
     return {
-      title: `${kaiwai.name}界隈｜kaiwai`,
-      description: `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。`,
+      title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+      description: `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。${kaiwai.description || ""}`,
       openGraph: { images: [fallbackOGP] },
       twitter: { card: "summary_large_image", images: [fallbackOGP] },
       robots: "index, follow",
@@ -293,20 +293,23 @@ try {
         }}
       >
         <h2
-          style={{
-            textAlign: "center",
-            fontWeight: 400,
-            fontSize: "0.9rem",
-            marginTop: "1.5rem",
-            marginBottom: "1.5rem",
-            lineHeight: "1.6",
-          }}
-        >
-          {kaiwai.name}界隈の"人"と"情報"が集まるSNSです。
-          <br />
-          他の界隈・アカウント作成は{" "}
-          <AppDownloadDialogTrigger /> から
-        </h2>
+  style={{
+    textAlign: "center",
+    fontWeight: 400,
+    fontSize: "0.9rem",
+    marginTop: "1.5rem",
+    marginBottom: "1.5rem",
+    marginLeft: "2.2rem",
+    marginRight: "2.2rem",
+    lineHeight: "1.6",
+  }}
+>
+  {kaiwai.description}
+  <br />
+  他の界隈・アカウント作成は{" "}
+  <AppDownloadDialogTrigger /> から
+</h2>
+
 {/* 🔹 kaiwai news */}
 {newsList.length > 0 && (
   <div style={{ margin: "1.8rem 0" }}>
