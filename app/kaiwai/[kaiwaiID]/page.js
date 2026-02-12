@@ -298,7 +298,7 @@ try {
     fontWeight: 400,
     fontSize: "0.9rem",
     marginTop: "1.5rem",
-    marginBottom: "1.5rem",
+    marginBottom: "1.0rem",
     marginLeft: "2.1rem",
     marginRight: "2.1rem",
     lineHeight: "1.6",
@@ -313,98 +313,112 @@ try {
 
 {/* 🔹 kaiwai news */}
 {newsList.length > 0 && (
-  <div style={{ margin: "1.8rem 0" }}>
+  <>
+    {/* 見出し（帯と隙間なし） */}
     <h2
-      style={{
-        fontSize: "1.1rem",
-        fontWeight: 600,
-        marginBottom: "0.1rem",
-        marginLeft: "2.2rem",
-        fontFamily: "'Urbanist','Montserrat',sans-serif",
+  style={{
+    fontSize: "1.2rem",
+    fontWeight: 600,
+    margin: 0,
+    padding: "0.2rem 0 0.3rem",
+    marginLeft: "2.2rem",
+    fontFamily: "'Urbanist','Montserrat',sans-serif",
 
-        // ✅ グラデ文字
-        background: "linear-gradient(135deg, #152635, #8fa8a7)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-      }}
-    >
-      {/* ✅ 表記変更 */}
-      {kaiwai.name}界隈news
-    </h2>
+    background: "linear-gradient(135deg, #96acaa, #a7bebc)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  }}
+>
+  {kaiwai.name}界隈news
+</h2>
 
+
+
+    {/* 横幅いっぱいの帯 */}
     <div
       style={{
-        display: "flex",
-        overflowX: "auto",
-        gap: "0.8rem",
-        padding: "0 1rem",
+        width: "100vw",
+        marginLeft: "calc(50% - 50vw)",
+        background: "linear-gradient(135deg, #8fa8a7, #eef2f3)",
+        padding: "1.5rem 0 1.8rem",
       }}
     >
-      {newsList.map((n) => (
-        <a
-          key={n.id}
-          href={n.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            minWidth: "220px",
-            maxWidth: "220px",
-            background: "#00000000",
-            borderRadius: "29px",
-            padding: "1.4rem",
-            textDecoration: "none",
-            color: "#222",
-            fontFamily: "'Urbanist','Montserrat',sans-serif",
-            position: "relative", // ✅ 右下sitename用
-          }}
-        >
-          {n.img && (
-            <img
-              src={n.img}
-              alt=""
-              style={{
-                width: "100%",
-                height: "120px",
-                objectFit: "cover",
-                borderRadius: "18px",
-                marginBottom: "0.6rem",
-              }}
-            />
-          )}
-
-          <h3
+      {/* 中身はいつもの幅に戻す */}
+      <div
+        style={{
+          maxWidth: "720px",
+          margin: "0 auto",
+          padding: "0 1rem",
+          display: "flex",
+          gap: "1.5rem",
+          overflowX: "auto",
+        }}
+      >
+        {newsList.map((n) => (
+          <a
+            key={n.id}
+            href={n.url}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              fontSize: "1.0rem",
-              fontWeight: 500,
-              lineHeight: "1.4",
-              margin: 0,
-              paddingBottom: "1.2rem", // ✅ sitenameと被らない余白
+              minWidth: "220px",
+              maxWidth: "220px",
+              background: "#ffffff",
+              borderRadius: "22px",
+              padding: "1.4rem",
+              textDecoration: "none",
+              color: "#222",
+              fontFamily: "'Urbanist','Montserrat',sans-serif",
+              position: "relative",
             }}
           >
-            {n.title}
-          </h3>
+            {n.img && (
+              <img
+                src={n.img}
+                alt=""
+                style={{
+                  width: "100%",
+                  height: "120px",
+                  objectFit: "cover",
+                  borderRadius: "16px",
+                  marginBottom: "0.6rem",
+                }}
+              />
+            )}
 
-          {/* ✅ 右下に sitename */}
-          {n.sitename && (
-            <div
+            <h3
               style={{
-                position: "absolute",
-                right: "0.9rem",
-                bottom: "0.8rem",
-                fontSize: "0.95rem",
-                color: "#8fa8a7",
-                opacity: 0.95,
-                whiteSpace: "nowrap",
+                fontSize: "1.0rem",
+                fontWeight: 500,
+                lineHeight: "1.4",
+                margin: 0,
+                paddingBottom: "1.2rem",
               }}
             >
-              {n.sitename}
-            </div>
-          )}
-        </a>
-      ))}
+              {n.title}
+            </h3>
+
+            {n.sitename && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: "0.9rem",
+                  bottom: "0.8rem",
+                  fontSize: "0.85rem",
+                  color: "#8fa8a7",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {n.sitename}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
+  </>
 )}
+
 
 
         {parentKaiwai && (
