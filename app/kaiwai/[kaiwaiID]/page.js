@@ -438,6 +438,17 @@ try {
             {parentKaiwai.name}のサブkaiwaiです
           </p>
         )}
+<h2
+  style={{
+    fontSize: "1.6rem",
+    fontWeight: 600,
+    margin: "1.8rem 0 0.6rem",
+    marginLeft: "1.0rem",
+    fontFamily: "'Urbanist','Montserrat',sans-serif",
+  }}
+>
+  posts
+</h2>
 
         {/* 投稿リスト */}
         <div
@@ -513,7 +524,7 @@ try {
                     </div>
                   )}
 
-                  <h4
+                  <p
                     style={{
                       fontSize: "0.9rem",
                       fontWeight: "400",
@@ -525,7 +536,7 @@ try {
                     }}
                   >
                     {post.postDescription || "（本文なし）"}
-                  </h4>
+                  </p>
 
                   {post.postPhoto && (
                     <img
@@ -581,6 +592,97 @@ try {
           )}
         </div>
       </div>
+{/* 🔻 posts 下のブランド紹介セクション */}
+<div
+  style={{
+    width: "100vw",
+    marginLeft: "calc(50% - 50vw)",
+    marginTop: "0.5rem",
+    backgroundImage:
+      "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+  {/* うっすら読みやすくするオーバーレイ */}
+  <div
+    style={{
+      backdropFilter: "blur(0px)",
+      WebkitBackdropFilter: "blur(0px)",
+      padding: "2.2rem 0",
+    }}
+  >
+    {/* 中身はいつもの幅 */}
+    <div
+      style={{
+        maxWidth: "720px",
+        margin: "0 auto",
+        padding: "0 1.4rem",
+        textAlign: "left",
+        color: "#152635",
+      }}
+    >
+      <p
+        style={{
+          margin: 0,
+          fontSize: "1.0rem",
+          lineHeight: "1.6",
+          letterSpacing: "0.02em",
+          fontFamily: "Noto Sans JP, Arial",
+          color: "#152635",
+        }}
+      >
+        界隈の数だけ、snsがあっていい。
+      </p>
+
+      <h2
+        style={{
+          margin: "0.4rem 0 1.1rem",
+          fontSize: "2.5rem",
+          fontWeight: 700,
+          fontFamily: "'Urbanist','Montserrat',sans-serif",
+          background: "linear-gradient(135deg, #152635, #8fa8a7)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          lineHeight: 1.1,
+        }}
+      >
+        kaiwai
+      </h2>
+
+      <p
+        style={{
+          margin: "0 0 0.9rem",
+          fontSize: "0.90rem",
+          lineHeight: "1.9",
+          letterSpacing: "0.02em",
+          fontFamily: "Noto Sans JP, Arial",
+          whiteSpace: "pre-line",
+        }}
+      >
+        趣味、地域、職種、悩み・・
+        {"\n"}各界隈のユーザーが集う国産SNS。
+      </p>
+
+      <p
+        style={{
+          margin: 0,
+          fontSize: "0.90rem",
+          lineHeight: "1.9",
+          letterSpacing: "0.02em",
+          fontFamily: "Noto Sans JP, Arial",
+          whiteSpace: "pre-line",
+        }}
+      >
+        {kaiwai.name}だけではありません。
+        {"\n"}界隈は自由に追加・切り替え。
+        {"\n"}ご自身で界隈を立ち上げ、
+　　　　　{"\n"}メンバーを募ることも。
+      </p>
+    </div>
+  </div>
+</div>
 
       <div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
         <KaiwaiWordCloud />
