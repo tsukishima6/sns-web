@@ -21,7 +21,7 @@ const fallbackProfilePhoto =
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
-// --- generateMetadata（noindex対応版）---
+// --- generateMetadata（SEO強化版）---
 export async function generateMetadata({ params }) {
   const { kaiwaiID } = params;
 
@@ -48,12 +48,31 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    // 🌏 通常インデックス許可
+    // 🔹 description整形（改行除去 + 文字数調整）
+    const cleanedDescription = (kaiwai.description || "")
+      .replace(/\s+/g, " ")  // 改行・余分な空白除去
+      .trim()
+      .slice(0, 140);        // 約140文字でカット（安全圏）
+
+    const finalDescription =
+      cleanedDescription.length > 0
+        ? `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。${cleanedDescription}`
+        : `${kaiwai.name}界隈の人と情報が集まるSNS、kaiwaiです。`;
+
     return {
       title: `${kaiwai.name}界隈｜kaiwaiSNS`,
-      description: `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。${kaiwai.description || ""}`,
-      openGraph: { images: [fallbackOGP] },
-      twitter: { card: "summary_large_image", images: [fallbackOGP] },
+      description: finalDescription,
+      openGraph: {
+        title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+        description: finalDescription,
+        images: [fallbackOGP],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+        description: finalDescription,
+        images: [fallbackOGP],
+      },
       robots: "index, follow",
     };
   } catch (err) {
