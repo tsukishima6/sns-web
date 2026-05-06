@@ -267,7 +267,7 @@ try {
                 background: "linear-gradient(135deg, #152635, #8fa8a7)",
                 color: "#fff",
                 borderRadius: "26px",
-                padding: "0.1rem 0.6rem",
+                padding: "0.3rem 0.6rem",
                 fontSize: "0.9rem",
                 fontWeight: "500",
                 marginLeft: "0.3rem",
