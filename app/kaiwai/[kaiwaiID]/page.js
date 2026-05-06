@@ -245,7 +245,7 @@ try {
           <h1
             style={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "baseline",
               gap: "0.2rem",
               margin: 0,
               marginLeft: "1rem",
