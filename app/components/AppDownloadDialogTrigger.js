@@ -14,7 +14,7 @@ export default function AppDownloadDialogTrigger() {
           color: "#1E88E5",
           textDecoration: "underline",
           cursor: "pointer",
-          fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+          fontFamily: `"Urbanist","Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
         }}
       >
         kaiwaiアプリ
