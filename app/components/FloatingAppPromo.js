@@ -159,14 +159,14 @@ export default function FloatingAppPromo() {
                 width: "100%",
                 padding: "11px",
                 borderRadius: "16px",
-                border: "1px solid rgba(255,255,255,0.2)",
-                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(150,150,150,0.4)",
+                background: "rgba(180,180,180,0.35)",
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
                 cursor: "pointer",
                 fontSize: "0.9rem",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-                color: "rgba(255,255,255,0.7)",
+                color: "#444",
               }}
             >
               閉じる
