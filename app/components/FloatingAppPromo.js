@@ -45,7 +45,7 @@ export default function FloatingAppPromo() {
             letterSpacing="1"
           >
             <textPath href="#floatTextCircle">
-              アカウント作成はAppStore・GooglePlayから
+              <tspan fontSize="12">アカウント作成は</tspan><tspan fontSize="13">AppStore・GooglePlay</tspan><tspan fontSize="12">から</tspan>
             </textPath>
           </text>
         </svg>
