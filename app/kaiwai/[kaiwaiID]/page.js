@@ -246,7 +246,7 @@ try {
             style={{
               display: "flex",
               alignItems: "baseline",
-              gap: "0.2rem",
+              gap: 0,
               margin: 0,
               marginLeft: "1rem",
               fontFamily: "'Urbanist','Montserrat',sans-serif",
