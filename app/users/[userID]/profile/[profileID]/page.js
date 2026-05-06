@@ -58,7 +58,10 @@ export async function generateMetadata({ params }) {
       description: `${profile.name || "ユーザー"}のプロフィール`,
       images: [profile.photo || fallbackOGP],
     },
-robots: "noindex, nofollow",
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
