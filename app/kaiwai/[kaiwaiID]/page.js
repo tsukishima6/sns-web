@@ -357,7 +357,7 @@ try {
     WebkitTextFillColor: "transparent",
   }}
 >
-  {kaiwai.name}界隈news
+  {kaiwai.name}界隈<span style={{ fontFamily: "'Urbanist', sans-serif" }}>news</span>
 </h2>
 
 
