@@ -13,6 +13,10 @@ export default function FloatingAppPromo() {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
       <div
         onClick={() => setOpen(true)}
@@ -80,8 +84,7 @@ export default function FloatingAppPromo() {
             inset: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.2)",
-            backdropFilter: "blur(3px)",
+            backgroundColor: "transparent",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -97,6 +100,7 @@ export default function FloatingAppPromo() {
               width: "85%",
               maxWidth: "300px",
               marginBottom: "100px",
+              animation: "slideUp 0.35s ease forwards",
             }}
           >
             {/* App Store */}
