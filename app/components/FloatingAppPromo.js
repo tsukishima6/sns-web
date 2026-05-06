@@ -80,7 +80,7 @@ export default function FloatingAppPromo() {
             inset: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.4)",
+            backgroundColor: "rgba(0,0,0,0.2)",
             backdropFilter: "blur(3px)",
             display: "flex",
             alignItems: "center",
