@@ -261,7 +261,7 @@ try {
             >
               {kaiwai.name}
             </span>
-            <ruby style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222", rubyAlign: "center" }}>
+            <ruby style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222", rubyAlign: "center" }}>
               界隈
               <rt style={{ fontSize: "0.55rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>
                 kaiwai
