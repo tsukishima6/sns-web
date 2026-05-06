@@ -7,6 +7,13 @@ export default function AppDownloadDialogTrigger() {
 
   return (
     <>
+      <style>{`
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       {/* トリガー部分：青文字＋アンダーライン */}
       <span
         onClick={() => setOpen(true)}
@@ -29,30 +36,26 @@ export default function AppDownloadDialogTrigger() {
             inset: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.4)",
-            backdropFilter: "blur(3px)",
+            backgroundColor: "transparent",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            paddingTop: "15vh",
             zIndex: 2000,
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff",
-              borderRadius: "16px",
-              padding: "28px 25px",
-              boxShadow: "0 4px 25px rgba(0,0,0,0.15)",
-              textAlign: "center",
-              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
               width: "85%",
-              maxWidth: "320px",
-              fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-              marginBottom: "100px",
+              maxWidth: "300px",
+              marginBottom: "0",
+              animation: "slideUp 0.35s ease forwards",
             }}
           >
-
             {/* App Store */}
             <a
               href="https://apps.apple.com/jp/app/kaiwai-%E7%95%8C%E9%9A%88%E3%83%81%E3%83%A3%E3%83%83%E3%83%88sns/id6469412765"
@@ -60,15 +63,19 @@ export default function AppDownloadDialogTrigger() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg,#21424b,#77b3b8)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.5), rgba(119,179,184,0.45))",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+                boxShadow: "0 8px 32px rgba(33,66,75,0.25), inset 0 1px 0 rgba(255,255,255,0.25)",
+                border: "none",
                 color: "#fff",
-                padding: "11px 15px",
+                padding: "13px 15px",
                 borderRadius: "16px",
-                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
                 fontFamily: "'Urbanist', sans-serif",
+                textAlign: "center",
               }}
             >
               App Store
@@ -81,15 +88,19 @@ export default function AppDownloadDialogTrigger() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg,#21424b,#77b3b8)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.5), rgba(119,179,184,0.45))",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+                boxShadow: "0 8px 32px rgba(33,66,75,0.25), inset 0 1px 0 rgba(255,255,255,0.25)",
+                border: "none",
                 color: "#fff",
-                padding: "11px 15px",
+                padding: "13px 15px",
                 borderRadius: "16px",
-                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
                 fontFamily: "'Urbanist', sans-serif",
+                textAlign: "center",
               }}
             >
               Google Play
@@ -101,15 +112,17 @@ export default function AppDownloadDialogTrigger() {
               style={{
                 display: "block",
                 width: "100%",
-                padding: "10px",
+                padding: "11px",
                 borderRadius: "16px",
-                border: "1px solid #ccc",
-                background: "white",
+                border: "none",
+                background: "rgba(200,200,200,0.4)",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4)",
                 cursor: "pointer",
                 fontSize: "0.9rem",
-                marginTop: "4px",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-                color: "#3f3f3f",
+                color: "#444",
               }}
             >
               閉じる
