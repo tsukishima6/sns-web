@@ -242,13 +242,14 @@ try {
             </Link>
           </div>
 
-          <div
+          <h1
             style={{
               display: "flex",
-              alignItems: "baseline",
+              alignItems: "center",
               gap: "0.2rem",
               margin: 0,
               marginLeft: "1rem",
+              fontFamily: "'Urbanist','Montserrat',sans-serif",
             }}
           >
             <span
@@ -260,15 +261,12 @@ try {
             >
               {kaiwai.name}
             </span>
-            <span
-              style={{
-                fontSize: "1.1rem",
-                fontWeight: "600",
-                color: "#222",
-              }}
-            >
-              kaiwai
-            </span>
+            <ruby style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222", rubyAlign: "center" }}>
+              界隈
+              <rt style={{ fontSize: "0.55rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>
+                kaiwai
+              </rt>
+            </ruby>
             <div
               style={{
                 background: "linear-gradient(135deg, #152635, #8fa8a7)",
@@ -282,7 +280,7 @@ try {
             >
               web版
             </div>
-          </div>
+          </h1>
 
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a
@@ -326,27 +324,12 @@ try {
           paddingBottom: "2.5rem",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            fontWeight: 700,
-            fontSize: "1.4rem",
-            marginTop: "1.5rem",
-            marginBottom: "0.2rem",
-            marginLeft: "2.1rem",
-            marginRight: "2.1rem",
-            fontFamily: "Noto Sans JP, Arial",
-            color: "#222",
-          }}
-        >
-          {kaiwai.name}界隈のSNS
-        </h1>
         <h2
   style={{
     textAlign: "center",
     fontWeight: 400,
     fontSize: "0.9rem",
-    marginTop: "0.5rem",
+    marginTop: "1.5rem",
     marginBottom: "1.0rem",
     marginLeft: "2.1rem",
     marginRight: "2.1rem",
