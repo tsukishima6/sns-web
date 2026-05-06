@@ -59,10 +59,9 @@ export async function generateMetadata({ params }) {
       description,
       images: [ogImage],
     },
-    robots: {
-      index: false,
-      follow: false,
-    },
+    robots: post.postDescription?.includes("に参加しました！よろしくお願いします。")
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
   };
 }
 
