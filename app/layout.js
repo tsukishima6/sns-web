@@ -10,6 +10,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import FloatingAppPromo from "./components/FloatingAppPromo";
 
 // 各フォントの設定
 const geistSans = Geist({
@@ -102,6 +103,7 @@ export default function RootLayout({ children }) {
         `}
       >
         {children}
+        <FloatingAppPromo />
 
         {/* Google Analytics */}
         <Script

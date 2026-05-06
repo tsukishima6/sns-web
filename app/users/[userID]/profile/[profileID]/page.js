@@ -2,6 +2,7 @@ import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebas
 import { db } from "../../../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
+import PageHeader from "../../../../components/PageHeader";
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -102,87 +103,7 @@ export default async function ProfilePage({ params }) {
 
   return (
     <>
-      {/* 固定ヘッダー */}
-      <header
-        style={{
-          width: "100%",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          backgroundColor: "#fff",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "960px",
-            margin: "0 auto",
-            padding: "0.8rem 1rem",
-            paddingTop: "1.2rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontFamily: "'Urbanist','Montserrat',sans-serif",
-          }}
-        >
-          <div style={{ flexShrink: 0 }}>
-      <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
-        <Image
-          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
-          alt="KAIWAI Logo"
-          width={34}
-          height={34}
-          style={{ objectFit: "contain", cursor: "pointer" }}
-        />
-      </Link>
-    </div>
-          <Link href={`/kaiwai/${kaiwaiID}`} style={{ textDecoration: "none", color: "inherit" }}>
-            <h1 style={{ display: "flex", alignItems: "baseline", gap: "0.2rem", margin: 0 , marginLeft: "1rem" }}>
-              <span style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222" }}>
-                {kaiwaiName}
-              </span>
-              <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#222" }}>
-                kaiwai
-              </span>
-              <div
-                style={{
-                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
-                  color: "#fff",
-                  borderRadius: "25px",
-                  padding: "0.1rem 0.6rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  marginLeft: "0.1rem",
-                }}
-              >
-                web版
-              </div>
-            </h1>
-          </Link>
-          <div style={{ display: "flex", gap: "0.25rem" }}>
-            <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-              <Image
-  src="/ap.png"   // ※ 64×64 以上の画像
-  alt="App Store"
-  width={28}
-  height={28}
-  style={{ objectFit: "contain" }}
-/>
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
-              <Image
-  src="/gp.png"   // ※ 64×64 以上の画像
-  alt="Google Play"
-  width={28}
-  height={28}
-  style={{ objectFit: "contain" }}
-/>
-            </a>
-          </div>
-        </div>
-      </header>
+      <PageHeader kaiwaiName={kaiwaiName} kaiwaiID={kaiwaiID} />
 
       {/* プロフィール本体 */}
       <div
