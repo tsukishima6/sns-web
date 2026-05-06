@@ -257,16 +257,11 @@ try {
                 fontSize: "1.0rem",
                 fontWeight: "600",
                 color: "#222",
+                lineHeight: "1",
               }}
             >
-              {kaiwai.name}
+              {kaiwai.name}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
             </span>
-            <ruby style={{ fontSize: "1.0rem", fontWeight: "600", color: "#222", rubyAlign: "center" }}>
-              界隈
-              <rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>
-                kaiwai
-              </rt>
-            </ruby>
             <div
               style={{
                 background: "linear-gradient(135deg, #152635, #8fa8a7)",
@@ -275,7 +270,8 @@ try {
                 padding: "0.1rem 0.6rem",
                 fontSize: "0.9rem",
                 fontWeight: "500",
-                marginLeft: "0.1rem",
+                marginLeft: "0.3rem",
+                lineHeight: "1",
               }}
             >
               web版
