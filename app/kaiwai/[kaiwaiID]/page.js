@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "../../components/wordcloud";
 import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
+import FloatingAppPromo from "../../components/FloatingAppPromo";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -716,6 +717,8 @@ try {
       <div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
         <KaiwaiWordCloud />
       </div>
+
+      <FloatingAppPromo />
     </>
   );
 }
