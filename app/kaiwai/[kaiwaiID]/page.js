@@ -245,7 +245,7 @@ try {
           <h1
             style={{
               display: "flex",
-              alignItems: "baseline",
+              alignItems: "flex-end",
               gap: 0,
               margin: 0,
               marginLeft: "1rem",
@@ -276,7 +276,6 @@ try {
                 fontSize: "0.9rem",
                 fontWeight: "500",
                 marginLeft: "0.1rem",
-                alignSelf: "flex-end",
               }}
             >
               web版
