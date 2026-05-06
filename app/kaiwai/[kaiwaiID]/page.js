@@ -331,6 +331,7 @@ try {
     marginRight: "2.1rem",
     lineHeight: "1.6",
     whiteSpace: "pre-line",
+    fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
   }}
 >
   {kaiwai.description}
