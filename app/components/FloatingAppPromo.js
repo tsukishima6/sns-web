@@ -39,13 +39,13 @@ export default function FloatingAppPromo() {
             />
           </defs>
           <text
-            fontSize="8"
+            fontSize="11"
             fill="#333"
             fontFamily="'Urbanist','Noto Sans JP',sans-serif"
             letterSpacing="1"
           >
             <textPath href="#floatTextCircle">
-              アカウント作成はAppStore・GooglePlayから ✦ アカウント作成はAppStore・GooglePlayから ✦
+              アカウント作成はAppStore・GooglePlayから
             </textPath>
           </text>
         </svg>
