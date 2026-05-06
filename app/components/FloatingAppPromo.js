@@ -39,7 +39,7 @@ export default function FloatingAppPromo() {
             />
           </defs>
           <text
-            fontSize="11"
+            fontSize="13"
             fill="#333"
             fontFamily="'Urbanist','Noto Sans JP',sans-serif"
             letterSpacing="1"
