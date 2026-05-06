@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function FloatingAppPromo() {
   return (
     <>
@@ -49,16 +51,16 @@ export default function FloatingAppPromo() {
         </svg>
 
         {/* 中央画像 */}
-        <img
+        <Image
           src="/iphone.png"
           alt="kaiwai app"
+          width={80}
+          height={80}
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "80px",
-            height: "80px",
             objectFit: "contain",
           }}
         />
