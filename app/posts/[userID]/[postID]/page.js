@@ -59,7 +59,10 @@ export async function generateMetadata({ params }) {
       description,
       images: [ogImage],
     },
-robots: "noindex, nofollow",
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
