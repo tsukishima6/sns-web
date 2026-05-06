@@ -276,6 +276,7 @@ try {
                 fontSize: "0.9rem",
                 fontWeight: "500",
                 marginLeft: "0.1rem",
+                alignSelf: "flex-end",
               }}
             >
               web版
