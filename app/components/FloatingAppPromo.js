@@ -91,15 +91,11 @@ export default function FloatingAppPromo() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff",
-              borderRadius: "16px",
-              padding: "28px 25px",
-              boxShadow: "0 4px 25px rgba(0,0,0,0.15)",
-              textAlign: "center",
-              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
               width: "85%",
-              maxWidth: "320px",
-              fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+              maxWidth: "300px",
               marginBottom: "100px",
             }}
           >
@@ -110,15 +106,18 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg,#21424b,#77b3b8)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.55), rgba(119,179,184,0.55))",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.3)",
                 color: "#fff",
-                padding: "11px 15px",
+                padding: "13px 15px",
                 borderRadius: "16px",
-                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
                 fontFamily: "'Urbanist', sans-serif",
+                textAlign: "center",
               }}
             >
               App Store
@@ -131,15 +130,18 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg,#21424b,#77b3b8)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.55), rgba(119,179,184,0.55))",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.3)",
                 color: "#fff",
-                padding: "11px 15px",
+                padding: "13px 15px",
                 borderRadius: "16px",
-                marginBottom: "13px",
                 textDecoration: "none",
                 fontWeight: "600",
                 fontSize: "1rem",
                 fontFamily: "'Urbanist', sans-serif",
+                textAlign: "center",
               }}
             >
               Google Play
@@ -151,15 +153,16 @@ export default function FloatingAppPromo() {
               style={{
                 display: "block",
                 width: "100%",
-                padding: "10px",
+                padding: "11px",
                 borderRadius: "16px",
-                border: "1px solid #ccc",
-                background: "white",
+                border: "1px solid rgba(255,255,255,0.2)",
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
                 cursor: "pointer",
                 fontSize: "0.9rem",
-                marginTop: "4px",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-                color: "#3f3f3f",
+                color: "rgba(255,255,255,0.7)",
               }}
             >
               閉じる
