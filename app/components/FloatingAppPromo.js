@@ -87,7 +87,8 @@ export default function FloatingAppPromo() {
             backgroundColor: "transparent",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "flex-end",
+            paddingBottom: "2.5rem",
             zIndex: 2000,
           }}
         >
@@ -99,7 +100,7 @@ export default function FloatingAppPromo() {
               gap: "12px",
               width: "85%",
               maxWidth: "300px",
-              marginBottom: "100px",
+              marginBottom: "0",
               animation: "slideUp 0.35s ease forwards",
             }}
           >
@@ -110,9 +111,9 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg, rgba(33,66,75,0.55), rgba(119,179,184,0.55))",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.75), rgba(119,179,184,0.75))",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 border: "1px solid rgba(255,255,255,0.3)",
                 color: "#fff",
                 padding: "13px 15px",
@@ -134,9 +135,9 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg, rgba(33,66,75,0.55), rgba(119,179,184,0.55))",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                background: "linear-gradient(135deg, rgba(33,66,75,0.75), rgba(119,179,184,0.75))",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 border: "1px solid rgba(255,255,255,0.3)",
                 color: "#fff",
                 padding: "13px 15px",
@@ -160,9 +161,9 @@ export default function FloatingAppPromo() {
                 padding: "11px",
                 borderRadius: "16px",
                 border: "1px solid rgba(150,150,150,0.4)",
-                background: "rgba(180,180,180,0.35)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                background: "rgba(180,180,180,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 cursor: "pointer",
                 fontSize: "0.9rem",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
