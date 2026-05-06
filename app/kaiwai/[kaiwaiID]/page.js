@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
       return {
         title: "kaiwaiが見つかりません",
         description: "指定されたkaiwaiは存在しません。",
-        robots: "noindex, nofollow",
+        robots: { index: false, follow: false },
       };
     }
 
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
       return {
         title: `${kaiwai.name || "kaiwai"}｜非公開界隈`,
         description: "この界隈はインデックス対象外です。",
-        robots: "noindex, nofollow",
+        robots: { index: false, follow: false },
       };
     }
 
@@ -56,24 +56,27 @@ export async function generateMetadata({ params }) {
 
     const finalDescription =
       cleanedDescription.length > 0
-        ? `${kaiwai.name}界隈の"人"と"情報"が集まるSNS、kaiwaiです。${cleanedDescription}`
-        : `${kaiwai.name}界隈の人と情報が集まるSNS、kaiwaiです。`;
+        ? `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。${cleanedDescription}`
+        : `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。`;
 
     return {
-      title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+      title: `${kaiwai.name}界隈のSNS｜kaiwai`,
       description: finalDescription,
       openGraph: {
-        title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+        title: `${kaiwai.name}界隈のSNS｜kaiwai`,
         description: finalDescription,
         images: [fallbackOGP],
       },
       twitter: {
         card: "summary_large_image",
-        title: `${kaiwai.name}界隈｜kaiwaiSNS`,
+        title: `${kaiwai.name}界隈のSNS｜kaiwai`,
         description: finalDescription,
         images: [fallbackOGP],
       },
-      robots: "index, follow",
+      robots: {
+        index: true,
+        follow: true,
+      },
     };
   } catch (err) {
     console.error("generateMetadata error:", err);
@@ -169,7 +172,7 @@ try {
     );
     // 🔹 30日以内の投稿だけ残す
     const now = Date.now();
-    const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+    const NINETY_DAYS = 90 * 24 * 60 * 60 * 1000;
 
     posts = posts.filter((post) => {
       if (!post.profile || !post.timePosted) return false;
@@ -177,7 +180,7 @@ try {
         ? post.timePosted.seconds * 1000
         : post.timePosted.toMillis?.();
       if (!postTime) return false;
-      return now - postTime <= THIRTY_DAYS;
+      return now - postTime <= NINETY_DAYS;
     });
 
     console.log(`Kaiwai ${kaiwaiID} posts after filter:`, posts.length);
@@ -185,8 +188,20 @@ try {
     console.error("posts fetch error:", err);
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": `${kaiwai.name}界隈のSNS｜kaiwai`,
+    "description": kaiwai.description || `${kaiwai.name}界隈のSNS「kaiwai」`,
+    "url": `https://kaiwai.vercel.app/kaiwai/${kaiwaiID}`,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* 固定ヘッダー */}
       <header
         style={{
@@ -227,7 +242,7 @@ try {
             </Link>
           </div>
 
-          <h1
+          <div
             style={{
               display: "flex",
               alignItems: "baseline",
@@ -267,7 +282,7 @@ try {
             >
               web版
             </div>
-          </h1>
+          </div>
 
           <div style={{ display: "flex", gap: "0.25rem" }}>
             <a
@@ -311,12 +326,27 @@ try {
           paddingBottom: "2.5rem",
         }}
       >
+        <h1
+          style={{
+            textAlign: "center",
+            fontWeight: 700,
+            fontSize: "1.4rem",
+            marginTop: "1.5rem",
+            marginBottom: "0.2rem",
+            marginLeft: "2.1rem",
+            marginRight: "2.1rem",
+            fontFamily: "Noto Sans JP, Arial",
+            color: "#222",
+          }}
+        >
+          {kaiwai.name}界隈のSNS
+        </h1>
         <h2
   style={{
     textAlign: "center",
     fontWeight: 400,
     fontSize: "0.9rem",
-    marginTop: "1.5rem",
+    marginTop: "0.5rem",
     marginBottom: "1.0rem",
     marginLeft: "2.1rem",
     marginRight: "2.1rem",
