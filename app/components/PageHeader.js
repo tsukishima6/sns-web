@@ -58,6 +58,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
                 fontWeight: "600",
                 color: "#222",
                 lineHeight: "1",
+                paddingBottom: "0.7rem",
               }}
             >
               {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
