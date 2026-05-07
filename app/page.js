@@ -1,177 +1,114 @@
-"use client";
-
-import React, { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { collectionGroup, query, orderBy, getDocs, getDoc, limit } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import KaiwaiWordCloud from "./components/wordcloud";
-import BentoGallery from "./components/BentoGallery"; 
+import BentoGallery from "./components/BentoGallery";
+import ParticlesBackground from "./components/ParticlesBackground";
+import PostsCarousel from "./components/PostsCarousel";
 
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-
-
-const fallbackProfilePhoto =
-  "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
-
-// 背景パーティクル
-function ParticlesBackground({ scrollY }) {
-  const [inited, setInited] = useState(false);
-  const particlesRef = useRef(null);
-
-  useEffect(() => {
-    let mounted = true;
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-      if (mounted) setInited(true);
-    }).catch((e) => {
-      console.error("initParticlesEngine error:", e);
-      if (mounted) setInited(false);
-    });
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const options = {
-    background: { color: { value: "#ffffff" } },
-    fullScreen: { enable: false },
-    fpsLimit: 60,
-    particles: {
-      number: { value: 80, density: { enable: true, area: 800 } },
-      color: { value: ["#2f4f4f", "#db7093", "#4682b4"] },
-      shape: { type: "circle" },
-      opacity: { value: 0.75 },
-      size: { value: { min: 1, max: 3 } },
-      move: {
-        enable: true,
-        speed: Math.min(4, 0.8 + Math.abs(scrollY || 0) * 0.0009),
-        direction: "none",
-        outModes: { default: "out" },
-      },
-      links: {
-        enable: true,
-        distance: 120,
-        color: "#9aa4b2",
-        opacity: 0.65,
-        width: 1,
-      },
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "kaiwai",
+    "url": "https://kaiwai.vercel.app",
+    "description": "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "kaiwai",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "iOS, Android",
+    "url": "https://kaiwai.vercel.app",
+    "description": "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS",
+    "downloadUrl": "https://apps.apple.com/jp/app/kaiwai/id6469412765",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY",
     },
-    detectRetina: true,
-  };
+  },
+];
 
-  if (!inited || typeof document === "undefined") return null;
+async function fetchPosts() {
+  try {
+    const q = query(collectionGroup(db, "posts"), orderBy("timePosted", "desc"), limit(5));
+    const snap = await getDocs(q);
 
-  const particleElement = (
-    <div
-      id="page-particles"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100%",
-        zIndex: -9999,
-        pointerEvents: "none",
-        overflow: "hidden",
-      }}
-    >
-      <Particles id="page-particles" options={options} ref={particlesRef} />
-    </div>
-  );
+    const posts = await Promise.all(
+      snap.docs.map(async (d) => {
+        const data = d.data();
+        const userID = d.ref.parent.parent?.id || null;
 
-  return createPortal(particleElement, document.body);
+        let profile = null;
+        if (data.postUser_profile) {
+          try {
+            const profileSnap = await getDoc(data.postUser_profile);
+            if (profileSnap.exists()) {
+              const p = profileSnap.data();
+              profile = {
+                id: profileSnap.id,
+                name: p.name || null,
+                photo: p.photo || null,
+                ID: p.ID || null,
+              };
+            }
+          } catch (e) {
+            console.error("profile fetch error:", e);
+          }
+        }
+
+        let kaiwaiName = "";
+        let kaiwaiID = "";
+        if (data.kaiwai) {
+          try {
+            const kaiwaiSnap = await getDoc(data.kaiwai);
+            if (kaiwaiSnap.exists()) {
+              kaiwaiName = kaiwaiSnap.data().name || "";
+              kaiwaiID = kaiwaiSnap.id;
+            }
+          } catch (e) {
+            console.error("kaiwai fetch error:", e);
+          }
+        }
+
+        return {
+          id: d.id,
+          userID,
+          postDescription: data.postDescription || null,
+          postPhoto: data.postPhoto || null,
+          timePosted: data.timePosted?.seconds || null,
+          profile,
+          kaiwaiName,
+          kaiwaiID,
+        };
+      })
+    );
+
+    return posts;
+  } catch (err) {
+    console.error("fetch posts error:", err);
+    return [];
+  }
 }
 
-export default function HomePage() {
-  const [posts, setPosts] = useState([]);
-  const containerRef = useRef(null);
-
-  // Firestore から投稿取得
-  useEffect(() => {
-    let mounted = true;
-    async function fetchPosts() {
-      try {
-        const q = query(collectionGroup(db, "posts"), orderBy("timePosted", "desc"), limit(5));
-        const snap = await getDocs(q);
-
-        const postsData = await Promise.all(
-          snap.docs.map(async (d) => {
-            const data = d.data();
-            const userID = d.ref.parent.parent?.id || null;
-
-            let profile = null;
-            if (data.postUser_profile) {
-              try {
-                const profileSnap = await getDoc(data.postUser_profile);
-                if (profileSnap.exists()) profile = { id: profileSnap.id, ...profileSnap.data() };
-              } catch (e) {
-                console.error("profile fetch error:", e);
-              }
-            }
-
-            let kaiwaiName = "";
-            let kaiwaiID = "";
-            if (data.kaiwai) {
-              try {
-                const kaiwaiSnap = await getDoc(data.kaiwai);
-                if (kaiwaiSnap.exists()) {
-                  kaiwaiName = kaiwaiSnap.data().name || "";
-                  kaiwaiID = kaiwaiSnap.id;
-                }
-              } catch (e) {
-                console.error("kaiwai fetch error:", e);
-              }
-            }
-
-            return {
-              id: d.id,
-              userID,
-              ...data,
-              profile,
-              kaiwaiName,
-              kaiwaiID,
-              timePosted: data.timePosted?.seconds || null,
-            };
-          })
-        );
-
-        if (mounted) setPosts(postsData);
-      } catch (err) {
-        console.error("fetch posts error:", err);
-      }
-    }
-    fetchPosts();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  // 自動カルーセル
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const interval = setInterval(() => {
-      if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 10) {
-        container.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        container.scrollBy({ left: 300, behavior: "smooth" });
-      }
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [posts]);
-
-  // スクロール量を監視
+export default async function HomePage() {
+  const posts = await fetchPosts();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* 背景パーティクル */}
       <ParticlesBackground />
 
       <div style={{ position: "relative", zIndex: 2 }}>
-        {/* ヘッダー（変更なし） */}
+        {/* ヘッダー */}
         <header
           style={{
             width: "100%",
@@ -224,31 +161,14 @@ export default function HomePage() {
               </div>
             </div>
 
-
-<div style={{ display: "flex", gap: "0.25rem" }}>
-  <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-    <Image
-  src="/ap.png"   // ※ 64×64 以上の画像
-  alt="App Store"
-  width={28}
-  height={28}
-  style={{ objectFit: "contain" }}
-/>
-  </a>
-  <a
-    href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Image
-  src="/gp.png"   // ※ 64×64 以上の画像
-  alt="Google Play"
-  width={28}
-  height={28}
-  style={{ objectFit: "contain" }}
-/>
-  </a>
-</div>
+            <div style={{ display: "flex", gap: "0.25rem" }}>
+              <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
+                <Image src="/ap.png" alt="App Store" width={28} height={28} style={{ objectFit: "contain" }} />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
+                <Image src="/gp.png" alt="Google Play" width={28} height={28} style={{ objectFit: "contain" }} />
+              </a>
+            </div>
           </div>
         </header>
 
@@ -279,7 +199,7 @@ export default function HomePage() {
           <div
             style={{
               background: "linear-gradient(135deg, #152635, #8fa8a7)",
-opacity: 0.85, 
+              opacity: 0.85,
               borderRadius: "25px",
               padding: "1.2rem",
               marginRight: "1.6rem",
@@ -294,149 +214,18 @@ opacity: 0.85,
               新しいSNSを作りました。
             </p>
           </div>
-<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
+
+          <div style={{ marginTop: "0rem", marginBottom: "0rem", minHeight: "80px" }}>
             <KaiwaiWordCloud />
           </div>
-          {/* 投稿カルーセル */}
-          <div suppressHydrationWarning>
-            {posts.length > 0 ? (
-              <div
-                ref={containerRef}
-                style={{
-                  display: "flex",
-                  gap: "1rem",
-                  overflowX: "auto",
-                  scrollBehavior: "smooth",
-                  paddingBottom: "0rem",
-                  marginTop: "2.2rem",
-                  fontFamily: "Urbanist",
-                  marginBottom: "1rem",
-                }}
-              >
-                {posts.map((post) => (
-                  <div
-                    key={post.id}
-                    style={{
-                      flex: "0 0 auto",
-                      minWidth: "290px",
-                      maxWidth: "290px",
-                      marginLeft: "0.2rem",
-                    }}
-                  >
-                    <Link
-                      href={`/posts/${post.userID || "unknown"}/${post.id}`}
-                      style={{
-                        display: "block",
-                        textDecoration: "none",
-                        color: "inherit",
-                      }}
-                    >
-                      <div
-                        style={{
-                          padding: "1.3rem",
-                          border: "0.8px solid #808080",
-                          borderRadius: "12px",
-                          backgroundColor: "rgba(255,255,255,0.97)",
-                          position: "relative",
-                        }}
-                      >
-                        {post.profile && (
-                          <div style={{ display: "flex", alignItems: "center", marginBottom: "0.6rem" }}>
-                            <img
-                              src={post.profile.photo || fallbackProfilePhoto}
-                              alt={post.profile.name || "ユーザー"}
-                              style={{
-                                width: "48px",
-                                height: "48px",
-                                borderRadius: "50%",
-                                marginRight: "0.75rem",
-                                objectFit: "cover",
-                              }}
-                            />
-                            <div style={{ display: "flex", flexDirection: "column" }}>
-                              <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "#333" }}>
-                                {post.profile.name}
-                              </span>
-                              <span style={{ fontSize: "0.9rem", color: "#666", fontFamily: "Urbanist" }}>
-                                @{post.profile.ID || post.userID}
-                              </span>
-                            </div>
-                          </div>
-                        )}
 
-                        <h4
-                          style={{
-                            fontSize: "1rem",
-                            fontWeight: "400",
-                            marginBottom: post.postPhoto ? "0.9rem" : "1.5rem",
-                            color: "#333",
-                          }}
-                        >
-                          {post.postDescription || "（本文なし）"}
-                        </h4>
-
-                        {post.postPhoto && (
-                          <img
-                            src={post.postPhoto}
-                            alt="投稿画像"
-                            style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
-                          />
-                        )}
-
-                        {post.timePosted && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              right: "1.2rem",
-                              bottom: "1.2rem",
-                              fontSize: "1rem",
-                              color: "#888",
-                              fontFamily: "Urbanist",
-                            }}
-                          >
-                            {new Date(post.timePosted * 1000).toLocaleString("ja-JP", {
-                              year: "numeric",
-                              month: "numeric",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-
-                    {/* 界隈リンクは外に出してネストを防止 */}
-                    {post.kaiwaiName && post.kaiwaiID && (
-                      <Link href={`/kaiwai/${post.kaiwaiID}`} style={{ textDecoration: "none" }}>
-                        <p
-                          style={{
-                            fontSize: "1rem",
-                            marginLeft: "0.2rem",
-                            fontWeight: "600",
-                            background: "linear-gradient(135deg, #58b5f7, #f20089)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            marginTop: "0.5rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          {post.kaiwaiName}kaiwai の投稿
-                        </p>
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p style={{ color: "#666" }}>まだ投稿がありません</p>
-            )}
-          </div>
+          <PostsCarousel posts={posts} />
         </div>
       </div>
-<div style={{ marginTop: "0rem" }}>
-  <BentoGallery />
-</div>
+
+      <div style={{ marginTop: "0rem" }}>
+        <BentoGallery />
+      </div>
     </>
   );
 }
