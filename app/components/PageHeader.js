@@ -45,7 +45,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
           <h1
             style={{
               display: "flex",
-              alignItems: "flex-end",
+              alignItems: "center",
               gap: 0,
               margin: 0,
               marginLeft: "1rem",

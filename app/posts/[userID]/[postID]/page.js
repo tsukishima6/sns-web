@@ -135,7 +135,6 @@ export default async function PostPage({ params }) {
         {/* メイン投稿カード */}
         <div
     style={{
-      width: "100%",
       margin: "0 auto",
       padding: "1.3rem 1rem" ,
       borderBottom: "1px solid #ddd",
@@ -242,7 +241,6 @@ export default async function PostPage({ params }) {
               padding: "1.3rem 1rem",
               borderBottom: "1px solid #ddd",
               backgroundColor: "transparent",
-              width: "100%",
             }}
           >
             {/* 投稿者情報 */}
