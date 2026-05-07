@@ -145,7 +145,7 @@ export default async function HomePage() {
             </div>
 
             <div style={{ marginLeft: "1.2rem", display: "flex", alignItems: "center", gap: "0.2rem" }}>
-              <h1 style={{ margin: 0, fontSize: "1.4rem", fontWeight: "500", color: "#222" }}>kaiwai</h1>
+              <span style={{ margin: 0, fontSize: "1.4rem", fontWeight: "500", color: "#222" }}>kaiwai</span>
               <div
                 style={{
                   background: "linear-gradient(135deg, #152635, #8fa8a7)",
@@ -183,7 +183,7 @@ export default async function HomePage() {
             zIndex: 2,
           }}
         >
-          <h2
+          <h1
             style={{
               textAlign: "center",
               fontWeight: 500,
@@ -194,7 +194,7 @@ export default async function HomePage() {
             }}
           >
             界隈の数だけ、SNSがあっていい。
-          </h2>
+          </h1>
 
           <div
             style={{
