@@ -88,7 +88,7 @@ export default function FloatingAppPromo() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            paddingTop: "15vh",
+            paddingBottom: "20vh",
             zIndex: 2000,
           }}
         >
