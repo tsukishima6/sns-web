@@ -73,6 +73,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
                 fontWeight: "500",
                 marginLeft: "0.3rem",
                 lineHeight: "1",
+                transform: "translateY(-5px)",
               }}
             >
               web版
