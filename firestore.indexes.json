@@ -47,6 +47,14 @@
         { "fieldPath": "users_favorited", "arrayConfig": "CONTAINS" },
         { "fieldPath": "timePosted", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "postcomments",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "post", "order": "ASCENDING" },
+        { "fieldPath": "timePosted", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": [

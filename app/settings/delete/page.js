@@ -12,7 +12,6 @@ import {
 import {
   doc,
   collection,
-  collectionGroup,
   query,
   where,
   getDocs,
@@ -44,23 +43,16 @@ async function deleteUserData(uid) {
     }
   }
 
-  // 自分の投稿（配下のpostcommentsも含めて）を削除
+  // 自分の投稿を削除
   const postsSnap = await getDocs(collection(db, "users", uid, "posts"));
   for (const p of postsSnap.docs) {
-    try {
-      const commentsSnap = await getDocs(collection(db, "users", uid, "posts", p.id, "postcomments"));
-      await Promise.all(commentsSnap.docs.map((c) => deleteDoc(c.ref)));
-    } catch (e) {
-      console.error("投稿配下コメント削除エラー:", e);
-    }
     await deleteDoc(p.ref);
   }
 
-  // 他人の投稿に自分が書いたコメントを削除
+  // 自分が書いたコメントを削除（postcommentsはコメント投稿者=自分のusers/{uid}/postcommentsに
+  // フラットに保存されるため、他人の投稿へのコメントもここに含まれる）
   try {
-    const myComments = await getDocs(
-      query(collectionGroup(db, "postcomments"), where("user", "==", userRef))
-    );
+    const myComments = await getDocs(collection(db, "users", uid, "postcomments"));
     await Promise.all(myComments.docs.map((c) => deleteDoc(c.ref)));
   } catch (e) {
     console.error("自分のコメント削除エラー:", e);

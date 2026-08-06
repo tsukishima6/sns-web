@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import {
   collection,
+  collectionGroup,
   query,
+  where,
   orderBy,
   getDocs,
   addDoc,
@@ -27,15 +29,15 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
 
   async function loadComments() {
     try {
-      const commentsRef = collection(
-        db,
-        "users",
-        postUserID,
-        "posts",
-        postID,
-        "postcomments"
+      // コメントは投稿者(postUserID)ではなく、書いた本人のusers/{uid}/postcommentsに
+      // フラットに保存される（Firestoreセキュリティルールがこの形にのみ書き込みを許可しているため）。
+      // 投稿へのコメント一覧はcollectionGroupで`post`フィールドを引いて集める
+      const postRef = doc(db, "users", postUserID, "posts", postID);
+      const q = query(
+        collectionGroup(db, "postcomments"),
+        where("post", "==", postRef),
+        orderBy("timePosted", "asc")
       );
-      const q = query(commentsRef, orderBy("timePosted", "asc"));
       const snap = await getDocs(q);
 
       const loaded = await Promise.all(
@@ -90,14 +92,8 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
       const commenterRef = doc(db, "users", user.uid);
       const kaiwaiRef = kaiwaiPath ? doc(db, ...kaiwaiPath.split("/")) : null;
 
-      const commentsRef = collection(
-        db,
-        "users",
-        postUserID,
-        "posts",
-        postID,
-        "postcomments"
-      );
+      // 書き込み先は自分(commenterRef)のusers/{uid}/postcomments（フラット）
+      const commentsRef = collection(db, "users", user.uid, "postcomments");
 
       await addDoc(commentsRef, {
         comment: text.trim(),
@@ -118,10 +114,10 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
     }
   }
 
-  async function handleDelete(commentID) {
+  async function handleDelete(commentID, authorUID) {
     if (!confirm("このコメントを削除しますか？")) return;
     try {
-      await deleteDoc(doc(db, "users", postUserID, "posts", postID, "postcomments", commentID));
+      await deleteDoc(doc(db, "users", authorUID, "postcomments", commentID));
       setComments((prev) => prev.filter((c) => c.id !== commentID));
     } catch (e) {
       console.error("comment delete error:", e);
@@ -182,7 +178,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
                   </span>
                   {user && c.userID === user.uid && (
                     <button
-                      onClick={() => handleDelete(c.id)}
+                      onClick={() => handleDelete(c.id, c.userID)}
                       style={{
                         marginLeft: "auto",
                         background: "none",
