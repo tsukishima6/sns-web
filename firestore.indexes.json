@@ -1,0 +1,70 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "profile",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kaiwai", "order": "ASCENDING" },
+        { "fieldPath": "users_favorited", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "profile",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kaiwai", "order": "ASCENDING" },
+        { "fieldPath": "name", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "profile",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kaiwai", "order": "ASCENDING" },
+        { "fieldPath": "ID", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "kaiwai", "order": "ASCENDING" },
+        { "fieldPath": "favorited", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "business",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "kaiwai", "order": "ASCENDING" },
+        { "fieldPath": "favorited", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "posts",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "users_favorited", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "timePosted", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "profile",
+      "fieldPath": "categories",
+      "indexes": [
+        { "queryScope": "COLLECTION", "arrayConfig": "CONTAINS" },
+        { "queryScope": "COLLECTION_GROUP", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "postcomments",
+      "fieldPath": "user",
+      "indexes": [
+        { "queryScope": "COLLECTION", "order": "ASCENDING" },
+        { "queryScope": "COLLECTION_GROUP", "order": "ASCENDING" }
+      ]
+    }
+  ]
+}

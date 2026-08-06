@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* ブラウザデフォルトの body margin をリセット */
 body {
   margin: 0;

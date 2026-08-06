@@ -210,7 +210,7 @@ try {
         style={{
           fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
           maxWidth: "720px",
-          paddingTop: "4.4rem",
+          paddingTop: "7.4rem",
           paddingLeft: "0rem",
           paddingRight: "0rem",
           paddingBottom: "2.5rem",

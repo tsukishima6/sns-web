@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PageHeader from "../../../../components/PageHeader";
 import KaiwaiWordCloud from "../../../../components/wordcloud";
+import EditProfileButton from "../../../../components/EditProfileButton";
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -80,6 +81,28 @@ export default async function ProfilePage({ params }) {
 
   const profile = profileSnap.data();
 
+  // タグ（categories）の名前を取得
+  let tags = [];
+  if (profile.categories && profile.categories.length > 0) {
+    tags = (
+      await Promise.all(
+        profile.categories.map(async (catRef) => {
+          try {
+            const catSnap = await getDoc(catRef);
+            if (!catSnap.exists()) return null;
+            return {
+              id: catRef.id,
+              kaiwaiID: catRef.parent.parent.id,
+              name: catSnap.data().category_name || "",
+            };
+          } catch {
+            return null;
+          }
+        })
+      )
+    ).filter(Boolean);
+  }
+
   // kaiwai の name と id を取得（ヘッダー用）
   let kaiwaiName = "";
   let kaiwaiID = "";
@@ -109,7 +132,7 @@ export default async function ProfilePage({ params }) {
       {/* プロフィール本体 */}
       <div
         style={{
-          marginTop: "6rem",
+          marginTop: "9rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -130,6 +153,36 @@ export default async function ProfilePage({ params }) {
         <p style={{ fontFamily: "Arial , Urbanist" , fontSize: "1rem", color: "#444", marginTop: "1.0rem", textAlign: "center" }}>
           {profile.bio && profile.bio.trim() !== "" ? profile.bio : "よろしくお願いします。"}
         </p>
+        {tags.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "0.5rem",
+              marginTop: "0.9rem",
+            }}
+          >
+            {tags.map((tag) => (
+              <Link
+                key={tag.id}
+                href={`/kaiwai/${tag.kaiwaiID}/category/${tag.id}`}
+                style={{
+                  fontSize: "0.8rem",
+                  color: "#666",
+                  border: "1px solid #ddd",
+                  borderRadius: "999px",
+                  padding: "0.3rem 0.8rem",
+                  textDecoration: "none",
+                  fontFamily: "Urbanist",
+                }}
+              >
+                #{tag.name}
+              </Link>
+            ))}
+          </div>
+        )}
+        <EditProfileButton userID={userID} />
       </div>
 
       {/* 投稿一覧 */}

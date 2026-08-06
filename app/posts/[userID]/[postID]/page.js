@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
 import KaiwaiWordCloud from "../../../components/wordcloud";
+import CommentSection from "../../../components/CommentSection";
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -132,7 +133,7 @@ export default async function PostPage({ params }) {
 
 
       {/* コンテンツ */}
-      <div style={{ paddingTop: "80px" }}>
+      <div style={{ paddingTop: "120px" }}>
         {/* メイン投稿カード */}
         <div
     style={{
@@ -182,7 +183,11 @@ export default async function PostPage({ params }) {
 
           {/* 投稿写真 */}
     {post.postPhoto && (
-      <img src={post.postPhoto} alt="投稿画像" style={{ width: "93%", marginBottom: "1rem" }} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", width: "93%", marginBottom: "1rem" }}>
+        {[post.postPhoto, post.postphoto2, post.postphoto3].filter(Boolean).map((src, i) => (
+          <img key={i} src={src} alt="投稿画像" style={{ width: "100%" }} />
+        ))}
+      </div>
     )}
 
     {/* 投稿本文 */}
@@ -207,6 +212,13 @@ export default async function PostPage({ params }) {
   </div>
 )}
   </div>
+
+        {/* コメントセクション */}
+        <CommentSection
+          postUserID={userID}
+          postID={postID}
+          kaiwaiPath={post.kaiwai?.path ?? null}
+        />
 
         {/* 他の投稿 */}
 {profileData && (

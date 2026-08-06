@@ -7,10 +7,10 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
       style={{
         width: "100%",
         position: "fixed",
-        top: 0,
+        top: 56,
         left: 0,
         right: 0,
-        zIndex: 1000,
+        zIndex: 9000,
         backgroundColor: "#fff",
         boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
       }}

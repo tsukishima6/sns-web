@@ -40,4 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 serviceAccountKey.json
-serviceAccountKey.json
+
+# ネイティブアプリ（FlutterFlow）のエクスポート。仕様書として参照するのみで、Web版のコードではない
+/ffcode/

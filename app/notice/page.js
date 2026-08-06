@@ -1,0 +1,276 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  getDoc,
+  limit,
+  doc,
+  deleteDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/lib/AuthContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const fallbackPhoto =
+  "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
+
+function getNotificationText(r) {
+  const name = r.profile?.name || "ユーザー";
+  if (r.permission) return `${name} からフォローリクエストが届いています`;
+  if (r.follow) return `${name} があなたをフォローしました`;
+  if (r.like) return `${name} があなたの投稿にいいねしました`;
+  if (r.comment) return `${name} があなたの投稿にコメントしました`;
+  if (r.post) return r.message || `${name} が投稿しました`;
+  if (r.event) return r.message || `イベントのお知らせ`;
+  if (r.checkin) return r.message || `チェックインのお知らせ`;
+  return r.message || "お知らせ";
+}
+
+function getPostURL(postref) {
+  if (!postref?.path) return null;
+  const parts = postref.path.split("/");
+  // users/{uid}/posts/{postID}
+  if (parts.length >= 4) return `/posts/${parts[1]}/${parts[3]}`;
+  return null;
+}
+
+function formatTime(ts) {
+  if (!ts) return "";
+  const date = ts.toDate ? ts.toDate() : new Date(ts.seconds * 1000);
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const h = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  return `${m}/${d} ${h}:${min}`;
+}
+
+export default function NoticePage() {
+  const { user, userDoc, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [receipts, setReceipts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [responding, setResponding] = useState(null);
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    loadReceipts();
+  }, [user, authLoading]);
+
+  async function loadReceipts() {
+    try {
+      const q = query(
+        collection(db, "users", user.uid, "receipt"),
+        orderBy("time", "desc"),
+        limit(30)
+      );
+      const snap = await getDocs(q);
+
+      const items = await Promise.all(
+        snap.docs.map(async (d) => {
+          const data = d.data();
+
+          let profile = null;
+          if (data.user_p) {
+            try {
+              const pfSnap = await getDoc(data.user_p);
+              if (pfSnap.exists()) profile = pfSnap.data();
+            } catch (_) {}
+          }
+
+          return { id: d.id, ...data, profile };
+        })
+      );
+
+      setReceipts(items.filter(Boolean));
+    } catch (e) {
+      console.error("notice fetch error:", e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleReject(receipt) {
+    setResponding(receipt.id);
+    try {
+      await deleteDoc(doc(db, "users", user.uid, "receipt", receipt.id));
+      setReceipts((prev) => prev.filter((r) => r.id !== receipt.id));
+    } catch (e) {
+      console.error("follow reject error:", e);
+    } finally {
+      setResponding(null);
+    }
+  }
+
+  async function handleApprove(receipt) {
+    if (!userDoc?.nowprofile || !receipt.user_p) return;
+    setResponding(receipt.id);
+    try {
+      await updateDoc(userDoc.nowprofile, {
+        followed: arrayUnion(receipt.user_p),
+      });
+      await updateDoc(receipt.user_p, {
+        following: arrayUnion(userDoc.nowprofile),
+      });
+      await updateDoc(userDoc.nowprofile, {
+        waitlist_follow: arrayRemove(receipt.user_p),
+      });
+      await deleteDoc(doc(db, "users", user.uid, "receipt", receipt.id));
+      setReceipts((prev) => prev.filter((r) => r.id !== receipt.id));
+    } catch (e) {
+      console.error("follow approve error:", e);
+    } finally {
+      setResponding(null);
+    }
+  }
+
+  if (!user) return null;
+
+  return (
+    <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+      <h1
+        style={{
+          fontSize: "1.1rem",
+          fontWeight: 600,
+          padding: "1rem 1rem 0.75rem",
+          fontFamily: "'Urbanist', sans-serif",
+          borderBottom: "1px solid #f0f0f0",
+        }}
+      >
+        お知らせ
+      </h1>
+
+      {loading ? (
+        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+          読み込み中…
+        </p>
+      ) : receipts.length === 0 ? (
+        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+          お知らせはありません
+        </p>
+      ) : (
+        receipts.map((r) => {
+          const postURL = r.like || r.comment ? getPostURL(r.postref) : null;
+
+          const inner = (
+            <div
+              style={{
+                display: "flex",
+                gap: "0.75rem",
+                padding: "0.9rem 1rem",
+                borderBottom: "1px solid #f5f5f5",
+                backgroundColor: r.seen ? "#fff" : "#f0f5fa",
+                alignItems: "flex-start",
+              }}
+            >
+              <img
+                src={r.profile?.photo || fallbackPhoto}
+                alt=""
+                style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  flexShrink: 0,
+                }}
+              />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p
+                  style={{
+                    margin: "0 0 0.2rem",
+                    fontSize: "0.88rem",
+                    color: "#222",
+                    lineHeight: "1.5",
+                    fontFamily: "'Noto Sans JP', sans-serif",
+                  }}
+                >
+                  {getNotificationText(r)}
+                </p>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "#bbb",
+                    fontFamily: "'Urbanist', sans-serif",
+                  }}
+                >
+                  {formatTime(r.time)}
+                </span>
+                {r.permission && (
+                  <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
+                    <button
+                      onClick={() => handleApprove(r)}
+                      disabled={responding === r.id}
+                      style={{
+                        padding: "0.35rem 0.9rem",
+                        fontSize: "0.8rem",
+                        borderRadius: "999px",
+                        border: "none",
+                        background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                        color: "#fff",
+                        cursor: responding === r.id ? "not-allowed" : "pointer",
+                        opacity: responding === r.id ? 0.5 : 1,
+                      }}
+                    >
+                      承認
+                    </button>
+                    <button
+                      onClick={() => handleReject(r)}
+                      disabled={responding === r.id}
+                      style={{
+                        padding: "0.35rem 0.9rem",
+                        fontSize: "0.8rem",
+                        borderRadius: "999px",
+                        border: "1px solid #ddd",
+                        background: "#fff",
+                        color: "#666",
+                        cursor: responding === r.id ? "not-allowed" : "pointer",
+                        opacity: responding === r.id ? 0.5 : 1,
+                      }}
+                    >
+                      拒否
+                    </button>
+                  </div>
+                )}
+              </div>
+              {!r.seen && (
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor: "#152635",
+                    flexShrink: 0,
+                    marginTop: "6px",
+                  }}
+                />
+              )}
+            </div>
+          );
+
+          return postURL ? (
+            <Link
+              key={r.id}
+              href={postURL}
+              style={{ textDecoration: "none", color: "inherit", display: "block" }}
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div key={r.id}>{inner}</div>
+          );
+        })
+      )}
+    </div>
+  );
+}

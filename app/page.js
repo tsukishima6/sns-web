@@ -108,76 +108,12 @@ export default async function HomePage() {
       <ParticlesBackground />
 
       <div style={{ position: "relative", zIndex: 2 }}>
-        {/* ヘッダー */}
-        <header
-          style={{
-            width: "100%",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1001,
-            backgroundColor: "rgba(255,255,255,0.95)",
-            backdropFilter: "saturate(120%) blur(4px)",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: "960px",
-              margin: "0 auto",
-              padding: "0.8rem 1rem",
-              paddingTop: "1.2rem",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              fontFamily: "'Urbanist','Montserrat',sans-serif",
-            }}
-          >
-            <div style={{ flexShrink: 0 }}>
-              <Image
-                src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
-                alt="KAIWAI Logo"
-                width={34}
-                height={34}
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-
-            <div style={{ marginLeft: "1.2rem", display: "flex", alignItems: "center", gap: "0.2rem" }}>
-              <span style={{ margin: 0, fontSize: "1.4rem", fontWeight: "500", color: "#222" }}>kaiwai</span>
-              <div
-                style={{
-                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
-                  color: "#fff",
-                  borderRadius: "26px",
-                  padding: "0.1rem 0.6rem",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  marginLeft: "0.1rem",
-                }}
-              >
-                web版
-              </div>
-            </div>
-
-            <div style={{ display: "flex", gap: "0.25rem" }}>
-              <a href="https://apps.apple.com/jp/app/kaiwai/id6469412765" target="_blank" rel="noopener noreferrer">
-                <Image src="/ap.png" alt="App Store" width={28} height={28} style={{ objectFit: "contain" }} />
-              </a>
-              <a href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6" target="_blank" rel="noopener noreferrer">
-                <Image src="/gp.png" alt="Google Play" width={28} height={28} style={{ objectFit: "contain" }} />
-              </a>
-            </div>
-          </div>
-        </header>
-
         {/* コンテンツ */}
         <div
           style={{
             fontFamily: "'Shippori Mincho', Urbanist, serif",
             maxWidth: "720px",
-            padding: "4.4rem 0rem 2rem 0rem",
+            padding: "1.5rem 0rem 2rem 0rem",
             margin: "0 auto",
             position: "relative",
             zIndex: 2,

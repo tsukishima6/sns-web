@@ -11,6 +11,7 @@ import {
 import "./globals.css";
 import Script from "next/script";
 import FloatingAppPromo from "./components/FloatingAppPromo";
+import Providers from "./providers";
 
 // 各フォントの設定
 const geistSans = Geist({
@@ -102,8 +103,12 @@ export default function RootLayout({ children }) {
           antialiased
         `}
       >
-        {children}
-        <FloatingAppPromo />
+        <Providers>
+          <main className="pt-14 pb-16">
+            {children}
+          </main>
+          <FloatingAppPromo />
+        </Providers>
 
         {/* Google Analytics */}
         <Script
