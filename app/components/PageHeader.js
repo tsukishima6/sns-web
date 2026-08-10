@@ -57,7 +57,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
           >
             <span
               style={{
-                fontSize: "1.0rem",
+                fontSize: kaiwaiID ? "1.0rem" : "1.25rem",
                 fontWeight: "600",
                 color: "#222",
                 lineHeight: "1",

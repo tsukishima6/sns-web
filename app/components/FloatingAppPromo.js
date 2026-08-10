@@ -101,7 +101,7 @@ export default function FloatingAppPromo() {
           <defs>
             <path
               id="floatTextCircle"
-              d="M 65,65 m -60,0 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0"
+              d="M 65,65 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0"
             />
           </defs>
           <text
