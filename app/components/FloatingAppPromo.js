@@ -1,10 +1,38 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function FloatingAppPromo() {
   const [open, setOpen] = useState(false);
+  const modelRef = useRef(null);
+
+  // model-viewer はブラウザ専用のカスタム要素なのでクライアント側でのみ読み込む
+  useEffect(() => {
+    import("@google/model-viewer");
+  }, []);
+
+  // スクロール量に応じて斜め軸で自転させる（model-viewer内部のorientationプロパティは
+  // ARレンダラー側の副作用でエラーになることがあるため、CSSの3D transformで回転させる）
+  useEffect(() => {
+    let ticking = false;
+    function updateRotation() {
+      const angle = window.scrollY * 0.5;
+      const el = modelRef.current;
+      if (el) {
+        el.style.transform = `translate(-50%, -50%) rotate3d(1, 1, 0, ${angle}deg)`;
+      }
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(updateRotation);
+        ticking = true;
+      }
+    }
+    updateRotation();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
@@ -22,15 +50,37 @@ export default function FloatingAppPromo() {
         onClick={() => setOpen(true)}
         style={{
           position: "fixed",
-          bottom: "1.5rem",
+          bottom: "76px",
           right: "1.5rem",
           zIndex: 999,
           width: "130px",
           height: "130px",
           cursor: "pointer",
+          perspective: "400px",
         }}
       >
-        {/* 回転テキスト */}
+        {/* 中央: 3Dモデル（テキストより奥） */}
+        {/* eslint-disable-next-line react/no-unknown-property */}
+        <model-viewer
+          ref={modelRef}
+          src="/16pro.glb"
+          disable-zoom
+          interaction-prompt="none"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80px",
+            height: "80px",
+            zIndex: 1,
+            pointerEvents: "none",
+            "--poster-color": "transparent",
+            backgroundColor: "transparent",
+          }}
+        />
+
+        {/* 回転テキスト（3Dモデルより手前） */}
         <svg
           viewBox="0 0 130 130"
           style={{
@@ -38,6 +88,8 @@ export default function FloatingAppPromo() {
             inset: 0,
             width: "130px",
             height: "130px",
+            zIndex: 2,
+            pointerEvents: "none",
             animation: "floatSpin 10s linear infinite",
           }}
         >
@@ -58,21 +110,6 @@ export default function FloatingAppPromo() {
             </textPath>
           </text>
         </svg>
-
-        {/* 中央画像 */}
-        <Image
-          src="/iphone.png"
-          alt="kaiwai app"
-          width={80}
-          height={80}
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            objectFit: "contain",
-          }}
-        />
       </div>
 
       {/* ダイアログ */}
