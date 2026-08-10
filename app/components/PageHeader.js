@@ -82,7 +82,8 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
                 fontWeight: "500",
                 marginLeft: "0.3rem",
                 lineHeight: "1",
-                transform: "translateY(-5px)",
+                // ruby注記がある時だけ高さが増えるので、その分だけ引き上げて揃える
+                transform: kaiwaiID ? "translateY(-5px)" : "translateY(0)",
               }}
             >
               web版

@@ -66,6 +66,8 @@ export default function FloatingAppPromo() {
           src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/sneaker.glb?alt=media&token=05b056e7-24ad-4419-bc4a-78ab0432bd52"
           disable-zoom
           interaction-prompt="none"
+          camera-orbit="-35deg 65deg 105%"
+          field-of-view="30deg"
           style={{
             position: "absolute",
             top: "50%",
