@@ -11,9 +11,9 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
         left: 0,
         right: 0,
         zIndex: 9000,
-        backgroundColor: "rgba(255,255,255,0.4)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        backgroundColor: "rgba(255,255,255,0.25)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
         borderBottom: "1px solid rgba(255,255,255,0.4)",
         boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
       }}

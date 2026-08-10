@@ -15,15 +15,15 @@ export default function FloatingAppPromo() {
   // （WebGLの描画結果を1枚の画像として回転させることになるため）90°付近で
   // 真横から見た状態になり紙のように薄く見えてしまう。model-viewerのcameraOrbit
   // で3Dカメラ自体をモデルの周りで回すと、常に立体として見える。
-  // ただしこのモデル（スマホ）は奥行きがごく薄いため、正面から大きく外れると
-  // 何も見えなくなる。sin波で正面(0deg)を中心に±30度だけ往復させる
+  // スニーカーは全方向に厚みがあるモデルなので、そのままフルスピンして良い
   useEffect(() => {
     let ticking = false;
     function updateOrbit() {
-      const azimuth = Math.sin(window.scrollY * 0.008) * 30;
+      const azimuth = window.scrollY * 0.5;
+      const polar = 65 + Math.sin(window.scrollY * 0.006) * 25;
       const el = modelRef.current;
       if (el) {
-        el.cameraOrbit = `${azimuth}deg 75deg 105%`;
+        el.cameraOrbit = `${azimuth}deg ${polar}deg 105%`;
       }
       ticking = false;
     }
@@ -67,7 +67,7 @@ export default function FloatingAppPromo() {
         {/* eslint-disable-next-line react/no-unknown-property */}
         <model-viewer
           ref={modelRef}
-          src="/16pro.glb"
+          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/sneaker.glb?alt=media&token=05b056e7-24ad-4419-bc4a-78ab0432bd52"
           disable-zoom
           interaction-prompt="none"
           style={{
@@ -75,8 +75,8 @@ export default function FloatingAppPromo() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "80px",
-            height: "80px",
+            width: "104px",
+            height: "104px",
             zIndex: 1,
             pointerEvents: "none",
             "--poster-color": "transparent",
@@ -94,6 +94,7 @@ export default function FloatingAppPromo() {
             height: "130px",
             zIndex: 2,
             pointerEvents: "none",
+            overflow: "visible",
             animation: "floatSpin 10s linear infinite",
           }}
         >

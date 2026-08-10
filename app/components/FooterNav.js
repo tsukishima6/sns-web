@@ -115,7 +115,7 @@ export default function FooterNav() {
   ];
 
   const activeColor = "#152635";
-  const inactiveColor = "#bbb";
+  const inactiveColor = "#777";
 
   return (
     <nav
@@ -125,9 +125,9 @@ export default function FooterNav() {
         left: 0,
         right: 0,
         height: "60px",
-        backgroundColor: "rgba(255,255,255,0.4)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        backgroundColor: "rgba(255,255,255,0.25)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
         borderTop: "1px solid rgba(255,255,255,0.4)",
         display: "flex",
         alignItems: "stretch",
@@ -142,29 +142,18 @@ export default function FooterNav() {
           <Link
             key={tab.label}
             href={tab.href}
+            aria-label={tab.label}
             style={{
               flex: 1,
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
               textDecoration: "none",
               color,
-              gap: "3px",
               transition: "color 0.15s",
             }}
           >
             {tab.icon(tab.active)}
-            <span
-              style={{
-                fontSize: "0.62rem",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: tab.active ? 600 : 400,
-                lineHeight: 1,
-              }}
-            >
-              {tab.label}
-            </span>
           </Link>
         );
       })}
