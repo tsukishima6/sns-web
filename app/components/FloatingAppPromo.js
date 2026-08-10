@@ -11,25 +11,29 @@ export default function FloatingAppPromo() {
     import("@google/model-viewer");
   }, []);
 
-  // スクロール量に応じて斜め軸で自転させる（model-viewer内部のorientationプロパティは
-  // ARレンダラー側の副作用でエラーになることがあるため、CSSの3D transformで回転させる）
+  // スクロール量に応じて自転させる。CSSのrotate3dでDOM要素そのものを回すと
+  // （WebGLの描画結果を1枚の画像として回転させることになるため）90°付近で
+  // 真横から見た状態になり紙のように薄く見えてしまう。model-viewerのcameraOrbit
+  // で3Dカメラ自体をモデルの周りで回すと、常に立体として見える。
+  // ただしこのモデル（スマホ）は奥行きがごく薄いため、正面から大きく外れると
+  // 何も見えなくなる。sin波で正面(0deg)を中心に±30度だけ往復させる
   useEffect(() => {
     let ticking = false;
-    function updateRotation() {
-      const angle = window.scrollY * 0.5;
+    function updateOrbit() {
+      const azimuth = Math.sin(window.scrollY * 0.008) * 30;
       const el = modelRef.current;
       if (el) {
-        el.style.transform = `translate(-50%, -50%) rotate3d(1, 1, 0, ${angle}deg)`;
+        el.cameraOrbit = `${azimuth}deg 75deg 105%`;
       }
       ticking = false;
     }
     function onScroll() {
       if (!ticking) {
-        window.requestAnimationFrame(updateRotation);
+        window.requestAnimationFrame(updateOrbit);
         ticking = true;
       }
     }
-    updateRotation();
+    updateOrbit();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -63,11 +67,9 @@ export default function FloatingAppPromo() {
         {/* eslint-disable-next-line react/no-unknown-property */}
         <model-viewer
           ref={modelRef}
-          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/sneaker.glb?alt=media&token=05b056e7-24ad-4419-bc4a-78ab0432bd52"
+          src="/16pro.glb"
           disable-zoom
           interaction-prompt="none"
-          camera-orbit="-35deg 65deg 105%"
-          field-of-view="30deg"
           style={{
             position: "absolute",
             top: "50%",
@@ -98,7 +100,7 @@ export default function FloatingAppPromo() {
           <defs>
             <path
               id="floatTextCircle"
-              d="M 65,65 m -52,0 a 52,52 0 1,1 104,0 a 52,52 0 1,1 -104,0"
+              d="M 65,65 m -60,0 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0"
             />
           </defs>
           <text

@@ -92,7 +92,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
         </Link>
 
         {/* アプリDLボタン */}
-        <div style={{ display: "flex", gap: "0.25rem" }}>
+        <div style={{ display: "flex", gap: "0.25rem", marginBottom: "8px" }}>
           <a
             href="https://apps.apple.com/jp/app/kaiwai/id6469412765"
             target="_blank"
