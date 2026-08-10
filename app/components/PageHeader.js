@@ -7,7 +7,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
       style={{
         width: "100%",
         position: "fixed",
-        top: 56,
+        top: 0,
         left: 0,
         right: 0,
         zIndex: 9000,
@@ -40,46 +40,48 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
           </Link>
         </div>
 
-        {/* タイトル */}
-        <Link href={`/kaiwai/${kaiwaiID}`} style={{ textDecoration: "none", color: "inherit" }}>
-          <h1
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 0,
-              margin: 0,
-              marginLeft: "1rem",
-              fontFamily: "'Urbanist','Montserrat',sans-serif",
-            }}
-          >
-            <span
+        {/* タイトル（界隈コンテキストがあるページのみ表示） */}
+        {kaiwaiID && (
+          <Link href={`/kaiwai/${kaiwaiID}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <h1
               style={{
-                fontSize: "1.0rem",
-                fontWeight: "600",
-                color: "#222",
-                lineHeight: "1",
-                paddingBottom: "0.7rem",
+                display: "flex",
+                alignItems: "baseline",
+                gap: 0,
+                margin: 0,
+                marginLeft: "1rem",
+                fontFamily: "'Urbanist','Montserrat',sans-serif",
               }}
             >
-              {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
-            </span>
-            <div
-              style={{
-                background: "linear-gradient(135deg, #152635, #8fa8a7)",
-                color: "#fff",
-                borderRadius: "26px",
-                padding: "0.3rem 0.6rem",
-                fontSize: "0.9rem",
-                fontWeight: "500",
-                marginLeft: "0.3rem",
-                lineHeight: "1",
-                transform: "translateY(-5px)",
-              }}
-            >
-              web版
-            </div>
-          </h1>
-        </Link>
+              <span
+                style={{
+                  fontSize: "1.0rem",
+                  fontWeight: "600",
+                  color: "#222",
+                  lineHeight: "1",
+                  paddingBottom: "0.7rem",
+                }}
+              >
+                {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
+              </span>
+              <div
+                style={{
+                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                  color: "#fff",
+                  borderRadius: "26px",
+                  padding: "0.3rem 0.6rem",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  marginLeft: "0.3rem",
+                  lineHeight: "1",
+                  transform: "translateY(-5px)",
+                }}
+              >
+                web版
+              </div>
+            </h1>
+          </Link>
+        )}
 
         {/* アプリDLボタン */}
         <div style={{ display: "flex", gap: "0.25rem" }}>

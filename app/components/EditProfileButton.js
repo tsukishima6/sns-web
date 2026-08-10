@@ -22,6 +22,12 @@ export default function EditProfileButton({ userID }) {
       >
         ♡ お気に入り
       </Link>
+      <Link
+        href="/settings"
+        className="inline-block px-4 py-1.5 border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+      >
+        設定
+      </Link>
     </div>
   );
 }

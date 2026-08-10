@@ -104,7 +104,7 @@ export default function RootLayout({ children }) {
         `}
       >
         <Providers>
-          <main className="pt-14 pb-16">
+          <main className="pb-16">
             {children}
           </main>
           <FloatingAppPromo />
