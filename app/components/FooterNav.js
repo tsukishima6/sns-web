@@ -125,7 +125,7 @@ export default function FooterNav() {
         left: 0,
         right: 0,
         height: "60px",
-        backgroundColor: "rgba(255,255,255,0.6)",
+        backgroundColor: "rgba(255,255,255,0.4)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         borderTop: "1px solid rgba(255,255,255,0.4)",

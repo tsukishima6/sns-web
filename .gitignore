@@ -43,3 +43,6 @@ serviceAccountKey.json
 
 # ネイティブアプリ（FlutterFlow）のエクスポート。仕様書として参照するのみで、Web版のコードではない
 /ffcode/
+
+# GitHubの100MB上限を超える大きいアセット。Firebase Storageにアップロードして参照する
+/public/sneaker.glb
