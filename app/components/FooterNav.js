@@ -86,27 +86,31 @@ export default function FooterNav() {
       label: "ホーム",
       href: "/",
       icon: (a) => <FeedIcon active={a} />,
-      exact: true,
+      active: pathname === "/",
     },
     {
       label: "チャット",
       href: chatHref,
       icon: (a) => <ChatIcon active={a} />,
+      active: !!user && (pathname === "/chat" || pathname?.startsWith("/chat/")),
     },
     {
       label: "探す",
       href: "/explore",
       icon: (a) => <SearchIcon active={a} />,
+      active: pathname === "/explore" || pathname?.startsWith("/explore/"),
     },
     {
       label: "お知らせ",
       href: noticeHref,
       icon: (a) => <BellIcon active={a} />,
+      active: !!user && (pathname === "/notice" || pathname?.startsWith("/notice/")),
     },
     {
       label: "マイページ",
       href: profileHref,
       icon: (a) => <PersonIcon active={a} />,
+      active: !!user && (pathname === profileHref || pathname?.startsWith(profileHref + "/")),
     },
   ];
 
@@ -121,8 +125,10 @@ export default function FooterNav() {
         left: 0,
         right: 0,
         height: "60px",
-        backgroundColor: "#fff",
-        borderTop: "1px solid #e8e8e8",
+        backgroundColor: "rgba(255,255,255,0.6)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderTop: "1px solid rgba(255,255,255,0.4)",
         display: "flex",
         alignItems: "stretch",
         zIndex: 9998,
@@ -130,11 +136,7 @@ export default function FooterNav() {
       }}
     >
       {tabs.map((tab) => {
-        const active = tab.exact
-          ? pathname === tab.href
-          : pathname === tab.href || pathname?.startsWith(tab.href + "/");
-
-        const color = active ? activeColor : inactiveColor;
+        const color = tab.active ? activeColor : inactiveColor;
 
         return (
           <Link
@@ -152,12 +154,12 @@ export default function FooterNav() {
               transition: "color 0.15s",
             }}
           >
-            {tab.icon(active)}
+            {tab.icon(tab.active)}
             <span
               style={{
                 fontSize: "0.62rem",
                 fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: active ? 600 : 400,
+                fontWeight: tab.active ? 600 : 400,
                 lineHeight: 1,
               }}
             >

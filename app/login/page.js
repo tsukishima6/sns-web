@@ -44,9 +44,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8">
-        <h1 className="text-2xl font-bold text-center mb-2">ログイン</h1>
-        <p className="text-sm text-gray-500 text-center mb-6">kaiwaiへようこそ</p>
+      <div
+        className="w-full max-w-sm rounded-[20px] p-8"
+        style={{
+          background: "rgba(255,255,255,0.55)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(255,255,255,0.6)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5)",
+        }}
+      >
+        <h1 className="text-2xl font-bold text-center mb-6">ログイン</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -58,7 +66,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-gray-300 rounded-[20px] text-sm focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="example@email.com"
             />
           </div>
@@ -71,13 +79,13 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-gray-300 rounded-[20px] text-sm focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="••••••••"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">
+            <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-[20px]">
               {error}
             </p>
           )}
@@ -85,7 +93,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
+            className="w-full bg-black text-white py-2.5 rounded-[20px] text-sm font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
           >
             {loading ? "ログイン中..." : "ログイン"}
           </button>
@@ -103,7 +111,7 @@ export default function LoginPage() {
             type="button"
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2.5 rounded-[20px] text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
           >
             <GoogleIcon />
             Googleでログイン

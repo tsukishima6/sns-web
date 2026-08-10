@@ -11,7 +11,10 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
         left: 0,
         right: 0,
         zIndex: 9000,
-        backgroundColor: "#fff",
+        backgroundColor: "rgba(255,255,255,0.6)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255,255,255,0.4)",
         boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
       }}
     >
