@@ -2,7 +2,7 @@ import { collectionGroup, query, orderBy, getDocs, getDoc, limit } from "firebas
 import { db } from "../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
-import KaiwaiWordCloud from "./components/wordcloud";
+import WordCloudSphere from "./components/WordCloudSphere";
 import BentoGallery from "./components/BentoGallery";
 import ParticlesBackground from "./components/ParticlesBackground";
 import PostsCarousel from "./components/PostsCarousel";
@@ -113,49 +113,60 @@ export default async function HomePage() {
           style={{
             fontFamily: "'Shippori Mincho', Urbanist, serif",
             maxWidth: "720px",
-            padding: "1.5rem 0rem 2rem 0rem",
+            padding: "0rem 0rem 2rem 0rem",
             margin: "0 auto",
             position: "relative",
             zIndex: 2,
           }}
         >
-          <h1
-            style={{
-              textAlign: "center",
-              fontWeight: 500,
-              fontSize: "1.1rem",
-              marginBottom: "1.3rem",
-              lineHeight: "1.6",
-              color: "#000",
-            }}
-          >
-            界隈の数だけ、SNSがあっていい。
-          </h1>
-
           <div
             style={{
-              background: "linear-gradient(135deg, #152635, #8fa8a7)",
-              opacity: 0.85,
-              borderRadius: "25px",
-              padding: "1.2rem",
-              marginRight: "1.6rem",
-              marginLeft: "1.6rem",
+              position: "relative",
+              marginTop: "-90px",
               marginBottom: "1.5rem",
-              fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
             }}
           >
-            <p style={{ color: "#fff", fontSize: "0.9rem", lineHeight: "1.8", textAlign: "center", margin: 0 }}>
-              趣味、地域、悩み、職種・・<br />
-              それぞれの界隈の情報にドップリ浸かる、<br />
-              新しいSNSを作りました。
-            </p>
-          </div>
+            {/* MV球: 高さ・位置を固定し、下のコンテンツ量に影響されない */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "520px", overflow: "hidden" }}>
+              <WordCloudSphere />
+            </div>
 
-          <div style={{ marginTop: "0rem", marginBottom: "0rem", minHeight: "80px" }}>
-            <KaiwaiWordCloud />
-          </div>
+            {/* h1以下: 独立してオフセット調整できる通常フロー */}
+            <div
+              style={{
+                position: "relative",
+                zIndex: 2,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                paddingTop: "260px",
+              }}
+            >
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontWeight: 500,
+                  fontSize: "1.1rem",
+                  lineHeight: "1.6",
+                  color: "#fff",
+                  margin: "0 1.5rem",
+                  padding: "0.7rem 1.3rem",
+                  background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                  backdropFilter: "blur(14px)",
+                  WebkitBackdropFilter: "blur(14px)",
+                  isolation: "isolate",
+                  transform: "translateZ(0)",
+                  boxShadow: "0 6px 28px rgba(21, 38, 53, 0.15)",
+                }}
+              >
+                界隈の数だけ、SNSがあっていい。
+              </h1>
 
-          <PostsCarousel posts={posts} />
+              <div style={{ position: "relative", zIndex: 5, width: "100%", marginTop: "2rem" }}>
+                <PostsCarousel posts={posts} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

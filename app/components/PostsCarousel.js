@@ -30,13 +30,14 @@ export default function PostsCarousel({ posts }) {
     <div suppressHydrationWarning>
       <div
         ref={containerRef}
+        className="no-scrollbar"
         style={{
           display: "flex",
           gap: "1rem",
           overflowX: "auto",
           scrollBehavior: "smooth",
           paddingBottom: "0rem",
-          marginTop: "2.2rem",
+          marginTop: "70px",
           fontFamily: "Urbanist",
           marginBottom: "1rem",
           minHeight: "200px",
@@ -52,18 +53,40 @@ export default function PostsCarousel({ posts }) {
               marginLeft: "0.2rem",
             }}
           >
-            <Link
-              href={`/posts/${post.userID || "unknown"}/${post.id}`}
-              style={{ display: "block", textDecoration: "none", color: "inherit" }}
+            <div
+              style={{
+                padding: "1.3rem",
+                border: "1px solid rgba(255,255,255,0.4)",
+                borderRadius: "20px",
+                backgroundColor: "rgba(255,255,255,0.25)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                isolation: "isolate",
+                transform: "translateZ(0)",
+                position: "relative",
+              }}
             >
-              <div
-                style={{
-                  padding: "1.3rem",
-                  border: "0.8px solid #808080",
-                  borderRadius: "12px",
-                  backgroundColor: "rgba(255,255,255,0.97)",
-                  position: "relative",
-                }}
+              {post.kaiwaiName && post.kaiwaiID && (
+                <Link href={`/kaiwai/${post.kaiwaiID}`} style={{ display: "inline-block", textDecoration: "none", marginBottom: "0.5rem" }}>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      fontSize: "0.72rem",
+                      fontWeight: "600",
+                      color: "#fff",
+                      background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                      padding: "0.25rem 0.65rem",
+                      borderRadius: "999px",
+                    }}
+                  >
+                    @{post.kaiwaiName}kaiwai
+                  </span>
+                </Link>
+              )}
+
+              <Link
+                href={`/posts/${post.userID || "unknown"}/${post.id}`}
+                style={{ display: "block", textDecoration: "none", color: "inherit" }}
               >
                 {post.profile && (
                   <div style={{ display: "flex", alignItems: "center", marginBottom: "0.6rem" }}>
@@ -111,9 +134,9 @@ export default function PostsCarousel({ posts }) {
                 {post.timePosted && (
                   <span
                     style={{
-                      position: "absolute",
-                      right: "1.2rem",
-                      bottom: "1.2rem",
+                      display: "block",
+                      textAlign: "right",
+                      marginTop: "0.8rem",
                       fontSize: "1rem",
                       color: "#888",
                       fontFamily: "Urbanist",
@@ -129,27 +152,8 @@ export default function PostsCarousel({ posts }) {
                     })}
                   </span>
                 )}
-              </div>
-            </Link>
-
-            {post.kaiwaiName && post.kaiwaiID && (
-              <Link href={`/kaiwai/${post.kaiwaiID}`} style={{ textDecoration: "none" }}>
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    marginLeft: "0.2rem",
-                    fontWeight: "600",
-                    background: "linear-gradient(135deg, #58b5f7, #f20089)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginTop: "0.5rem",
-                    textAlign: "left",
-                  }}
-                >
-                  {post.kaiwaiName}kaiwai の投稿
-                </p>
               </Link>
-            )}
+            </div>
           </div>
         ))}
       </div>

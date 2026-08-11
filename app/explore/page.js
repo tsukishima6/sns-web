@@ -5,7 +5,6 @@ import {
   collectionGroup,
   query,
   where,
-  orderBy,
   getDocs,
   collection,
   limit,
@@ -16,9 +15,6 @@ import Link from "next/link";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
-
-const fallbackKaiwai =
-  "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
 export default function ExplorePage() {
   const [tab, setTab] = useState("user"); // "user" | "kaiwai"
@@ -35,7 +31,7 @@ export default function ExplorePage() {
             key={t.key}
             onClick={() => setTab(t.key)}
             style={{ fontFamily: "'Urbanist', sans-serif" }}
-            className={`flex-1 py-3 text-sm font-medium transition-colors border-b-[1.5px] ${
+            className={`flex-1 py-3 text-lg font-medium transition-colors border-b-[1.5px] ${
               tab === t.key
                 ? "border-gray-800 text-gray-800"
                 : "border-transparent text-gray-400"
@@ -125,7 +121,7 @@ function UserSearchTab() {
   return (
     <div className="px-4 py-4">
       {/* 検索バー */}
-      <div className="relative mb-5">
+      <div className="relative mt-3 mb-5">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
           width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -138,8 +134,7 @@ function UserSearchTab() {
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          placeholder="名前またはIDで検索"
-          className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full h-9 pl-9 pr-4 bg-gray-50 border border-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
           style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
         />
         {keyword && (
@@ -184,7 +179,7 @@ function UserSearchTab() {
                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                     {u.name}
                   </p>
-                  <p className="text-xs text-gray-400 truncate"
+                  <p className="text-sm text-gray-400 truncate"
                      style={{ fontFamily: "'Urbanist', sans-serif" }}>
                     @{u.ID}
                   </p>
@@ -199,13 +194,13 @@ function UserSearchTab() {
       )}
 
       {!userDoc?.kaiwai ? (
-        <p className="text-center text-sm text-gray-300 py-12"
+        <p className="text-center text-base text-gray-300 py-12"
            style={{ fontFamily: "'Urbanist', sans-serif" }}>
           界隈に参加するとユーザー検索が使えます
         </p>
       ) : (
         !keyword && (
-          <p className="text-center text-sm text-gray-300 py-12"
+          <p className="text-center text-base text-gray-300 py-12"
              style={{ fontFamily: "'Urbanist', sans-serif" }}>
             キーワードを入力してください
           </p>
@@ -216,16 +211,37 @@ function UserSearchTab() {
 }
 
 /* ─── 界隈タブ ─── */
+const KAIWAI_CATEGORIES = [
+  { key: "hobbies", label: "趣味" },
+  { key: "local", label: "地域" },
+  { key: "alumni", label: "同窓・OB" },
+  { key: "other", label: "その他" },
+];
+
+function sortByName(list) {
+  return [...list].sort((a, b) =>
+    (a.name || "").localeCompare(b.name || "", "ja")
+  );
+}
+function sortByNumberAsc(list) {
+  return [...list].sort((a, b) => (a.number || 0) - (b.number || 0));
+}
+function sortByNumberDesc(list) {
+  return [...list].sort((a, b) => (b.number || 0) - (a.number || 0));
+}
+
 function KaiwaiTab() {
   const [kaiwaiList, setKaiwaiList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     async function fetch() {
       try {
-        const snap = await getDocs(
-          query(collection(db, "kaiwai"), orderBy("number", "desc"))
-        );
+        // orderBy("number") だと number フィールドが無いドキュメント（ユーザー作成のkaiwaiなど）が
+        // Firestoreの仕様上クエリ結果から丸ごと除外されてしまうため、探索用の一覧では使わない
+        const snap = await getDocs(collection(db, "kaiwai"));
         const list = snap.docs
           .map((d) => ({ id: d.id, ...d.data() }))
           .filter((k) => !k.closed && !k.noindex);
@@ -241,63 +257,185 @@ function KaiwaiTab() {
 
   if (loading) {
     return (
-      <p className="text-center text-sm text-gray-400 py-12">読み込み中...</p>
+      <p className="text-center text-base text-gray-400 py-12">読み込み中...</p>
     );
   }
 
-  const hobby = kaiwaiList.filter((k) => k.hobbies);
-  const local = kaiwaiList.filter((k) => k.local);
-  const alumni = kaiwaiList.filter((k) => k.alumni);
-  const other = kaiwaiList.filter((k) => !k.hobbies && !k.local && !k.alumni);
+  // 子kaiwai（parentが設定されているもの）は一覧に出さず、親のアコーディオン内にのみ表示する
+  const categories = KAIWAI_CATEGORIES.map((c) => {
+    const base = kaiwaiList.filter((k) => {
+      if (k.parent) return false;
+      if (c.key === "other") return !k.hobbies && !k.local && !k.alumni;
+      return !!k[c.key];
+    });
+    // 地域・その他は人数順（地域は少ない順、その他は多い順）、それ以外は名前順
+    let list;
+    if (c.key === "local") list = sortByNumberAsc(base);
+    else if (c.key === "other") list = sortByNumberDesc(base);
+    else list = sortByName(base);
+    return { ...c, list };
+  }).filter((c) => c.list.length > 0);
 
-  const sections = [
-    { label: "趣味", list: hobby },
-    { label: "地域", list: local },
-    { label: "同窓・OB", list: alumni },
-    { label: "その他", list: other },
-  ].filter((s) => s.list.length > 0);
+  const effectiveCategory =
+    activeCategory && categories.some((c) => c.key === activeCategory)
+      ? activeCategory
+      : categories[0]?.key;
+
+  const currentList =
+    categories.find((c) => c.key === effectiveCategory)?.list || [];
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  const searchResults = trimmedKeyword
+    ? kaiwaiList.filter(
+        (k) =>
+          (k.name || "").toLowerCase().includes(trimmedKeyword) ||
+          (k.name_english || "").toLowerCase().includes(trimmedKeyword)
+      )
+    : [];
 
   return (
     <div className="px-4 py-4">
-      {sections.map((section) => (
-        <div key={section.label} className="mb-6">
-          <h2
-            className="text-xs font-semibold text-[#8fa8a7] uppercase tracking-widest mb-3 pb-1 border-b border-gray-100"
-            style={{ fontFamily: "'Urbanist', sans-serif" }}
+      {/* 検索バー */}
+      <div className="relative mt-3 mb-5">
+        <svg
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
+          width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="22" y2="22" />
+        </svg>
+        <input
+          type="text"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="w-full h-9 pl-9 pr-4 bg-gray-50 border border-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        />
+        {keyword && (
+          <button
+            onClick={() => setKeyword("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500"
           >
-            {section.label}
-          </h2>
-          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}>
-            {section.list.map((k) => (
-              <Link
-                key={k.id}
-                href={`/kaiwai/${k.id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div className="rounded-2xl overflow-hidden border border-gray-100 bg-white hover:shadow-sm transition-shadow">
-                  <div style={{ position: "relative", paddingTop: "56.25%" }}>
-                    <img
-                      src={k.image || fallbackKaiwai}
-                      alt={k.name}
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                  </div>
-                  <div className="p-2.5">
-                    <p className="text-sm font-semibold text-gray-800 truncate"
-                       style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
-                      {k.name}
-                    </p>
-                    <p className="text-xs text-[#8fa8a7] mt-0.5"
-                       style={{ fontFamily: "'Urbanist', sans-serif" }}>
-                      {k.number || 0}人
-                    </p>
-                  </div>
-                </div>
-              </Link>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {trimmedKeyword ? (
+        searchResults.length > 0 ? (
+          <div className="space-y-1">
+            {searchResults.map((k) => (
+              <KaiwaiRow key={k.id} k={k} allKaiwai={kaiwaiList} />
             ))}
           </div>
+        ) : (
+          <p className="text-center text-base text-gray-400 py-12">
+            「{keyword.trim()}」に一致する界隈が見つかりませんでした
+          </p>
+        )
+      ) : categories.length === 0 ? (
+        <p className="text-center text-base text-gray-400 py-12">
+          界隈が見つかりませんでした
+        </p>
+      ) : (
+        <>
+          {/* カテゴリタブ */}
+          <div className="flex gap-2 mb-5 overflow-x-auto no-scrollbar">
+            {categories.map((c) => (
+              <button
+                key={c.key}
+                onClick={() => setActiveCategory(c.key)}
+                style={{ fontFamily: "'Urbanist', sans-serif" }}
+                className={`flex-shrink-0 h-9 px-4 flex items-center justify-center rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                  effectiveCategory === c.key
+                    ? "bg-[#152635] text-white"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-1">
+            {currentList.map((k) => (
+              <KaiwaiRow key={k.id} k={k} allKaiwai={kaiwaiList} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* 界隈1件分の行。oya（親）はアコーディオンでサブ界隈を開閉できる */
+function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
+  const [open, setOpen] = useState(false);
+  const isOya = k.oya === true;
+  const children = isOya
+    ? allKaiwai.filter((c) => c.parent?.id === k.id)
+    : [];
+
+  return (
+    <div>
+      <div className="flex items-center">
+        <Link
+          href={`/kaiwai/${k.id}`}
+          style={{ textDecoration: "none", color: "inherit", paddingLeft: `${depth * 1.2}rem` }}
+          className="flex-1 min-w-0 flex flex-col py-3 px-2 rounded-xl hover:bg-gray-50 transition-colors"
+        >
+          <span
+            className="text-base font-semibold text-gray-800 truncate"
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
+          >
+            {k.name}
+          </span>
+          {k.name_english && (
+            <span
+              className="text-sm text-[#8fa8a7] truncate"
+              style={{ fontFamily: "'Urbanist', sans-serif" }}
+            >
+              {k.name_english}
+            </span>
+          )}
+        </Link>
+
+        {isOya && (
+          <span
+            className="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap"
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
+          >
+            サブkaiwaiがあります
+          </span>
+        )}
+
+        {isOya && (
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "サブ界隈を閉じる" : "サブ界隈を開く"}
+            className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <svg
+              width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+              style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {isOya && open && children.length > 0 && (
+        <div className="ml-4 border-l border-gray-100">
+          {children.map((c) => (
+            <KaiwaiRow key={c.id} k={c} allKaiwai={allKaiwai} depth={depth + 1} />
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }

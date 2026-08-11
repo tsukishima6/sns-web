@@ -21,7 +21,7 @@ export default function Providers({ children }) {
   return (
     <AuthProvider>
       {!hasOwnHeader && <PageHeader />}
-      <div style={{ paddingTop: hasOwnHeader ? 0 : "120px" }}>{children}</div>
+      <div style={{ paddingTop: hasOwnHeader ? 0 : "90px" }}>{children}</div>
       <FooterNav />
     </AuthProvider>
   );

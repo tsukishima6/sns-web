@@ -5,3 +5,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* 横スクロールのスクロールバーを非表示にする */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
