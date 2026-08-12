@@ -141,7 +141,7 @@ export default function SettingsDeletePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function SettingsDeletePage() {
   if (step === "done") {
     return (
       <div className="max-w-2xl mx-auto px-4 py-6 text-center">
-        <p className="text-sm text-gray-600 mb-4">アカウントを削除しました。</p>
+        <p className="text-sm text-gray-600 dark:text-[var(--fg-secondary)] mb-4">アカウントを削除しました。</p>
         <Link
           href="/"
           className="inline-block px-6 py-2.5 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors"
@@ -165,26 +165,26 @@ export default function SettingsDeletePage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/settings" className="text-gray-400 hover:text-gray-600">
+        <Link href="/settings" className="text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </Link>
-        <h1 className="text-base font-semibold text-gray-800">アカウントの削除</h1>
+        <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">アカウントの削除</h1>
       </div>
 
       {step === "confirm" && (
         <div className="space-y-5">
-          <div className="bg-red-50 border border-red-100 rounded-2xl p-5">
-            <p className="text-sm font-semibold text-red-600 mb-2">削除する前にご確認ください</p>
-            <ul className="text-xs text-red-500 space-y-1.5 list-disc list-inside leading-relaxed">
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 rounded-2xl p-5">
+            <p className="text-sm font-semibold text-red-600 dark:text-red-400 mb-2">削除する前にご確認ください</p>
+            <ul className="text-xs text-red-500 dark:text-red-400 space-y-1.5 list-disc list-inside leading-relaxed">
               <li>アカウントは完全に削除され、元に戻せません</li>
               <li>投稿・プロフィール・チャット履歴が失われます</li>
               <li>同じメールアドレスで再登録することはできません</li>
             </ul>
           </div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)]">
             本当に削除する場合は「次へ」をタップしてください。
           </p>
 
@@ -196,7 +196,7 @@ export default function SettingsDeletePage() {
           </button>
           <Link
             href="/settings"
-            className="block text-center text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="block text-center text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)] transition-colors"
           >
             キャンセル
           </Link>
@@ -205,33 +205,33 @@ export default function SettingsDeletePage() {
 
       {step === "reauth" && (
         <div className="space-y-5">
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-gray-600 dark:text-[var(--fg-secondary)] leading-relaxed">
             セキュリティのため、アカウント削除の前に本人確認が必要です。
           </p>
 
           {!isGoogleUser && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">
                 現在のパスワード
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
                 placeholder="••••••••"
               />
             </div>
           )}
 
           {isGoogleUser && (
-            <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-4 py-3">
+            <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] bg-gray-50 dark:bg-[var(--surface-muted)] rounded-xl px-4 py-3">
               Googleアカウントで登録されています。次のボタンを押すとGoogle再認証が行われます。
             </p>
           )}
 
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">
+            <p className="text-sm text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-lg">
               {error}
             </p>
           )}
@@ -245,7 +245,7 @@ export default function SettingsDeletePage() {
           </button>
           <button
             onClick={() => { setStep("confirm"); setError(""); }}
-            className="w-full text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="w-full text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)] transition-colors"
           >
             戻る
           </button>

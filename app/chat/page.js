@@ -113,18 +113,19 @@ export default function ChatListPage() {
           fontWeight: 600,
           padding: "1rem 1rem 0.75rem",
           fontFamily: "'Urbanist', sans-serif",
-          borderBottom: "1px solid #f0f0f0",
+          borderBottom: "1px solid var(--border-subtle)",
+          color: "var(--fg-primary)",
         }}
       >
-        チャット
+        kaiwa
       </h1>
 
       {loading ? (
-        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+        <p style={{ padding: "3rem", textAlign: "center", color: "var(--fg-muted)", fontSize: "0.9rem" }}>
           読み込み中…
         </p>
       ) : chats.length === 0 ? (
-        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+        <p style={{ padding: "3rem", textAlign: "center", color: "var(--fg-muted)", fontSize: "0.9rem" }}>
           チャットはまだありません
         </p>
       ) : (
@@ -139,7 +140,7 @@ export default function ChatListPage() {
                 display: "flex",
                 gap: "0.75rem",
                 padding: "0.85rem 1rem",
-                borderBottom: "1px solid #f5f5f5",
+                borderBottom: "1px solid var(--border-subtle)",
                 alignItems: "center",
               }}
             >
@@ -165,7 +166,7 @@ export default function ChatListPage() {
                       height: "10px",
                       borderRadius: "50%",
                       backgroundColor: "#152635",
-                      border: "2px solid #fff",
+                      border: "2px solid var(--bg-page)",
                     }}
                   />
                 )}
@@ -185,7 +186,7 @@ export default function ChatListPage() {
                     style={{
                       fontWeight: chat.isUnread ? 700 : 500,
                       fontSize: "0.92rem",
-                      color: "#1a1a1a",
+                      color: "var(--fg-primary)",
                       fontFamily: "'Noto Sans JP', sans-serif",
                     }}
                   >
@@ -194,7 +195,7 @@ export default function ChatListPage() {
                   <span
                     style={{
                       fontSize: "0.75rem",
-                      color: "#bbb",
+                      color: "var(--fg-muted)",
                       fontFamily: "'Urbanist', sans-serif",
                       flexShrink: 0,
                     }}
@@ -206,7 +207,7 @@ export default function ChatListPage() {
                   style={{
                     margin: 0,
                     fontSize: "0.83rem",
-                    color: chat.isUnread ? "#444" : "#bbb",
+                    color: chat.isUnread ? "var(--fg-secondary)" : "var(--fg-muted)",
                     fontFamily: "'Noto Sans JP', sans-serif",
                     overflow: "hidden",
                     textOverflow: "ellipsis",

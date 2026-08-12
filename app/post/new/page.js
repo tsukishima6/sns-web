@@ -134,7 +134,7 @@ export default function NewPostPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -146,28 +146,28 @@ export default function NewPostPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-base font-semibold text-gray-800">新規投稿</h1>
-        <Link href="/feed" className="text-sm text-gray-400 hover:text-gray-600">
+        <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">新規投稿</h1>
+        <Link href="/feed" className="text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
           キャンセル
         </Link>
       </div>
 
       {!hasKaiwai ? (
         <div className="text-center py-16">
-          <p className="text-gray-500 text-sm mb-2">参加している界隈がありません</p>
-          <p className="text-gray-400 text-xs">アプリから界隈に参加してから投稿できます</p>
+          <p className="text-gray-500 dark:text-[var(--fg-secondary)] text-sm mb-2">参加している界隈がありません</p>
+          <p className="text-gray-400 dark:text-[var(--fg-muted)] text-xs">アプリから界隈に参加してから投稿できます</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* 界隈セレクタ */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5">
+            <label className="block text-xs font-medium text-gray-500 dark:text-[var(--fg-secondary)] mb-1.5">
               界隈を選択
             </label>
             <select
               value={selectedKaiwai}
               onChange={(e) => setSelectedKaiwai(e.target.value)}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2.5 border border-gray-200 dark:border-[var(--border-subtle)] rounded-xl text-sm bg-white dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] focus:outline-none focus:ring-2 focus:ring-black"
             >
               {kaiwaiOptions.map((k) => (
                 <option key={k.id} value={k.id}>
@@ -184,9 +184,9 @@ export default function NewPostPage() {
               onChange={(e) => setText(e.target.value)}
               placeholder="いまどうしてる？"
               rows={5}
-              className="w-full px-3 py-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-3 border border-gray-200 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
             />
-            <p className="text-right text-xs text-gray-400 mt-1">{text.length} 文字</p>
+            <p className="text-right text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1">{text.length} 文字</p>
           </div>
 
           {/* 画像プレビュー */}
@@ -225,7 +225,7 @@ export default function NewPostPage() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors"
+                className="flex items-center gap-2 text-sm text-gray-500 dark:text-[var(--fg-secondary)] hover:text-black dark:hover:text-[var(--fg-primary)] transition-colors"
               >
                 <span className="text-lg leading-none">🖼</span>
                 画像を追加（最大3枚）
@@ -234,7 +234,7 @@ export default function NewPostPage() {
           )}
 
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-xl">
+            <p className="text-sm text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-xl">
               {error}
             </p>
           )}

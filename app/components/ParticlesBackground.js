@@ -4,10 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import { useTheme } from "@/lib/ThemeContext";
 
 export default function ParticlesBackground() {
   const [inited, setInited] = useState(false);
   const particlesRef = useRef(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     let mounted = true;
@@ -22,7 +24,7 @@ export default function ParticlesBackground() {
   }, []);
 
   const options = {
-    background: { color: { value: "#ffffff" } },
+    background: { color: { value: resolvedTheme === "dark" ? "#0b0f14" : "#ffffff" } },
     fullScreen: { enable: false },
     fpsLimit: 60,
     particles: {

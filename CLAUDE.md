@@ -25,7 +25,7 @@ kaiwai Web（https://kaiwai.vercel.app）。**ネイティブアプリ（Flutter
 - `serviceAccountKey.json`（リポジトリ直下）と`firebase-admin`依存は、上記のような確認用データをAdmin SDK経由で後片付けする、といった一回限りのスクリプト用。アプリ本体からは使っていない
 - パスエイリアス `@/*` はリポジトリ直下を指す（`jsconfig.json`の`paths`と`next.config.mjs`のwebpack aliasで設定）。`./app/*`や`./src/*`ではない
 - `src/components/Header.js` は使われていない孤立した重複ファイル。実際に使われているヘッダーは `app/components/PageHeader.js`（`app/providers.js` が界隈コンテキスト付きページ以外の全ページに自動でレンダーする。共通ページの本文トップpaddingも同じ場所で `paddingTop: hasOwnHeader ? 0 : "90px"` として管理している）
-- 半透明ガラス風の見た目（`backgroundColor: rgba(...)` + `backdropFilter: "blur(...)"`）を使う要素には、必ず `isolation: "isolate"` と `transform: "translateZ(0)"` も付けること。無いと背後がぼやけず、ただの半透明表示になる（Chromiumが独立した合成レイヤーを作らないため）。実際に `PageHeader`・`PostsCarousel` の投稿カード・`FloatingAppPromo` のダイアログでこの理由でブラーが効いていなかった（2026-08-11に修正。ズームしたスクリーンショットで背後の文字が全くぼやけていないことで発覚した — 半透明になっているだけだと見た目上は「ブラーがかかっているっぽい」と誤認しやすいので、疑わしい時は拡大して確認すること）
+- 半透明ガラス風の見た目（`backgroundColor: rgba(...)` + `backdropFilter: "blur(...)"`）を使う要素には、必ず `isolation: "isolate"` と `transform: "translateZ(0)"` も付けること。無いと背後がぼやけず、ただの半透明表示になる（Chromiumが独立した合成レイヤーを作らないため）。実際に `PageHeader`・`PostsCarousel` の投稿カード・`FloatingAppPromo` のダイアログでこの理由でブラーが効いていなかった（2026-08-11に修正。ズームしたスクリーンショットで背後の文字が全くぼやけていないことで発覚した — 半透明になっているだけだと見た目上は「ブラーがかかっているっぽい」と誤認しやすいので、疑わしい時は拡大して確認すること）。**さらに、ガラス要素が`position: fixed`の中に入れ子になっている場合（`FloatingAppPromo`のダイアログ等）は、ガラス要素自身だけでなく、間にある`position: fixed`の祖先要素（オーバーレイdivなど）にも同じ`isolation: "isolate"` + `transform: "translateZ(0)"`を付けないとブラーが効かない**。祖先が`z-index`付きの`position: fixed`で単独の合成レイヤーになっていないと、Chromiumがガラス要素の`backdrop-filter`をページ本体まで届かせられない（2026-08-12に`FloatingAppPromo`のダイアログで発覚・修正）
 
 ## データモデル（Firestore）で特に注意する点
 

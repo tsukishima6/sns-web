@@ -98,7 +98,7 @@ export default async function KaiwaiPage({ params }) {
 
   if (!kaiwaiSnap.exists()) {
     return (
-      <div style={{ padding: "2rem", fontSize: "1.5rem" }}>
+      <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>
         KAIWAIが見つかりません
       </div>
     );
@@ -288,11 +288,11 @@ try {
             style={{
               minWidth: "220px",
               maxWidth: "220px",
-              background: "#ffffff",
+              background: "var(--surface)",
               borderRadius: "22px",
               padding: "1.4rem",
               textDecoration: "none",
-              color: "#222",
+              color: "var(--fg-primary)",
               fontFamily: "'Urbanist','Montserrat',sans-serif",
               position: "relative",
             }}
@@ -350,9 +350,9 @@ try {
           <p
             style={{
               fontSize: "1rem",
-              color: "#444",
+              color: "var(--fg-secondary)",
               marginBottom: "1.6rem",
-              backgroundColor: "#f1f1f1",
+              backgroundColor: "var(--surface-muted)",
               padding: "0.8rem 1rem",
               marginRight: "0.8rem",
               marginLeft: "0.8rem",
@@ -393,7 +393,7 @@ try {
                 <div
   style={{
     padding: "1.1rem 0",
-    borderBottom: "1px solid #ddd",
+    borderBottom: "1px solid var(--border-subtle)",
     backgroundColor: "transparent",
     fontFamily: "Arial, sans-serif",
     position: "relative",
@@ -431,7 +431,7 @@ try {
                           style={{
                             fontWeight: "500",
                             fontSize: "0.9rem",
-                            color: "#333",
+                            color: "var(--fg-primary)",
                           }}
                         >
                           {post.profile.name}
@@ -439,7 +439,7 @@ try {
                         <span
                           style={{
                             fontSize: "0.9rem",
-                            color: "#666",
+                            color: "var(--fg-secondary)",
                             fontFamily: "Urbanist",
                           }}
                         >
@@ -454,7 +454,7 @@ try {
                       fontSize: "0.9rem",
                       fontWeight: "400",
                       marginBottom: post.postPhoto ? "0.9rem" : "1.8rem",
-                      color: "#333",
+                      color: "var(--fg-primary)",
                       marginLeft: "1.0rem",
                       marginRight: "1.0rem",
                       marginTop: "0.9rem",
@@ -480,7 +480,7 @@ try {
                       style={{
                         fontSize: "1rem",
                         lineHeight: "1.6",
-                        color: "#555",
+                        color: "var(--fg-secondary)",
                       }}
                     >
                       {post.postContent}
@@ -494,7 +494,7 @@ try {
                         right: "1.2rem",
                         bottom: "0.8rem",
                         fontSize: "1.0rem",
-                        color: "#888",
+                        color: "var(--fg-muted)",
                         fontFamily: "Urbanist",
                       }}
                     >
@@ -513,7 +513,7 @@ try {
               </Link>
             ))
           ) : (
-            <p style={{ color: "#666" }}>まだ投稿がありません</p>
+            <p style={{ color: "var(--fg-secondary)" }}>まだ投稿がありません</p>
           )}
         </div>
       </div>

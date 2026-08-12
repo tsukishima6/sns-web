@@ -1,9 +1,37 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg-page: #ffffff;
+  --fg-primary: #1a1a1a;
+  --fg-secondary: #555555;
+  --fg-muted: #888888;
+  --card-bg: rgba(255, 255, 255, 0.25);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --surface: #ffffff;
+  --surface-muted: #f9fafb;
+  --border-subtle: #f3f4f6;
+}
+
+.dark {
+  --bg-page: #0b0f14;
+  --fg-primary: #f1f1f1;
+  --fg-secondary: #b8bec4;
+  --fg-muted: #8a9096;
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.14);
+  --surface: #12171d;
+  --surface-muted: #161c23;
+  --border-subtle: #232a32;
+}
 
 /* ブラウザデフォルトの body margin をリセット */
 body {
   margin: 0;
   padding: 0;
+  background: var(--bg-page);
+  color: var(--fg-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* 横スクロールのスクロールバーを非表示にする */

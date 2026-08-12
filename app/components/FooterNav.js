@@ -80,13 +80,14 @@ export default function FooterNav() {
 
   const chatHref = user ? "/chat" : "/login";
   const noticeHref = user ? "/notice" : "/login";
+  const homeHref = user ? "/feed" : "/";
 
   const tabs = [
     {
       label: "ホーム",
-      href: "/",
+      href: homeHref,
       icon: (a) => <FeedIcon active={a} />,
-      active: pathname === "/",
+      active: pathname === homeHref,
     },
     {
       label: "チャット",
@@ -114,8 +115,8 @@ export default function FooterNav() {
     },
   ];
 
-  const activeColor = "#152635";
-  const inactiveColor = "#777";
+  const activeColor = "#8fa8a7";
+  const inactiveColor = "var(--fg-muted)";
 
   return (
     <nav
@@ -125,10 +126,12 @@ export default function FooterNav() {
         left: 0,
         right: 0,
         height: "60px",
-        backgroundColor: "rgba(255,255,255,0.25)",
+        backgroundColor: "var(--card-bg)",
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
-        borderTop: "1px solid rgba(255,255,255,0.4)",
+        isolation: "isolate",
+        transform: "translateZ(0)",
+        borderTop: "1px solid var(--card-border)",
         display: "flex",
         alignItems: "stretch",
         zIndex: 9998,

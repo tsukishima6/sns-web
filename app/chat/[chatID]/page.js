@@ -180,12 +180,12 @@ export default function ChatThreadPage() {
           alignItems: "center",
           gap: "0.75rem",
           padding: "0.75rem 1rem",
-          borderBottom: "1px solid #eee",
-          backgroundColor: "#fff",
+          borderBottom: "1px solid var(--border-subtle)",
+          backgroundColor: "var(--surface)",
           flexShrink: 0,
         }}
       >
-        <Link href="/chat" style={{ color: "#888", lineHeight: 1 }}>
+        <Link href="/chat" style={{ color: "var(--fg-muted)", lineHeight: 1 }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
@@ -202,7 +202,7 @@ export default function ChatThreadPage() {
             fontWeight: 600,
             fontSize: "0.95rem",
             fontFamily: "'Noto Sans JP', sans-serif",
-            color: "#1a1a1a",
+            color: "var(--fg-primary)",
           }}
         >
           {headerName}
@@ -260,7 +260,7 @@ export default function ChatThreadPage() {
                   <span
                     style={{
                       fontSize: "0.7rem",
-                      color: "#aaa",
+                      color: "var(--fg-muted)",
                       fontFamily: "'Noto Sans JP', sans-serif",
                     }}
                   >
@@ -269,8 +269,8 @@ export default function ChatThreadPage() {
                 )}
                 <div
                   style={{
-                    backgroundColor: isMe ? "#152635" : "#f0f0f0",
-                    color: isMe ? "#fff" : "#222",
+                    backgroundColor: isMe ? "#152635" : "var(--surface-muted)",
+                    color: isMe ? "#fff" : "var(--fg-primary)",
                     padding: "0.55rem 0.9rem",
                     borderRadius: isMe
                       ? "18px 18px 4px 18px"
@@ -294,7 +294,7 @@ export default function ChatThreadPage() {
                 <span
                   style={{
                     fontSize: "0.65rem",
-                    color: "#ccc",
+                    color: "var(--fg-muted)",
                     fontFamily: "'Urbanist', sans-serif",
                   }}
                 >
@@ -314,8 +314,8 @@ export default function ChatThreadPage() {
           display: "flex",
           gap: "0.5rem",
           padding: "0.65rem 0.75rem",
-          borderTop: "1px solid #eee",
-          backgroundColor: "#fff",
+          borderTop: "1px solid var(--border-subtle)",
+          backgroundColor: "var(--surface)",
           flexShrink: 0,
           alignItems: "flex-end",
         }}
@@ -328,7 +328,7 @@ export default function ChatThreadPage() {
           rows={1}
           style={{
             flex: 1,
-            border: "1px solid #e0e0e0",
+            border: "1px solid var(--border-subtle)",
             borderRadius: "20px",
             padding: "0.55rem 1rem",
             fontSize: "0.9rem",
@@ -338,6 +338,8 @@ export default function ChatThreadPage() {
             lineHeight: "1.5",
             maxHeight: "120px",
             overflowY: "auto",
+            backgroundColor: "var(--surface)",
+            color: "var(--fg-primary)",
           }}
         />
         <button

@@ -30,8 +30,8 @@ function TagChip({ tag, selectedTags, onToggle }) {
       onClick={() => onToggle(tag)}
       className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full text-sm border transition-colors ${
         selected
-          ? "bg-black text-white border-black"
-          : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+          ? "bg-black text-white border-black dark:border-white"
+          : "bg-white dark:bg-[var(--surface)] text-gray-700 dark:text-[var(--fg-secondary)] border-gray-300 dark:border-[var(--border-subtle)] hover:border-gray-400 dark:hover:border-[var(--fg-muted)]"
       }`}
     >
       #{tag.name}
@@ -185,7 +185,7 @@ export default function ProfileEditPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -197,8 +197,8 @@ export default function ProfileEditPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-base font-semibold text-gray-800">プロフィール編集</h1>
-        <Link href={`/users/${user.uid}/profile/${user.uid}`} className="text-sm text-gray-400 hover:text-gray-600">
+        <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">プロフィール編集</h1>
+        <Link href={`/users/${user.uid}/profile/${user.uid}`} className="text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
           キャンセル
         </Link>
       </div>
@@ -230,7 +230,7 @@ export default function ProfileEditPage() {
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="text-sm text-gray-500 hover:text-black transition-colors"
+            className="text-sm text-gray-500 dark:text-[var(--fg-secondary)] hover:text-black dark:hover:text-[var(--fg-primary)] transition-colors"
           >
             写真を変更
           </button>
@@ -238,7 +238,7 @@ export default function ProfileEditPage() {
 
         {/* 表示名 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">
             表示名
           </label>
           <input
@@ -246,45 +246,45 @@ export default function ProfileEditPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="あなたの名前"
           />
         </div>
 
         {/* ID */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">
             ID
           </label>
           <input
             type="text"
             value={profileID}
             onChange={(e) => setProfileID(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="your_id"
           />
-          <p className="text-xs text-gray-400 mt-1">@の後に表示される識別子です</p>
+          <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1">@の後に表示される識別子です</p>
         </div>
 
         {/* 自己紹介 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">
             自己紹介
           </label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="自己紹介を入力してください"
           />
-          <p className="text-right text-xs text-gray-400 mt-1">{bio.length} 文字</p>
+          <p className="text-right text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1">{bio.length} 文字</p>
         </div>
 
         {/* タグ */}
         {kaiwaiRef && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">タグ</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1.5">タグ</label>
 
             <div className="flex items-center gap-2 mb-2">
               <span className="text-base shrink-0" title="人気順">🔥</span>
@@ -315,12 +315,12 @@ export default function ProfileEditPage() {
                   if (e.key === "Enter") handleAddNewTag(e);
                 }}
                 placeholder="新しいタグを作成"
-                className="flex-1 px-3 py-1.5 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                className="flex-1 px-3 py-1.5 border border-gray-200 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
               />
               <button
                 type="button"
                 onClick={handleAddNewTag}
-                className="px-3 py-1.5 rounded-full text-sm border border-gray-300 text-gray-600 hover:bg-gray-50"
+                className="px-3 py-1.5 rounded-full text-sm border border-gray-300 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)]"
               >
                 追加
               </button>
@@ -329,7 +329,7 @@ export default function ProfileEditPage() {
         )}
 
         {error && (
-          <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">
+          <p className="text-sm text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-lg">
             {error}
           </p>
         )}

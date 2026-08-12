@@ -27,7 +27,7 @@ export default async function BusinessDetailPage({ params }) {
   const snap = await getDoc(doc(db, "business", bizID));
   if (!snap.exists()) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400">
+      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
         ビジネス情報が見つかりません
       </div>
     );
@@ -91,26 +91,26 @@ export default async function BusinessDetailPage({ params }) {
         {/* 名前 */}
         <div>
           <h1
-            className="text-xl font-bold text-gray-800"
+            className="text-xl font-bold text-gray-800 dark:text-[var(--fg-primary)]"
             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
           >
             {biz.display_name}
           </h1>
           {biz.subname && (
-            <p className="text-sm text-gray-400 mt-0.5"
+            <p className="text-sm text-gray-400 dark:text-[var(--fg-muted)] mt-0.5"
                style={{ fontFamily: "'Urbanist', sans-serif" }}>
               {biz.subname}
             </p>
           )}
           <div className="flex items-center gap-3 mt-1.5">
             {biz.review_display && avgRating && (
-              <span className="flex items-center gap-1 text-sm text-gray-600">
+              <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-[var(--fg-secondary)]">
                 ⭐ {avgRating}
-                <span className="text-xs text-gray-400">({ratingList.length})</span>
+                <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">({ratingList.length})</span>
               </span>
             )}
             {favoritedCount > 0 && (
-              <span className="flex items-center gap-1 text-sm text-gray-600">
+              <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-[var(--fg-secondary)]">
                 ♡ {favoritedCount}
               </span>
             )}
@@ -128,47 +128,47 @@ export default async function BusinessDetailPage({ params }) {
 
         {/* 説明 */}
         {biz.discription && (
-          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap"
+          <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
              style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
             {biz.discription}
           </p>
         )}
 
         {/* 基本情報 */}
-        <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+        <div className="bg-gray-50 dark:bg-[var(--surface-muted)] rounded-2xl p-4 space-y-3">
           {biz.location_name && (
             <div className="flex gap-3 text-sm">
-              <span className="text-gray-400 flex-shrink-0">📍</span>
+              <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">📍</span>
               <div>
-                <p className="text-xs text-gray-400 mb-0.5">場所</p>
-                <p className="text-gray-700">{biz.location_name}</p>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">場所</p>
+                <p className="text-gray-700 dark:text-[var(--fg-secondary)]">{biz.location_name}</p>
               </div>
             </div>
           )}
           {biz.location_adress && (
             <div className="flex gap-3 text-sm">
-              <span className="text-gray-400 flex-shrink-0">🏠</span>
+              <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">🏠</span>
               <div>
-                <p className="text-xs text-gray-400 mb-0.5">住所</p>
-                <p className="text-gray-700">{biz.location_adress}</p>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">住所</p>
+                <p className="text-gray-700 dark:text-[var(--fg-secondary)]">{biz.location_adress}</p>
               </div>
             </div>
           )}
           {biz.fee && (
             <div className="flex gap-3 text-sm">
-              <span className="text-gray-400 flex-shrink-0">💴</span>
+              <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">💴</span>
               <div>
-                <p className="text-xs text-gray-400 mb-0.5">料金</p>
-                <p className="text-gray-700">{biz.fee}</p>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">料金</p>
+                <p className="text-gray-700 dark:text-[var(--fg-secondary)]">{biz.fee}</p>
               </div>
             </div>
           )}
           {biz.bizhour && (
             <div className="flex gap-3 text-sm">
-              <span className="text-gray-400 flex-shrink-0">🕒</span>
+              <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">🕒</span>
               <div>
-                <p className="text-xs text-gray-400 mb-0.5">営業時間</p>
-                <p className="text-gray-700 whitespace-pre-wrap">{biz.bizhour}</p>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">営業時間</p>
+                <p className="text-gray-700 dark:text-[var(--fg-secondary)] whitespace-pre-wrap">{biz.bizhour}</p>
               </div>
             </div>
           )}
@@ -192,12 +192,12 @@ export default async function BusinessDetailPage({ params }) {
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-3 px-4 py-3 border border-gray-200 dark:border-[var(--border-subtle)] rounded-xl text-sm text-gray-700 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
                 style={{ textDecoration: "none" }}
               >
                 <span>{s.icon}</span>
                 <span>{s.label}</span>
-                <svg className="ml-auto text-gray-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="ml-auto text-gray-300 dark:text-[var(--fg-muted)]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                 </svg>
@@ -209,7 +209,7 @@ export default async function BusinessDetailPage({ params }) {
         {/* 関連イベント */}
         {relatedEvents.length > 0 && (
           <div>
-            <h2 className="text-sm font-semibold text-gray-500 mb-2" style={{ fontFamily: "'Urbanist', sans-serif" }}>
+            <h2 className="text-sm font-semibold text-gray-500 dark:text-[var(--fg-secondary)] mb-2" style={{ fontFamily: "'Urbanist', sans-serif" }}>
               events
             </h2>
             <div className="space-y-2">
@@ -217,7 +217,7 @@ export default async function BusinessDetailPage({ params }) {
                 <Link
                   key={ev.id}
                   href={`/events/${ev.id}`}
-                  className="flex items-center gap-3 px-3 py-2.5 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-3 py-2.5 border border-gray-100 dark:border-[var(--border-subtle)] rounded-xl hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
                   style={{ textDecoration: "none" }}
                 >
                   <img
@@ -225,7 +225,7 @@ export default async function BusinessDetailPage({ params }) {
                     alt={ev.event_title || ""}
                     className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                   />
-                  <p className="text-sm text-gray-700 line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                  <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                     {ev.event_title}
                   </p>
                 </Link>

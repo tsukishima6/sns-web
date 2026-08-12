@@ -143,7 +143,7 @@ export default function FavoritesPage() {
   if (loading || fetching) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -152,9 +152,9 @@ export default function FavoritesPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="px-4 py-4 border-b border-gray-100">
+      <div className="px-4 py-4 border-b border-gray-100 dark:border-[var(--border-subtle)]">
         <h1
-          className="text-base font-medium text-gray-800"
+          className="text-base font-medium text-gray-800 dark:text-[var(--fg-primary)]"
           style={{ fontFamily: "'Urbanist', sans-serif" }}
         >
           favorites
@@ -167,7 +167,7 @@ export default function FavoritesPage() {
             <Link
               key={`${p.userID}-${p.id}`}
               href={`/users/${p.userID}/profile/${p.id}`}
-              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
             >
               <img
                 src={p.photo || fallbackPhoto}
@@ -175,10 +175,10 @@ export default function FavoritesPage() {
                 className="w-10 h-10 rounded-full object-cover flex-shrink-0"
               />
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                   {p.name}
                 </p>
-                <p className="text-xs text-gray-400" style={{ fontFamily: "'Urbanist', sans-serif" }}>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]" style={{ fontFamily: "'Urbanist', sans-serif" }}>
                   @{p.ID || p.userID}
                 </p>
               </div>
@@ -193,14 +193,14 @@ export default function FavoritesPage() {
             <Link
               key={ev.id}
               href={`/events/${ev.id}`}
-              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
             >
               <img
                 src={ev.event_photo || fallbackPhoto}
                 alt={ev.event_title || ""}
                 className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
               />
-              <p className="text-sm font-medium text-gray-800 line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                 {ev.event_title}
               </p>
             </Link>
@@ -214,14 +214,14 @@ export default function FavoritesPage() {
             <Link
               key={biz.id}
               href={`/business/${biz.id}`}
-              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
             >
               <img
                 src={biz.photo_1 || fallbackPhoto}
                 alt={biz.display_name || ""}
                 className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
               />
-              <p className="text-sm font-medium text-gray-800 line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                 {biz.display_name}
               </p>
             </Link>
@@ -230,8 +230,8 @@ export default function FavoritesPage() {
       )}
 
       {(profiles.length > 0 || events.length > 0 || businesses.length > 0) && (
-        <div className="px-4 py-3 border-b border-gray-100">
-          <h2 className="text-xs font-semibold text-gray-400 tracking-widest" style={{ fontFamily: "'Urbanist', sans-serif" }}>
+        <div className="px-4 py-3 border-b border-gray-100 dark:border-[var(--border-subtle)]">
+          <h2 className="text-xs font-semibold text-gray-400 dark:text-[var(--fg-muted)] tracking-widest" style={{ fontFamily: "'Urbanist', sans-serif" }}>
             posts
           </h2>
         </div>
@@ -240,8 +240,8 @@ export default function FavoritesPage() {
       {posts.length === 0 ? (
         profiles.length === 0 && events.length === 0 && businesses.length === 0 && (
           <div className="text-center py-16 px-4">
-            <p className="text-gray-400 text-sm">お気に入りがありません</p>
-            <p className="text-xs text-gray-300 mt-2">投稿・ユーザー・イベント・ビジネスをお気に入りするとここに表示されます</p>
+            <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">お気に入りがありません</p>
+            <p className="text-xs text-gray-300 dark:text-[var(--fg-muted)] mt-2">投稿・ユーザー・イベント・ビジネスをお気に入りするとここに表示されます</p>
           </div>
         )
       ) : (
@@ -257,9 +257,9 @@ export default function FavoritesPage() {
 
 function FavSection({ title, children }) {
   return (
-    <div className="border-b border-gray-100">
+    <div className="border-b border-gray-100 dark:border-[var(--border-subtle)]">
       <div className="px-4 pt-3">
-        <h2 className="text-xs font-semibold text-gray-400 tracking-widest" style={{ fontFamily: "'Urbanist', sans-serif" }}>
+        <h2 className="text-xs font-semibold text-gray-400 dark:text-[var(--fg-muted)] tracking-widest" style={{ fontFamily: "'Urbanist', sans-serif" }}>
           {title}
         </h2>
       </div>
@@ -288,7 +288,7 @@ function PostCard({ post }) {
       href={`/posts/${post.userID}/${post.id}`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <div className="px-4 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+      <div className="px-4 py-4 border-b border-gray-100 dark:border-[var(--border-subtle)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors">
         {post.profile && (
           <div className="flex items-center gap-3 mb-3">
             <img
@@ -297,11 +297,11 @@ function PostCard({ post }) {
               className="w-10 h-10 rounded-full object-cover flex-shrink-0"
             />
             <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-800 truncate"
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate"
                  style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                 {post.profile.name}
               </p>
-              <p className="text-xs text-gray-400"
+              <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]"
                  style={{ fontFamily: "'Urbanist', sans-serif" }}>
                 @{post.profile.ID || post.userID}
               </p>
@@ -310,7 +310,7 @@ function PostCard({ post }) {
         )}
 
         {post.postDescription && (
-          <p className="text-sm text-gray-700 mb-3 leading-relaxed whitespace-pre-wrap"
+          <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] mb-3 leading-relaxed whitespace-pre-wrap"
              style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
             {post.postDescription}
           </p>
@@ -325,7 +325,7 @@ function PostCard({ post }) {
         )}
 
         <div className="flex items-center justify-between">
-          <span className="text-xs text-gray-400">{formatTime(post.timePosted)}</span>
+          <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">{formatTime(post.timePosted)}</span>
           <span className="text-xs text-[#8fa8a7]">♡ お気に入り</span>
         </div>
       </div>

@@ -23,7 +23,7 @@ export default function PostsCarousel({ posts }) {
   }, [posts]);
 
   if (!posts || posts.length === 0) {
-    return <p style={{ color: "#666" }}>まだ投稿がありません</p>;
+    return <p style={{ color: "var(--fg-secondary)" }}>まだ投稿がありません</p>;
   }
 
   return (
@@ -36,10 +36,11 @@ export default function PostsCarousel({ posts }) {
           gap: "1rem",
           overflowX: "auto",
           scrollBehavior: "smooth",
-          paddingBottom: "0rem",
-          marginTop: "70px",
+          paddingTop: "16px",
+          paddingBottom: "40px",
+          marginTop: "54px",
           fontFamily: "Urbanist",
-          marginBottom: "1rem",
+          marginBottom: "0",
           minHeight: "200px",
         }}
       >
@@ -56,25 +57,26 @@ export default function PostsCarousel({ posts }) {
             <div
               style={{
                 padding: "1.3rem",
-                border: "1px solid rgba(255,255,255,0.4)",
+                border: "1px solid var(--card-border)",
                 borderRadius: "20px",
-                backgroundColor: "rgba(255,255,255,0.25)",
+                backgroundColor: "var(--card-bg)",
                 backdropFilter: "blur(10px)",
                 WebkitBackdropFilter: "blur(10px)",
                 isolation: "isolate",
                 transform: "translateZ(0)",
                 position: "relative",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
               }}
             >
               {post.kaiwaiName && post.kaiwaiID && (
-                <Link href={`/kaiwai/${post.kaiwaiID}`} style={{ display: "inline-block", textDecoration: "none", marginBottom: "0.5rem" }}>
+                <Link href={`/kaiwai/${post.kaiwaiID}`} style={{ display: "inline-block", textDecoration: "none", marginBottom: "11px" }}>
                   <span
                     style={{
                       display: "inline-block",
                       fontSize: "0.72rem",
                       fontWeight: "600",
                       color: "#fff",
-                      background: "linear-gradient(135deg, #152635, #8fa8a7)",
+                      background: "linear-gradient(135deg, rgba(21,38,53,0.75), rgba(143,168,167,0.7))",
                       padding: "0.25rem 0.65rem",
                       borderRadius: "999px",
                     }}
@@ -102,10 +104,10 @@ export default function PostsCarousel({ posts }) {
                       }}
                     />
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                      <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "#333" }}>
+                      <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "var(--fg-primary)" }}>
                         {post.profile.name}
                       </span>
-                      <span style={{ fontSize: "0.9rem", color: "#666", fontFamily: "Urbanist" }}>
+                      <span style={{ fontSize: "0.9rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
                         @{post.profile.ID || post.userID}
                       </span>
                     </div>
@@ -117,7 +119,7 @@ export default function PostsCarousel({ posts }) {
                     fontSize: "1rem",
                     fontWeight: "400",
                     marginBottom: post.postPhoto ? "0.9rem" : "1.5rem",
-                    color: "#333",
+                    color: "var(--fg-primary)",
                   }}
                 >
                   {post.postDescription || "（本文なし）"}
@@ -138,7 +140,7 @@ export default function PostsCarousel({ posts }) {
                       textAlign: "right",
                       marginTop: "0.8rem",
                       fontSize: "1rem",
-                      color: "#888",
+                      color: "var(--fg-muted)",
                       fontFamily: "Urbanist",
                     }}
                   >

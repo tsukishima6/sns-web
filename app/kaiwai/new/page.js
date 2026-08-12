@@ -42,15 +42,15 @@ function Toggle({ checked, onChange }) {
 
 function ToggleRow({ label, sublabel, checked, onChange, helper }) {
   return (
-    <div className="py-3 border-b border-gray-100 last:border-b-0">
+    <div className="py-3 border-b border-gray-100 dark:border-[var(--border-subtle)] last:border-b-0">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-800">{label}</p>
-          <p className="text-xs text-gray-400">{sublabel}</p>
+          <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)]">{label}</p>
+          <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">{sublabel}</p>
         </div>
         <Toggle checked={checked} onChange={onChange} />
       </div>
-      {helper && <p className="text-xs text-gray-400 mt-1.5">{helper}</p>}
+      {helper && <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1.5">{helper}</p>}
     </div>
   );
 }
@@ -77,13 +77,13 @@ function ParentSelectModal({ onClose, onSelect }) {
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/50 px-0 sm:px-4">
-      <div className="w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <h2 className="text-sm font-semibold text-gray-800">親KAIWAIを選択</h2>
+      <div className="w-full sm:max-w-md bg-white dark:bg-[var(--surface)] rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[var(--border-subtle)]">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-[var(--fg-primary)]">親KAIWAIを選択</h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-700 text-lg leading-none"
+            className="text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-700 dark:hover:text-[var(--fg-secondary)] text-lg leading-none"
           >
             ×
           </button>
@@ -95,15 +95,15 @@ function ParentSelectModal({ onClose, onSelect }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="検索"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
           />
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
           {list === null ? (
-            <p className="text-sm text-gray-400 text-center py-8">読み込み中...</p>
+            <p className="text-sm text-gray-400 dark:text-[var(--fg-muted)] text-center py-8">読み込み中...</p>
           ) : filtered.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-8">見つかりませんでした</p>
+            <p className="text-sm text-gray-400 dark:text-[var(--fg-muted)] text-center py-8">見つかりませんでした</p>
           ) : (
             filtered.map((k) => (
               <button
@@ -135,15 +135,15 @@ function ParentSelectModal({ onClose, onSelect }) {
         </div>
 
         {pending && (
-          <div className="border-t border-gray-100 p-4 space-y-3">
-            <p className="text-sm text-gray-700 text-center">
+          <div className="border-t border-gray-100 dark:border-[var(--border-subtle)] p-4 space-y-3">
+            <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] text-center">
               「{pending.name}」を親KAIWAIに設定しますか？
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setPending(null)}
-                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)]"
               >
                 キャンセル
               </button>
@@ -284,7 +284,7 @@ export default function NewKaiwaiPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -294,8 +294,8 @@ export default function NewKaiwaiPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-base font-semibold text-gray-800">KAIWAIを立ち上げる</h1>
-        <Link href="/kaiwai" className="text-sm text-gray-400 hover:text-gray-600">
+        <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">KAIWAIを立ち上げる</h1>
+        <Link href="/kaiwai" className="text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
           キャンセル
         </Link>
       </div>
@@ -303,38 +303,38 @@ export default function NewKaiwaiPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* KAIWAI名 */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">KAIWAI名</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">KAIWAI名</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value.slice(0, 12))}
             maxLength={12}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="例: 読書"
           />
-          <p className="text-right text-xs text-gray-400 mt-1">{name.length}/12</p>
+          <p className="text-right text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1">{name.length}/12</p>
         </div>
 
         {/* KAIWAI ID */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">KAIWAI ID</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">KAIWAI ID</label>
           <input
             type="text"
             value={kaiwaiID}
             onChange={handleIDChange}
             maxLength={12}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="dokusho"
           />
-          <p className="text-xs text-gray-400 mt-1">半角英数字のみ、12文字まで</p>
+          <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-1">半角英数字のみ、12文字まで</p>
         </div>
 
         {/* カテゴリ */}
         <div>
-          <p className="text-sm font-medium text-gray-700 mb-1">カテゴリ（最低1つ）</p>
-          <div className="border border-gray-100 rounded-xl px-3">
+          <p className="text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">カテゴリ（最低1つ）</p>
+          <div className="border border-gray-100 dark:border-[var(--border-subtle)] rounded-xl px-3">
             <ToggleRow label="趣味" sublabel="hobby" checked={hobbies} onChange={setHobbies} />
             <ToggleRow label="地域" sublabel="area" checked={local} onChange={setLocal} />
             <ToggleRow label="その他" sublabel="other" checked={other} onChange={setOther} />
@@ -342,7 +342,7 @@ export default function NewKaiwaiPage() {
         </div>
 
         {/* クローズド・非表示設定 */}
-        <div className="bg-gray-50 rounded-xl px-3">
+        <div className="bg-gray-50 dark:bg-[var(--surface-muted)] rounded-xl px-3">
           <ToggleRow
             label="クローズド"
             sublabel="closed"
@@ -362,24 +362,24 @@ export default function NewKaiwaiPage() {
         {/* 親を選択 */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-700">既存KAIWAIの子として設定</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)]">既存KAIWAIの子として設定</p>
             {parent ? (
-              <p className="text-xs text-gray-500 mt-0.5">{parent.name}</p>
+              <p className="text-xs text-gray-500 dark:text-[var(--fg-secondary)] mt-0.5">{parent.name}</p>
             ) : (
-              <p className="text-xs text-gray-400 mt-0.5">未設定　*必須ではありません</p>
+              <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-0.5">未設定　*必須ではありません</p>
             )}
           </div>
           <button
             type="button"
             onClick={() => setShowParentModal(true)}
-            className="px-4 py-1.5 rounded-full text-xs border border-gray-300 text-gray-600 hover:bg-gray-50"
+            className="px-4 py-1.5 rounded-full text-xs border border-gray-300 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)]"
           >
             親を選択
           </button>
         </div>
 
         {error && (
-          <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+          <p className="text-sm text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-lg">{error}</p>
         )}
 
         {!confirming ? (
@@ -391,14 +391,14 @@ export default function NewKaiwaiPage() {
             KAIWAIを作成
           </button>
         ) : (
-          <div className="border border-gray-200 rounded-xl p-4 space-y-3">
-            <p className="text-sm text-gray-700 text-center">KAIWAIを作成します。よろしいですか？</p>
+          <div className="border border-gray-200 dark:border-[var(--border-subtle)] rounded-xl p-4 space-y-3">
+            <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] text-center">KAIWAIを作成します。よろしいですか？</p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
                 disabled={submitting}
-                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] disabled:opacity-40"
               >
                 キャンセル
               </button>

@@ -76,7 +76,7 @@ export default async function ProfilePage({ params }) {
   const profileSnap = await getDoc(profileRef);
 
   if (!profileSnap.exists()) {
-    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>プロフィールが見つかりません</div>;
+    return <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>プロフィールが見つかりません</div>;
   }
 
   const profile = profileSnap.data();
@@ -144,13 +144,13 @@ export default async function ProfilePage({ params }) {
           alt={profile.name || "ユーザー"}
           style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover" }}
         />
-        <h2 style={{ fontFamily: "Arial , Urbanist" , margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "Arial , Urbanist" , margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center", color: "var(--fg-primary)" }}>
           {profile.name}
         </h2>
-        <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "#666", margin: "0rem 0", textAlign: "center" }}>
+        <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "var(--fg-secondary)", margin: "0rem 0", textAlign: "center" }}>
           @{profile.ID}
         </p>
-        <p style={{ fontFamily: "Arial , Urbanist" , fontSize: "1rem", color: "#444", marginTop: "1.0rem", textAlign: "center" }}>
+        <p style={{ fontFamily: "Arial , Urbanist" , fontSize: "1rem", color: "var(--fg-secondary)", marginTop: "1.0rem", textAlign: "center" }}>
           {profile.bio && profile.bio.trim() !== "" ? profile.bio : "よろしくお願いします。"}
         </p>
         {tags.length > 0 && (
@@ -169,8 +169,8 @@ export default async function ProfilePage({ params }) {
                 href={`/kaiwai/${tag.kaiwaiID}/category/${tag.id}`}
                 style={{
                   fontSize: "0.8rem",
-                  color: "#666",
-                  border: "1px solid #ddd",
+                  color: "var(--fg-secondary)",
+                  border: "1px solid var(--border-subtle)",
                   borderRadius: "999px",
                   padding: "0.3rem 0.8rem",
                   textDecoration: "none",
@@ -205,10 +205,10 @@ export default async function ProfilePage({ params }) {
             <div
               style={{
                 padding: "1.3rem",
-                border: "1px solid #ddd",
+                border: "1px solid var(--border-subtle)",
                 borderRadius: "12px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                backgroundColor: "#fff",
+                backgroundColor: "var(--surface)",
                 fontFamily: "Arial, sans-serif",
                 position: "relative",
               }}
@@ -227,10 +227,10 @@ export default async function ProfilePage({ params }) {
                   }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "#333" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.9rem", color: "var(--fg-primary)" }}>
                     {profile.name}
                   </span>
-                  <span style={{ fontSize: "0.9rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "0.9rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
                     @{profile.ID || userID}
                   </span>
                 </div>
@@ -242,7 +242,7 @@ export default async function ProfilePage({ params }) {
                   fontSize: "1rem",
                   fontWeight: "400",
                   marginBottom: post.postPhoto ? "1rem" : "2rem",
-                  color: "#333",
+                  color: "var(--fg-primary)",
                 }}
               >
                 {post.postDescription}
@@ -255,7 +255,7 @@ export default async function ProfilePage({ params }) {
                 />
               )}
               {post.postContent && (
-                <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#555" }}>{post.postContent}</p>
+                <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--fg-secondary)" }}>{post.postContent}</p>
               )}
 
               {/* 投稿日時 */}
@@ -266,7 +266,7 @@ export default async function ProfilePage({ params }) {
                     right: "1rem",
                     bottom: "0.6rem",
                     fontSize: "1.0rem",
-                    color: "#888",
+                    color: "var(--fg-muted)",
                     fontFamily: "Urbanist",
                   }}
                 >

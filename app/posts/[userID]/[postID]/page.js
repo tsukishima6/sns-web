@@ -76,7 +76,7 @@ export default async function PostPage({ params }) {
   const postSnap = await getDoc(postRef);
 
   if (!postSnap.exists()) {
-    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>投稿が見つかりません</div>;
+    return <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>投稿が見つかりません</div>;
   }
 
   const post = postSnap.data();
@@ -139,7 +139,7 @@ export default async function PostPage({ params }) {
     style={{
       margin: "0 auto",
       padding: "1.3rem 1rem" ,
-      borderBottom: "1px solid #ddd",
+      borderBottom: "1px solid var(--border-subtle)",
       backgroundColor: "transparent",
       fontFamily: "Urbanist, sans-serif",
       position: "relative",
@@ -155,10 +155,10 @@ export default async function PostPage({ params }) {
             style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
           />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333" }}>
+            <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)" }}>
               {profileData.name}
             </span>
-            <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
               @{profileData.ID || userID}
             </span>
           </div>
@@ -172,7 +172,7 @@ export default async function PostPage({ params }) {
         fontSize: "1rem",
         fontWeight: "400",
         marginBottom: post.postPhoto ? "1rem" : "1.6rem",
-        color: "#333",
+        color: "var(--fg-primary)",
         marginLeft: "0.2rem",
         marginRight: "1.2rem",
 　　　　 fontFamily: "Urbanist",
@@ -192,7 +192,7 @@ export default async function PostPage({ params }) {
 
     {/* 投稿本文 */}
     {post.postContent && (
-      <p style={{ fontFamily: "Urbanist", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "#555", marginRight: "1.8rem"}}>{post.postContent}</p>
+      <p style={{ fontFamily: "Urbanist", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "var(--fg-secondary)", marginRight: "1.8rem"}}>{post.postContent}</p>
     )}
 
     {/* 投稿日時 */}
@@ -201,7 +201,7 @@ export default async function PostPage({ params }) {
     style={{
       marginTop: "0.5rem",
       fontSize: "1rem",
-      color: "#888",
+      color: "var(--fg-muted)",
       fontFamily: "'Urbanist','Montserrat',sans-serif",
       textAlign: "right",   // ← 追加
       marginRight: "2.4rem",
@@ -229,7 +229,7 @@ export default async function PostPage({ params }) {
           style={{
             fontSize: "0.95rem",
             fontWeight: "500",
-            color: "#222",
+            color: "var(--fg-primary)",
             margin: 0,
           }}
         >
@@ -252,7 +252,7 @@ export default async function PostPage({ params }) {
             key={idx}
             style={{
               padding: "1.3rem 1rem",
-              borderBottom: "1px solid #ddd",
+              borderBottom: "1px solid var(--border-subtle)",
               backgroundColor: "transparent",
             }}
           >
@@ -265,10 +265,10 @@ export default async function PostPage({ params }) {
                   style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "#333", fontFamily: "Urbanist" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)", fontFamily: "Urbanist" }}>
                     {profileData.name}
                   </span>
-                  <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+                  <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
                     @{profileData.ID || userID}
                   </span>
                 </div>
@@ -285,7 +285,7 @@ export default async function PostPage({ params }) {
                   fontSize: "0.95rem",
                   fontWeight: "400",
                   marginBottom: other.postPhoto ? "1rem" : "1.5rem",
-                  color: "#333",
+                  color: "var(--fg-primary)",
                   marginRight: "1.8rem",
                   fontFamily: "Urbanist",
                 }}
@@ -309,7 +309,7 @@ export default async function PostPage({ params }) {
                   style={{
                     fontSize: "0.9rem",
                     lineHeight: "1.6",
-                    color: "#555",
+                    color: "var(--fg-secondary)",
                   }}
                 >
                   {other.postContent}
@@ -321,7 +321,7 @@ export default async function PostPage({ params }) {
                 style={{
                   marginTop: "0.5rem",
                   fontSize: "1rem",
-                  color: "#888",
+                  color: "var(--fg-muted)",
                   textAlign: "right",
                   fontFamily: "'Urbanist','Montserrat',sans-serif",
                   marginRight: "2.4rem",

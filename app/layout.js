@@ -12,6 +12,7 @@ import "./globals.css";
 import Script from "next/script";
 import FloatingAppPromo from "./components/FloatingAppPromo";
 import Providers from "./providers";
+import { ThemeProvider } from "@/lib/ThemeContext";
 
 // 各フォントの設定
 const geistSans = Geist({
@@ -103,12 +104,26 @@ export default function RootLayout({ children }) {
           antialiased
         `}
       >
-        <Providers>
-          <main className="pb-16">
-            {children}
-          </main>
-          <FloatingAppPromo />
-        </Providers>
+        {/* 初回ペイント前にダークモードを適用し、切り替え時のチラつき（FOUC）を防ぐ */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var t = localStorage.getItem('kaiwai-theme');
+                var isDark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                if (isDark) document.documentElement.classList.add('dark');
+              } catch (e) {}
+            `,
+          }}
+        />
+        <ThemeProvider>
+          <Providers>
+            <main className="pb-16">
+              {children}
+            </main>
+            <FloatingAppPromo />
+          </Providers>
+        </ThemeProvider>
 
         {/* Google Analytics */}
         <Script

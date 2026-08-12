@@ -135,15 +135,15 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
   };
 
   return (
-    <div style={{ borderTop: "1px solid #eee", marginTop: "0.5rem" }}>
+    <div style={{ borderTop: "1px solid var(--border-subtle)", marginTop: "0.5rem" }}>
       {/* コメント一覧 */}
       <div>
         {loading ? (
-          <p style={{ padding: "1rem", color: "#999", fontSize: "0.85rem", textAlign: "center" }}>
+          <p style={{ padding: "1rem", color: "var(--fg-muted)", fontSize: "0.85rem", textAlign: "center" }}>
             読み込み中…
           </p>
         ) : comments.length === 0 ? (
-          <p style={{ padding: "1.2rem 1rem", color: "#aaa", fontSize: "0.85rem" }}>
+          <p style={{ padding: "1.2rem 1rem", color: "var(--fg-muted)", fontSize: "0.85rem" }}>
             まだコメントはありません
           </p>
         ) : (
@@ -154,7 +154,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
                 display: "flex",
                 gap: "0.75rem",
                 padding: "0.9rem 1rem",
-                borderBottom: "1px solid #f0f0f0",
+                borderBottom: "1px solid var(--border-subtle)",
               }}
             >
               <img
@@ -170,10 +170,10 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
               />
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem", marginBottom: "0.2rem" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.88rem", color: "#222", fontFamily: "Urbanist, sans-serif" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.88rem", color: "var(--fg-primary)", fontFamily: "Urbanist, sans-serif" }}>
                     {c.profile?.name || "ユーザー"}
                   </span>
-                  <span style={{ fontSize: "0.78rem", color: "#aaa", fontFamily: "Urbanist, sans-serif" }}>
+                  <span style={{ fontSize: "0.78rem", color: "var(--fg-muted)", fontFamily: "Urbanist, sans-serif" }}>
                     {formatTime(c.timePosted)}
                   </span>
                   {user && c.userID === user.uid && (
@@ -183,7 +183,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
                         marginLeft: "auto",
                         background: "none",
                         border: "none",
-                        color: "#bbb",
+                        color: "var(--fg-muted)",
                         fontSize: "0.78rem",
                         cursor: "pointer",
                         fontFamily: "Noto Sans JP, sans-serif",
@@ -193,7 +193,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
                     </button>
                   )}
                 </div>
-                <p style={{ margin: 0, fontSize: "0.9rem", color: "#333", lineHeight: "1.5", fontFamily: "Noto Sans JP, sans-serif" }}>
+                <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--fg-primary)", lineHeight: "1.5", fontFamily: "Noto Sans JP, sans-serif" }}>
                   {c.comment}
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
             display: "flex",
             gap: "0.5rem",
             padding: "0.8rem 1rem",
-            borderTop: "1px solid #eee",
+            borderTop: "1px solid var(--border-subtle)",
             alignItems: "flex-end",
           }}
         >
@@ -221,7 +221,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
             rows={2}
             style={{
               flex: 1,
-              border: "1px solid #ddd",
+              border: "1px solid var(--border-subtle)",
               borderRadius: "10px",
               padding: "0.6rem 0.8rem",
               fontSize: "0.9rem",
@@ -229,6 +229,8 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
               resize: "none",
               outline: "none",
               lineHeight: "1.5",
+              backgroundColor: "var(--surface)",
+              color: "var(--fg-primary)",
             }}
           />
           <button
@@ -251,7 +253,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
           </button>
         </form>
       ) : (
-        <p style={{ padding: "1rem", color: "#aaa", fontSize: "0.85rem" }}>
+        <p style={{ padding: "1rem", color: "var(--fg-muted)", fontSize: "0.85rem" }}>
           コメントするには{" "}
           <a href="/login" style={{ color: "#152635", textDecoration: "underline" }}>
             ログイン

@@ -65,7 +65,7 @@ export default async function KaiwaiListPage() {
       <p
         style={{
           fontSize: "0.85rem",
-          color: "#888",
+          color: "var(--fg-secondary)",
           marginBottom: "1.2rem",
         }}
       >
@@ -90,7 +90,7 @@ export default async function KaiwaiListPage() {
       </Link>
 
       {kaiwaiList.length === 0 ? (
-        <p style={{ color: "#aaa" }}>界隈が見つかりませんでした。</p>
+        <p style={{ color: "var(--fg-muted)" }}>界隈が見つかりませんでした。</p>
       ) : sections.length > 0 ? (
         sections.map((section) => (
           <section key={section.label} style={{ marginBottom: "2rem" }}>
@@ -103,7 +103,7 @@ export default async function KaiwaiListPage() {
                 textTransform: "uppercase",
                 marginBottom: "0.75rem",
                 fontFamily: "'Urbanist', sans-serif",
-                borderBottom: "1px solid #eee",
+                borderBottom: "1px solid var(--border-subtle)",
                 paddingBottom: "0.4rem",
               }}
             >
@@ -145,8 +145,8 @@ function KaiwaiCard({ kaiwai }) {
         style={{
           borderRadius: "16px",
           overflow: "hidden",
-          border: "1px solid #eee",
-          background: "#fff",
+          border: "1px solid var(--border-subtle)",
+          background: "var(--surface)",
           transition: "box-shadow 0.15s",
         }}
       >
@@ -173,7 +173,7 @@ function KaiwaiCard({ kaiwai }) {
               style={{
                 fontSize: "0.95rem",
                 fontWeight: 600,
-                color: "#1a1a1a",
+                color: "var(--fg-primary)",
                 fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -189,7 +189,7 @@ function KaiwaiCard({ kaiwai }) {
             <div
               style={{
                 fontSize: "0.72rem",
-                color: "#aaa",
+                color: "var(--fg-muted)",
                 fontFamily: "'Urbanist', sans-serif",
                 marginBottom: "0.35rem",
                 overflow: "hidden",
@@ -205,7 +205,7 @@ function KaiwaiCard({ kaiwai }) {
             <p
               style={{
                 fontSize: "0.78rem",
-                color: "#666",
+                color: "var(--fg-secondary)",
                 margin: "0 0 0.4rem",
                 lineHeight: "1.45",
                 display: "-webkit-box",

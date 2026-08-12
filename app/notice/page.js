@@ -145,18 +145,19 @@ export default function NoticePage() {
           fontWeight: 600,
           padding: "1rem 1rem 0.75rem",
           fontFamily: "'Urbanist', sans-serif",
-          borderBottom: "1px solid #f0f0f0",
+          borderBottom: "1px solid var(--border-subtle)",
+          color: "var(--fg-primary)",
         }}
       >
         お知らせ
       </h1>
 
       {loading ? (
-        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+        <p style={{ padding: "3rem", textAlign: "center", color: "var(--fg-muted)", fontSize: "0.9rem" }}>
           読み込み中…
         </p>
       ) : receipts.length === 0 ? (
-        <p style={{ padding: "3rem", textAlign: "center", color: "#bbb", fontSize: "0.9rem" }}>
+        <p style={{ padding: "3rem", textAlign: "center", color: "var(--fg-muted)", fontSize: "0.9rem" }}>
           お知らせはありません
         </p>
       ) : (
@@ -169,8 +170,8 @@ export default function NoticePage() {
                 display: "flex",
                 gap: "0.75rem",
                 padding: "0.9rem 1rem",
-                borderBottom: "1px solid #f5f5f5",
-                backgroundColor: r.seen ? "#fff" : "#f0f5fa",
+                borderBottom: "1px solid var(--border-subtle)",
+                backgroundColor: r.seen ? "var(--surface)" : "rgba(143,168,167,0.15)",
                 alignItems: "flex-start",
               }}
             >
@@ -190,7 +191,7 @@ export default function NoticePage() {
                   style={{
                     margin: "0 0 0.2rem",
                     fontSize: "0.88rem",
-                    color: "#222",
+                    color: "var(--fg-primary)",
                     lineHeight: "1.5",
                     fontFamily: "'Noto Sans JP', sans-serif",
                   }}
@@ -200,7 +201,7 @@ export default function NoticePage() {
                 <span
                   style={{
                     fontSize: "0.75rem",
-                    color: "#bbb",
+                    color: "var(--fg-muted)",
                     fontFamily: "'Urbanist', sans-serif",
                   }}
                 >
@@ -231,9 +232,9 @@ export default function NoticePage() {
                         padding: "0.35rem 0.9rem",
                         fontSize: "0.8rem",
                         borderRadius: "999px",
-                        border: "1px solid #ddd",
-                        background: "#fff",
-                        color: "#666",
+                        border: "1px solid var(--border-subtle)",
+                        background: "var(--surface)",
+                        color: "var(--fg-secondary)",
                         cursor: responding === r.id ? "not-allowed" : "pointer",
                         opacity: responding === r.id ? 0.5 : 1,
                       }}

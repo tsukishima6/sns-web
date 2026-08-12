@@ -101,7 +101,7 @@ export default function PostUrlPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -113,42 +113,42 @@ export default function PostUrlPage() {
       {/* ヘッダー */}
       <div className="flex items-center gap-3 mb-6">
         {step === "url" ? (
-          <Link href="/post/new" className="text-gray-400 hover:text-gray-600">
+          <Link href="/post/new" className="text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </Link>
         ) : (
-          <button onClick={() => setStep(step === "kaiwai" ? "preview" : "url")} className="text-gray-400 hover:text-gray-600">
+          <button onClick={() => setStep(step === "kaiwai" ? "preview" : "url")} className="text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
         )}
-        <h1 className="text-base font-semibold text-gray-800">URLを投稿する</h1>
+        <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">URLを投稿する</h1>
       </div>
 
       {/* ステップ1: URL入力 */}
       {step === "url" && (
         <div className="space-y-5">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)]">
             シェアしたいWebページのURLを入力してください。
             OGP情報を取得して界隈のニュースとして投稿できます。
           </p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">URL</label>
             <input
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleFetchOgp()}
               placeholder="https://..."
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2.5 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
 
           {ogpError && (
-            <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">{ogpError}</p>
+            <p className="text-sm text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-lg">{ogpError}</p>
           )}
 
           <button
@@ -165,7 +165,7 @@ export default function PostUrlPage() {
       {step === "preview" && ogp && (
         <div className="space-y-5">
           {/* OGPプレビュー */}
-          <div className="border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="border border-gray-200 dark:border-[var(--border-subtle)] rounded-2xl overflow-hidden">
             {ogp.image && (
               <img src={ogp.image} alt="" className="w-full h-44 object-cover" />
             )}
@@ -174,7 +174,7 @@ export default function PostUrlPage() {
                  style={{ fontFamily: "'Urbanist', sans-serif" }}>
                 {ogp.sitename}
               </p>
-              <p className="text-sm font-medium text-gray-800 line-clamp-2"
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2"
                  style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                 {ogp.title}
               </p>
@@ -183,23 +183,23 @@ export default function PostUrlPage() {
 
           {/* タイトル編集 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">タイトル</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">タイトル</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
 
           {/* 説明編集 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">説明（任意）</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-[var(--fg-primary)] mb-1">説明（任意）</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-[var(--border-subtle)] dark:bg-[var(--surface)] dark:text-[var(--fg-primary)] rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
 
@@ -215,10 +215,10 @@ export default function PostUrlPage() {
       {/* ステップ3: 界隈選択 */}
       {step === "kaiwai" && (
         <div className="space-y-4">
-          <p className="text-sm text-gray-500">投稿する界隈を選んでください</p>
+          <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)]">投稿する界隈を選んでください</p>
 
           {kaiwaiList.length === 0 ? (
-            <p className="text-center text-sm text-gray-400 py-8">
+            <p className="text-center text-sm text-gray-400 dark:text-[var(--fg-muted)] py-8">
               参加している界隈がありません
             </p>
           ) : (
@@ -229,14 +229,14 @@ export default function PostUrlPage() {
                   onClick={() => setSelectedKaiwai(k)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all text-left ${
                     selectedKaiwai?.id === k.id
-                      ? "border-black bg-gray-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-black dark:border-white bg-gray-50 dark:bg-[var(--surface-muted)]"
+                      : "border-gray-200 dark:border-[var(--border-subtle)] hover:border-gray-300 dark:hover:border-[var(--fg-muted)]"
                   }`}
                 >
                   {k.image && (
                     <img src={k.image} alt={k.name} className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
                   )}
-                  <span className="text-sm font-medium text-gray-800"
+                  <span className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)]"
                         style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                     {k.name}
                   </span>

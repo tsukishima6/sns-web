@@ -55,14 +55,14 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
               style={{
                 fontSize: kaiwaiID ? "1.0rem" : "1.25rem",
                 fontWeight: "600",
-                color: "#222",
+                color: "var(--fg-primary)",
                 lineHeight: "1",
                 paddingBottom: "0.7rem",
               }}
             >
               {kaiwaiID ? (
                 <>
-                  {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "#555", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
+                  {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "var(--fg-secondary)", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
                 </>
               ) : (
                 "kaiwai"

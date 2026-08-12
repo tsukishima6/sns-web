@@ -12,17 +12,23 @@ const HAS_OWN_HEADER = [
   /^\/kaiwai\/(?!new$)[^/]+$/,
   /^\/kaiwai\/[^/]+\/category\/[^/]+$/,
   /^\/users\/[^/]+\/profile\/[^/]+$/,
+  /^\/login$/,
+  /^\/signup$/,
 ];
+
+// ログイン・登録画面はネイティブ版同様、アプリのヘッダー/フッターナビが無い没入型の全画面
+const NO_CHROME = [/^\/login$/, /^\/signup$/];
 
 export default function Providers({ children }) {
   const pathname = usePathname();
   const hasOwnHeader = HAS_OWN_HEADER.some((pattern) => pattern.test(pathname));
+  const noChrome = NO_CHROME.some((pattern) => pattern.test(pathname));
 
   return (
     <AuthProvider>
       {!hasOwnHeader && <PageHeader />}
       <div style={{ paddingTop: hasOwnHeader ? 0 : "90px" }}>{children}</div>
-      <FooterNav />
+      {!noChrome && <FooterNav />}
     </AuthProvider>
   );
 }

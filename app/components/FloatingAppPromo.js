@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 export default function FloatingAppPromo() {
   const [open, setOpen] = useState(false);
@@ -106,12 +107,12 @@ export default function FloatingAppPromo() {
           </defs>
           <text
             fontSize="13"
-            fill="#333"
+            fill="var(--fg-primary)"
             fontFamily="'Urbanist','Noto Sans JP',sans-serif"
             letterSpacing="1"
           >
             <textPath href="#floatTextCircle">
-              <tspan fontSize="12">アカウント作成は</tspan><tspan fontSize="13">AppStore・GooglePlay</tspan><tspan fontSize="12">から</tspan>
+              <tspan fontSize="13">AppStore・GooglePlay・</tspan><tspan fontSize="12">ブラウザでサインアップ</tspan>
             </textPath>
           </text>
         </svg>
@@ -130,8 +131,10 @@ export default function FloatingAppPromo() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            paddingBottom: "2vh",
+            paddingTop: "10vh",
             zIndex: 2000,
+            isolation: "isolate",
+            transform: "translateZ(0)",
           }}
         >
           <div
@@ -139,11 +142,13 @@ export default function FloatingAppPromo() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "12px",
+              gap: "18px",
               width: "85%",
               maxWidth: "300px",
               marginBottom: "0",
               animation: "slideUp 0.35s ease forwards",
+              isolation: "isolate",
+              transform: "translateZ(0)",
             }}
           >
             {/* App Store */}
@@ -153,12 +158,12 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg, rgba(21,38,53,0.85), rgba(143,168,167,0.8))",
+                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
                 isolation: "isolate",
                 transform: "translateZ(0)",
-                border: "none",
+                border: "1px solid var(--card-border)",
                 color: "#fff",
                 padding: "13px 15px",
                 borderRadius: "16px",
@@ -179,12 +184,12 @@ export default function FloatingAppPromo() {
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                background: "linear-gradient(135deg, rgba(21,38,53,0.85), rgba(143,168,167,0.8))",
+                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
                 isolation: "isolate",
                 transform: "translateZ(0)",
-                border: "none",
+                border: "1px solid var(--card-border)",
                 color: "#fff",
                 padding: "13px 15px",
                 borderRadius: "16px",
@@ -198,6 +203,31 @@ export default function FloatingAppPromo() {
               Google Play
             </a>
 
+            {/* ブラウザでサインアップ */}
+            <Link
+              href="/signup"
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block",
+                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                isolation: "isolate",
+                transform: "translateZ(0)",
+                border: "1px solid var(--card-border)",
+                color: "#fff",
+                padding: "13px 15px",
+                borderRadius: "16px",
+                textDecoration: "none",
+                fontWeight: "600",
+                fontSize: "1rem",
+                fontFamily: "'Urbanist', sans-serif",
+                textAlign: "center",
+              }}
+            >
+              ブラウザでサインアップ
+            </Link>
+
             {/* 閉じる */}
             <button
               onClick={() => setOpen(false)}
@@ -206,16 +236,18 @@ export default function FloatingAppPromo() {
                 width: "100%",
                 padding: "11px",
                 borderRadius: "16px",
-                border: "none",
-                background: "rgba(230,230,230,0.75)",
+                border: "1px solid var(--card-border)",
+                background: "var(--card-bg)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
                 isolation: "isolate",
                 transform: "translateZ(0)",
+                appearance: "none",
+                WebkitAppearance: "none",
                 cursor: "pointer",
                 fontSize: "0.9rem",
                 fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-                color: "#444",
+                color: "var(--fg-primary)",
               }}
             >
               閉じる

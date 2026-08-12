@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
+import { useTheme } from "@/lib/ThemeContext";
 
 const PRIVACY_TOGGLES = [
   { key: "privacySearch", label: "ユーザ検索で表示されないようにする" },
@@ -81,7 +82,7 @@ export default function SettingsPage() {
     <div className="max-w-2xl mx-auto px-4 py-6">
       <h1
         style={{ fontFamily: "'Urbanist', sans-serif" }}
-        className="text-lg font-normal text-gray-800 mb-6"
+        className="text-lg font-normal text-gray-800 dark:text-[var(--fg-primary)] mb-6"
       >
         Setting
       </h1>
@@ -90,7 +91,7 @@ export default function SettingsPage() {
       {profile && (
         <Link
           href={`/users/${user.uid}/profile/${user.uid}`}
-          className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-4 p-4 bg-white dark:bg-[var(--surface)] rounded-2xl border border-gray-100 dark:border-[var(--border-subtle)] shadow-sm mb-6 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <img
@@ -99,17 +100,22 @@ export default function SettingsPage() {
             className="w-14 h-14 rounded-full object-cover flex-shrink-0"
           />
           <div className="min-w-0">
-            <p className="font-semibold text-gray-800 text-sm">{profile.name}</p>
-            <p className="text-xs text-gray-400" style={{ fontFamily: "'Urbanist', sans-serif" }}>
+            <p className="font-semibold text-gray-800 dark:text-[var(--fg-primary)] text-sm">{profile.name}</p>
+            <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]" style={{ fontFamily: "'Urbanist', sans-serif" }}>
               @{profile.ID}
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">{user.email}</p>
+            <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mt-0.5">{user.email}</p>
           </div>
-          <svg className="ml-auto flex-shrink-0 text-gray-300" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="ml-auto flex-shrink-0 text-gray-300 dark:text-[var(--fg-muted)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </Link>
       )}
+
+      {/* メニューセクション：表示 */}
+      <MenuSection label="表示">
+        <ThemeMenuRow />
+      </MenuSection>
 
       {/* メニューセクション：アカウント */}
       <MenuSection label="アカウント">
@@ -130,10 +136,10 @@ export default function SettingsPage() {
         {PRIVACY_TOGGLES.map((t) => (
           <div
             key={t.key}
-            className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-50 last:border-0"
+            className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-50 dark:border-[var(--border-subtle)] last:border-0"
           >
             <span
-              className="text-sm text-gray-700 flex-1"
+              className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
             >
               {t.label}
@@ -160,7 +166,7 @@ export default function SettingsPage() {
       <div className="mt-6">
         <button
           onClick={handleLogout}
-          className="w-full py-3 rounded-xl text-sm text-red-500 border border-red-100 bg-red-50 hover:bg-red-100 transition-colors font-medium"
+          className="w-full py-3 rounded-xl text-sm text-red-500 dark:text-red-400 border border-red-100 dark:border-red-900/40 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors font-medium"
         >
           ログアウト
         </button>
@@ -170,10 +176,53 @@ export default function SettingsPage() {
       <div className="mt-3 text-center">
         <Link
           href="/settings/delete"
-          className="text-xs text-gray-400 hover:text-red-400 transition-colors underline"
+          className="text-xs text-gray-400 dark:text-[var(--fg-muted)] hover:text-red-400 transition-colors underline"
         >
           アカウントを削除する
         </Link>
+      </div>
+    </div>
+  );
+}
+
+function ThemeMenuRow() {
+  const { theme, setTheme } = useTheme();
+  const options = [
+    { key: "light", label: "ライト" },
+    { key: "dark", label: "ダーク" },
+    { key: "system", label: "自動" },
+  ];
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-3.5">
+      <span
+        className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
+        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+      >
+        テーマ
+      </span>
+      <div className="flex gap-1 bg-gray-100 dark:bg-[var(--surface-muted)] rounded-full p-1">
+        {options.map((o) => (
+          <button
+            key={o.key}
+            type="button"
+            onClick={() => setTheme(o.key)}
+            style={{
+              fontFamily: "'Urbanist', sans-serif",
+              background:
+                theme === o.key
+                  ? "linear-gradient(135deg, #152635, #8fa8a7)"
+                  : undefined,
+            }}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              theme === o.key
+                ? "text-white"
+                : "text-gray-500 dark:text-[var(--fg-muted)]"
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -202,11 +251,11 @@ function PrivacySwitch({ checked, onChange }) {
 function MenuSection({ label, children }) {
   return (
     <div className="mb-5">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2 px-1"
+      <p className="text-xs font-semibold text-gray-400 dark:text-[var(--fg-muted)] uppercase tracking-widest mb-2 px-1"
          style={{ fontFamily: "'Urbanist', sans-serif" }}>
         {label}
       </p>
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[var(--surface)] rounded-2xl border border-gray-100 dark:border-[var(--border-subtle)] shadow-sm overflow-hidden">
         {children}
       </div>
     </div>
@@ -215,13 +264,13 @@ function MenuSection({ label, children }) {
 
 function MenuItem({ href, label, icon, external }) {
   const inner = (
-    <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-      <span className="text-gray-400 flex-shrink-0">{icon}</span>
-      <span className="text-sm text-gray-700 flex-1"
+    <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors border-b border-gray-50 dark:border-[var(--border-subtle)] last:border-0">
+      <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">{icon}</span>
+      <span className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
         {label}
       </span>
-      <svg className="text-gray-300 flex-shrink-0" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="text-gray-300 dark:text-[var(--fg-muted)] flex-shrink-0" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="9 18 15 12 9 6" />
       </svg>
     </div>

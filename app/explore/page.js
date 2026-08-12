@@ -22,7 +22,7 @@ export default function ExplorePage() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* タブバー */}
-      <div className="flex border-b border-gray-100 sticky top-14 bg-white z-10">
+      <div className="flex border-b border-gray-100 dark:border-[var(--border-subtle)] sticky top-14 bg-white dark:bg-[var(--surface)] z-10">
         {[
           { key: "user", label: "user" },
           { key: "kaiwai", label: "kaiwai" },
@@ -33,8 +33,8 @@ export default function ExplorePage() {
             style={{ fontFamily: "'Urbanist', sans-serif" }}
             className={`flex-1 py-3 text-lg font-medium transition-colors border-b-[1.5px] ${
               tab === t.key
-                ? "border-gray-800 text-gray-800"
-                : "border-transparent text-gray-400"
+                ? "border-gray-800 text-gray-800 dark:border-[var(--fg-primary)] dark:text-[var(--fg-primary)]"
+                : "border-transparent text-gray-400 dark:text-[var(--fg-muted)]"
             }`}
           >
             {t.label}
@@ -123,7 +123,7 @@ function UserSearchTab() {
       {/* 検索バー */}
       <div className="relative mt-3 mb-5">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 dark:text-[var(--fg-muted)]"
           width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
         >
@@ -134,13 +134,13 @@ function UserSearchTab() {
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          className="w-full h-9 pl-9 pr-4 bg-gray-50 border border-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full h-9 pl-9 pr-4 bg-gray-50 dark:bg-[var(--surface-muted)] border border-gray-100 dark:border-[var(--border-subtle)] rounded-full text-sm text-[var(--fg-primary)] focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
           style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
         />
         {keyword && (
           <button
             onClick={() => setKeyword("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 dark:text-[var(--fg-muted)] dark:hover:text-[var(--fg-primary)]"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -151,11 +151,11 @@ function UserSearchTab() {
 
       {/* 結果 */}
       {searching && (
-        <p className="text-center text-sm text-gray-400 py-8">検索中...</p>
+        <p className="text-center text-sm text-gray-400 dark:text-[var(--fg-muted)] py-8">検索中...</p>
       )}
 
       {!searching && searched && results.length === 0 && (
-        <p className="text-center text-sm text-gray-400 py-8">
+        <p className="text-center text-sm text-gray-400 dark:text-[var(--fg-muted)] py-8">
           「{keyword}」に一致するユーザーが見つかりませんでした
         </p>
       )}
@@ -168,23 +168,23 @@ function UserSearchTab() {
               href={`/users/${u.uid}/profile/${u.pid}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <div className="flex items-center gap-3 py-3 px-2 rounded-xl hover:bg-gray-50 transition-colors">
+              <div className="flex items-center gap-3 py-3 px-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors">
                 <img
                   src={u.photo || fallbackPhoto}
                   alt={u.name}
                   className="w-11 h-11 rounded-full object-cover flex-shrink-0"
                 />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate"
+                  <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate"
                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                     {u.name}
                   </p>
-                  <p className="text-sm text-gray-400 truncate"
+                  <p className="text-sm text-gray-400 dark:text-[var(--fg-muted)] truncate"
                      style={{ fontFamily: "'Urbanist', sans-serif" }}>
                     @{u.ID}
                   </p>
                 </div>
-                <svg className="ml-auto flex-shrink-0 text-gray-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="ml-auto flex-shrink-0 text-gray-300 dark:text-[var(--fg-muted)]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
               </div>
@@ -194,13 +194,13 @@ function UserSearchTab() {
       )}
 
       {!userDoc?.kaiwai ? (
-        <p className="text-center text-base text-gray-300 py-12"
+        <p className="text-center text-base text-gray-300 dark:text-[var(--fg-muted)] py-12"
            style={{ fontFamily: "'Urbanist', sans-serif" }}>
           界隈に参加するとユーザー検索が使えます
         </p>
       ) : (
         !keyword && (
-          <p className="text-center text-base text-gray-300 py-12"
+          <p className="text-center text-base text-gray-300 dark:text-[var(--fg-muted)] py-12"
              style={{ fontFamily: "'Urbanist', sans-serif" }}>
             キーワードを入力してください
           </p>
@@ -257,7 +257,7 @@ function KaiwaiTab() {
 
   if (loading) {
     return (
-      <p className="text-center text-base text-gray-400 py-12">読み込み中...</p>
+      <p className="text-center text-base text-gray-400 dark:text-[var(--fg-muted)] py-12">読み込み中...</p>
     );
   }
 
@@ -298,7 +298,7 @@ function KaiwaiTab() {
       {/* 検索バー */}
       <div className="relative mt-3 mb-5">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 dark:text-[var(--fg-muted)]"
           width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
         >
@@ -309,13 +309,13 @@ function KaiwaiTab() {
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          className="w-full h-9 pl-9 pr-4 bg-gray-50 border border-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full h-9 pl-9 pr-4 bg-gray-50 dark:bg-[var(--surface-muted)] border border-gray-100 dark:border-[var(--border-subtle)] rounded-full text-sm text-[var(--fg-primary)] focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
           style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
         />
         {keyword && (
           <button
             onClick={() => setKeyword("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 dark:text-[var(--fg-muted)] dark:hover:text-[var(--fg-primary)]"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -332,27 +332,33 @@ function KaiwaiTab() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-base text-gray-400 py-12">
+          <p className="text-center text-base text-gray-400 dark:text-[var(--fg-muted)] py-12">
             「{keyword.trim()}」に一致する界隈が見つかりませんでした
           </p>
         )
       ) : categories.length === 0 ? (
-        <p className="text-center text-base text-gray-400 py-12">
+        <p className="text-center text-base text-gray-400 dark:text-[var(--fg-muted)] py-12">
           界隈が見つかりませんでした
         </p>
       ) : (
         <>
           {/* カテゴリタブ */}
-          <div className="flex gap-2 mb-5 overflow-x-auto no-scrollbar">
+          <div className="flex justify-center gap-4 mb-5 overflow-x-auto no-scrollbar">
             {categories.map((c) => (
               <button
                 key={c.key}
                 onClick={() => setActiveCategory(c.key)}
-                style={{ fontFamily: "'Urbanist', sans-serif" }}
+                style={{
+                  fontFamily: "'Urbanist', sans-serif",
+                  background:
+                    effectiveCategory === c.key
+                      ? "linear-gradient(135deg, #152635, #8fa8a7)"
+                      : undefined,
+                }}
                 className={`flex-shrink-0 h-9 px-4 flex items-center justify-center rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                   effectiveCategory === c.key
-                    ? "bg-[#152635] text-white"
-                    : "bg-gray-100 text-gray-500"
+                    ? "text-white"
+                    : "bg-gray-100 dark:bg-[var(--surface-muted)] text-gray-500 dark:text-[var(--fg-muted)]"
                 }`}
               >
                 {c.label}
@@ -385,10 +391,10 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
         <Link
           href={`/kaiwai/${k.id}`}
           style={{ textDecoration: "none", color: "inherit", paddingLeft: `${depth * 1.2}rem` }}
-          className="flex-1 min-w-0 flex flex-col py-3 px-2 rounded-xl hover:bg-gray-50 transition-colors"
+          className="flex-1 min-w-0 flex flex-col py-3 px-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
         >
           <span
-            className="text-base font-semibold text-gray-800 truncate"
+            className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)] truncate"
             style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {k.name}
@@ -405,7 +411,7 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
 
         {isOya && (
           <span
-            className="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap"
+            className="flex-shrink-0 text-xs text-gray-400 dark:text-[var(--fg-muted)] whitespace-nowrap"
             style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             サブkaiwaiがあります
@@ -416,7 +422,7 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "サブ界隈を閉じる" : "サブ界隈を開く"}
-            className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 dark:text-[var(--fg-muted)] dark:hover:text-[var(--fg-primary)] transition-colors"
           >
             <svg
               width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -430,7 +436,7 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
       </div>
 
       {isOya && open && children.length > 0 && (
-        <div className="ml-4 border-l border-gray-100">
+        <div className="ml-4 border-l border-gray-100 dark:border-[var(--border-subtle)]">
           {children.map((c) => (
             <KaiwaiRow key={c.id} k={c} allKaiwai={allKaiwai} depth={depth + 1} />
           ))}

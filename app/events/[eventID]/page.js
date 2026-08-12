@@ -40,7 +40,7 @@ export default async function EventDetailPage({ params }) {
   const snap = await getDoc(doc(db, "events", eventID));
   if (!snap.exists()) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400">
+      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
         イベントが見つかりません
       </div>
     );
@@ -94,13 +94,13 @@ export default async function EventDetailPage({ params }) {
         {/* タイトル */}
         <div>
           <h1
-            className="text-xl font-bold text-gray-800 leading-snug mb-1"
+            className="text-xl font-bold text-gray-800 dark:text-[var(--fg-primary)] leading-snug mb-1"
             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
           >
             {ev.event_title}
           </h1>
           {ev.event_subtitle && (
-            <p className="text-sm text-gray-500"
+            <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)]"
                style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
               {ev.event_subtitle}
             </p>
@@ -108,7 +108,7 @@ export default async function EventDetailPage({ params }) {
         </div>
 
         {/* 基本情報 */}
-        <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+        <div className="bg-gray-50 dark:bg-[var(--surface-muted)] rounded-2xl p-4 space-y-3">
           {ev.event_schedule && (
             <InfoRow icon={<CalIcon />} label="開催日時" value={formatDate(ev.event_schedule)} />
           )}
@@ -129,11 +129,11 @@ export default async function EventDetailPage({ params }) {
         {/* 説明 */}
         {ev.event_description && (
           <div>
-            <h2 className="text-sm font-semibold text-gray-600 mb-2"
+            <h2 className="text-sm font-semibold text-gray-600 dark:text-[var(--fg-secondary)] mb-2"
                 style={{ fontFamily: "'Urbanist', sans-serif" }}>
               詳細
             </h2>
-            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap"
+            <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
                style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
               {ev.event_description}
             </p>
@@ -143,11 +143,11 @@ export default async function EventDetailPage({ params }) {
         {/* 注意事項 */}
         {ev.event_notice && (
           <div>
-            <h2 className="text-sm font-semibold text-gray-600 mb-2"
+            <h2 className="text-sm font-semibold text-gray-600 dark:text-[var(--fg-secondary)] mb-2"
                 style={{ fontFamily: "'Urbanist', sans-serif" }}>
               注意事項
             </h2>
-            <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-wrap"
+            <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
                style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
               {ev.event_notice}
             </p>
@@ -169,7 +169,7 @@ export default async function EventDetailPage({ params }) {
             href={ev.event_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 dark:border-[var(--border-subtle)] text-sm text-gray-700 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
             style={{ textDecoration: "none" }}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -187,11 +187,11 @@ export default async function EventDetailPage({ params }) {
 function InfoRow({ icon, label, value }) {
   return (
     <div className="flex gap-3">
-      <span className="text-gray-400 flex-shrink-0 mt-0.5">{icon}</span>
+      <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0 mt-0.5">{icon}</span>
       <div className="min-w-0">
-        <p className="text-xs text-gray-400 mb-0.5"
+        <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5"
            style={{ fontFamily: "'Urbanist', sans-serif" }}>{label}</p>
-        <p className="text-sm text-gray-700"
+        <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)]"
            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>{value}</p>
       </div>
     </div>

@@ -40,7 +40,7 @@ export default async function CategoryPage({ params }) {
   ]);
 
   if (!categorySnap.exists()) {
-    return <div style={{ padding: "2rem", fontSize: "1.5rem" }}>タグが見つかりません</div>;
+    return <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>タグが見つかりません</div>;
   }
 
   const category = categorySnap.data();
@@ -105,12 +105,12 @@ export default async function CategoryPage({ params }) {
         >
           #{category.category_name}
         </h1>
-        <p style={{ fontSize: "0.85rem", color: "#888", marginBottom: "2rem" }}>
+        <p style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", marginBottom: "2rem" }}>
           このタグを付けているユーザー
         </p>
 
         {profiles.length === 0 ? (
-          <p style={{ color: "#aaa" }}>まだこのタグを付けているユーザーがいません</p>
+          <p style={{ color: "var(--fg-muted)" }}>まだこのタグを付けているユーザーがいません</p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
             {profiles.map((profile) => (
@@ -125,7 +125,7 @@ export default async function CategoryPage({ params }) {
                   padding: "0.8rem 0.4rem",
                   textDecoration: "none",
                   color: "inherit",
-                  borderBottom: "1px solid #eee",
+                  borderBottom: "1px solid var(--border-subtle)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.9rem", minWidth: 0 }}>
@@ -141,10 +141,10 @@ export default async function CategoryPage({ params }) {
                     }}
                   />
                   <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-                    <span style={{ fontWeight: 500, fontSize: "0.9rem", color: "#333" }}>
+                    <span style={{ fontWeight: 500, fontSize: "0.9rem", color: "var(--fg-primary)" }}>
                       {profile.name}
                     </span>
-                    <span style={{ fontSize: "0.85rem", color: "#666", fontFamily: "Urbanist" }}>
+                    <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
                       @{profile.ID || profile.userID}
                     </span>
                   </div>
@@ -169,7 +169,7 @@ export default async function CategoryPage({ params }) {
                     <span
                       style={{
                         fontSize: "0.75rem",
-                        color: "#999",
+                        color: "var(--fg-muted)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",

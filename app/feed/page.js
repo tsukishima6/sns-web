@@ -80,7 +80,7 @@ export default function FeedPage() {
   if (loading || fetching) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-sm">読み込み中...</p>
       </div>
     );
   }
@@ -90,10 +90,10 @@ export default function FeedPage() {
   if (posts.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500 text-sm mb-4">
+        <p className="text-gray-500 dark:text-[var(--fg-secondary)] text-sm mb-4">
           フィードに表示する投稿がありません。
         </p>
-        <p className="text-gray-400 text-xs">
+        <p className="text-gray-400 dark:text-[var(--fg-muted)] text-xs">
           アプリから界隈に参加すると投稿が表示されます。
         </p>
       </div>
@@ -102,9 +102,6 @@ export default function FeedPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="px-4 py-4 border-b border-gray-100">
-        <h1 className="text-base font-semibold text-gray-800">フィード</h1>
-      </div>
       <div>
         {posts.map((post) => (
           <PostCard key={`${post.userID}-${post.id}`} post={post} />
@@ -134,7 +131,7 @@ function PostCard({ post }) {
       href={`/posts/${post.userID}/${post.id}`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <div className="px-4 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+      <div className="px-4 py-4 border-b border-gray-100 dark:border-[var(--border-subtle)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors">
         {/* プロフィール行 */}
         {post.profile && (
           <div className="flex items-center gap-3 mb-3">
@@ -144,10 +141,10 @@ function PostCard({ post }) {
               className="w-10 h-10 rounded-full object-cover flex-shrink-0"
             />
             <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-800 truncate">
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate">
                 {post.profile.name}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">
                 @{post.profile.ID || post.userID}
               </p>
             </div>
@@ -156,7 +153,7 @@ function PostCard({ post }) {
 
         {/* 本文 */}
         {post.postDescription && (
-          <p className="text-sm text-gray-700 mb-3 leading-relaxed whitespace-pre-wrap">
+          <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] mb-3 leading-relaxed whitespace-pre-wrap">
             {post.postDescription}
           </p>
         )}
@@ -177,9 +174,9 @@ function PostCard({ post }) {
 
         {/* 時刻・いいね */}
         <div className="flex items-center justify-between">
-          <span className="text-xs text-gray-400">{formatTime(post.timePosted)}</span>
+          <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">{formatTime(post.timePosted)}</span>
           {post.numlikes > 0 && (
-            <span className="text-xs text-gray-400">♡ {post.numlikes}</span>
+            <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">♡ {post.numlikes}</span>
           )}
         </div>
       </div>
