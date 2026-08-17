@@ -1,6 +1,9 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
+import BusinessLikeButton from "@/app/components/BusinessLikeButton";
+import FavoriteButton from "@/app/components/FavoriteButton";
+import FollowBusinessButton from "@/app/components/FollowBusinessButton";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -114,6 +117,13 @@ export default async function BusinessDetailPage({ params }) {
                 ♡ {favoritedCount}
               </span>
             )}
+          </div>
+
+          {/* いいね・お気に入り・フォロー */}
+          <div className="flex items-center gap-4 mt-3">
+            <BusinessLikeButton bizID={bizID} />
+            <FavoriteButton targetPath={`business/${bizID}`} fieldName="favorited" />
+            <FollowBusinessButton bizID={bizID} />
           </div>
           {biz.categories?.length > 0 && (
             <div className="flex gap-1.5 flex-wrap mt-2">

@@ -15,6 +15,8 @@ import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
 import KaiwaiWordCloud from "../../../components/wordcloud";
 import CommentSection from "../../../components/CommentSection";
+import LikeButton from "../../../components/LikeButton";
+import FavoriteButton from "../../../components/FavoriteButton";
 import { isPostIndexable } from "../../../../lib/postIndexing";
 
 // fallback画像
@@ -263,6 +265,12 @@ export default async function PostPage({ params }) {
     {formatTime(post.timePosted)}
   </div>
 )}
+
+    {/* いいね・お気に入り */}
+    <div style={{ marginTop: "0.75rem", display: "flex", gap: "1rem" }}>
+      <LikeButton postUserID={userID} postID={postID} kaiwaiPath={post.kaiwai?.path ?? null} />
+      <FavoriteButton targetPath={`users/${userID}/posts/${postID}`} fieldName="users_favorited" />
+    </div>
   </div>
 
         {/* コメントセクション */}

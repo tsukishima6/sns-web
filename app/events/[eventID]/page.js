@@ -1,6 +1,9 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
+import EventLikeButton from "@/app/components/EventLikeButton";
+import EventJoinButton from "@/app/components/EventJoinButton";
+import FavoriteButton from "@/app/components/FavoriteButton";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -105,6 +108,13 @@ export default async function EventDetailPage({ params }) {
               {ev.event_subtitle}
             </p>
           )}
+        </div>
+
+        {/* 参加・いいね・お気に入り */}
+        <div className="flex items-center gap-4">
+          <EventJoinButton eventID={eventID} />
+          <EventLikeButton eventID={eventID} />
+          <FavoriteButton targetPath={`events/${eventID}`} fieldName="favorited" />
         </div>
 
         {/* 基本情報 */}

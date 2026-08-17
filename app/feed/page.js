@@ -14,6 +14,8 @@ import {
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
 import Link from "next/link";
+import LikeButton from "../components/LikeButton";
+import FavoriteButton from "../components/FavoriteButton";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -175,9 +177,13 @@ function PostCard({ post }) {
         {/* 時刻・いいね */}
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">{formatTime(post.timePosted)}</span>
-          {post.numlikes > 0 && (
-            <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">♡ {post.numlikes}</span>
-          )}
+          <div className="flex items-center gap-3">
+            <LikeButton postUserID={post.userID} postID={post.id} kaiwaiPath={post.kaiwai?.path ?? null} />
+            <FavoriteButton
+              targetPath={`users/${post.userID}/posts/${post.id}`}
+              fieldName="users_favorited"
+            />
+          </div>
         </div>
       </div>
     </Link>
