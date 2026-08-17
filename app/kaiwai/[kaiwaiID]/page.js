@@ -15,6 +15,7 @@ import Link from "next/link";
 import KaiwaiWordCloud from "../../components/wordcloud";
 import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
 import PageHeader from "../../components/PageHeader";
+import KaiwaiEditLink from "../../components/KaiwaiEditLink";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -241,6 +242,8 @@ try {
   他の界隈・アカウント作成は{" "}
   <AppDownloadDialogTrigger /> から
 </h2>
+
+<KaiwaiEditLink kaiwaiID={kaiwaiID} />
 
 {/* 🔹 kaiwai news */}
 {newsList.length > 0 && (
