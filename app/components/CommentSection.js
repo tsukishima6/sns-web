@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   collection,
   collectionGroup,
@@ -20,12 +20,14 @@ import { useAuth } from "@/lib/AuthContext";
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
 
-export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
+export default function CommentSection({ postUserID, postID, kaiwaiPath, initialComments = [] }) {
   const { user, userDoc } = useAuth();
-  const [comments, setComments] = useState([]);
+  // 初期表示はサーバー側で取得済みのコメントをそのまま使う(SEO用にSSRしているため、
+  // マウント時に再取得するとクローラーに見えているHTMLと二重にFirestoreへ問い合わせることになる)
+  const [comments, setComments] = useState(initialComments);
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   async function loadComments() {
     try {
@@ -68,10 +70,6 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath }) {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    loadComments();
-  }, [postUserID, postID]);
 
   async function handleSubmit(e) {
     e.preventDefault();

@@ -22,6 +22,9 @@ const fallbackProfilePhoto =
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
+// ISRでキャッシュさせる（毎リクエストFirestore叩く no-store状態を解消し、TTFBとクロール効率を改善）
+export const revalidate = 1800;
+
 // --- generateMetadata（SEO強化版）---
 export async function generateMetadata({ params }) {
   const { kaiwaiID } = params;
@@ -63,6 +66,9 @@ export async function generateMetadata({ params }) {
     return {
       title: `${kaiwai.name}界隈のSNS｜kaiwai`,
       description: finalDescription,
+      alternates: {
+        canonical: `/kaiwai/${kaiwaiID}`,
+      },
       openGraph: {
         title: `${kaiwai.name}界隈のSNS｜kaiwai`,
         description: finalDescription,

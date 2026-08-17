@@ -62,9 +62,13 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://kaiwai.vercel.app"),
   title: "kaiwai｜界隈の数だけ、SNSがあっていい",
   description:
     "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.ico",
   },

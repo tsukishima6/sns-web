@@ -1,10 +1,21 @@
-import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  collectionGroup,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  getCountFromServer,
+} from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
 import KaiwaiWordCloud from "../../../components/wordcloud";
 import CommentSection from "../../../components/CommentSection";
+import { isPostIndexable } from "../../../../lib/postIndexing";
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -48,6 +59,14 @@ export async function generateMetadata({ params }) {
   const description =
     `${profileData?.name || "ユーザー"}：${post.postDescription || ""} @${kaiwaiName}kaiwai`;
 
+  // コメントが付いていれば内容が薄くても厚みがあるとみなす(件数のみ、集計クエリなので低コスト)
+  const commentCountSnap = await getCountFromServer(
+    query(collectionGroup(db, "postcomments"), where("post", "==", postRef))
+  );
+  const commentCount = commentCountSnap.data().count;
+
+  const indexable = isPostIndexable({ post, authorUid: userID, commentCount });
+
   return {
     title: post.postDescription || "KAIWAI 投稿",
     description,
@@ -62,9 +81,8 @@ export async function generateMetadata({ params }) {
       description,
       images: [ogImage],
     },
-    robots: post.postDescription?.includes("に参加しました！よろしくお願いします。")
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    // noindexでもfollowはtrueにして、界隈ページ等へのリンク評価は通す
+    robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
@@ -126,6 +144,40 @@ export default async function PostPage({ params }) {
       .filter((doc) => doc.id !== postID)
       .map((doc) => ({ id: doc.id, ...doc.data() }));
   }
+
+  // コメントをサーバー側で取得してSSRする(クライアント取得だとクローラーから見て
+  // 本文がほぼ空のページになり、内容の薄いページとして評価されてしまうため)
+  const commentsQuery = query(
+    collectionGroup(db, "postcomments"),
+    where("post", "==", postRef),
+    orderBy("timePosted", "asc")
+  );
+  const commentsSnap = await getDocs(commentsQuery);
+  const initialComments = await Promise.all(
+    commentsSnap.docs.map(async (commentDoc) => {
+      const data = commentDoc.data();
+      let commentProfile = null;
+      if (data.commentuser_pf) {
+        try {
+          const pfSnap = await getDoc(data.commentuser_pf);
+          if (pfSnap.exists()) {
+            const pf = pfSnap.data();
+            commentProfile = { name: pf.name || null, photo: pf.photo || null };
+          }
+        } catch (_) {}
+      }
+      return {
+        id: commentDoc.id,
+        comment: data.comment || "",
+        // Timestampはクライアントコンポーネントへプレーンな値でしか渡せない
+        timePosted: data.timePosted
+          ? { seconds: data.timePosted.seconds, nanoseconds: data.timePosted.nanoseconds }
+          : null,
+        userID: data.user?.id || null,
+        profile: commentProfile,
+      };
+    })
+  );
 
   return (
     <>
@@ -218,6 +270,7 @@ export default async function PostPage({ params }) {
           postUserID={userID}
           postID={postID}
           kaiwaiPath={post.kaiwai?.path ?? null}
+          initialComments={initialComments}
         />
 
         {/* 他の投稿 */}
