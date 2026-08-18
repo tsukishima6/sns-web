@@ -1,10 +1,11 @@
-import { collectionGroup, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collectionGroup, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
 import BusinessLikeButton from "@/app/components/BusinessLikeButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import FollowBusinessButton from "@/app/components/FollowBusinessButton";
 import BizReviewSection from "@/app/components/BizReviewSection";
+import BizPostEntry from "@/app/components/BizPostEntry";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -93,6 +94,32 @@ export default async function BusinessDetailPage({ params }) {
     }
   }
 
+  // 店舗として投稿された投稿一覧(post.asbiz == この店舗)。ネイティブ
+  // (business_dposts_widget.dart)と同じくorderByありのクエリ(本番に既にある
+  // 複合インデックス[asbiz ASC, timePosted DESC]をそのまま使い回せる)
+  let bizPosts = [];
+  try {
+    const bizPostsSnap = await getDocs(
+      query(
+        collectionGroup(db, "posts"),
+        where("asbiz", "==", doc(db, "business", bizID)),
+        orderBy("timePosted", "desc")
+      )
+    );
+    bizPosts = bizPostsSnap.docs.map((d) => {
+      const data = d.data();
+      return {
+        id: d.id,
+        userID: d.ref.parent.parent?.id || null,
+        postDescription: data.postDescription || "",
+        postPhoto: data.postPhoto || "",
+        timePosted: data.timePosted ? { seconds: data.timePosted.seconds, nanoseconds: data.timePosted.nanoseconds } : null,
+      };
+    });
+  } catch (err) {
+    console.error("biz posts fetch error:", err);
+  }
+
   let relatedEvents = [];
   if (biz.events?.length > 0) {
     relatedEvents = (
@@ -171,6 +198,16 @@ export default async function BusinessDetailPage({ params }) {
             <BusinessLikeButton bizID={bizID} />
             <FavoriteButton targetPath={`business/${bizID}`} fieldName="favorited" />
             <FollowBusinessButton bizID={bizID} />
+          </div>
+
+          {/* 引用して投稿・店舗として投稿 */}
+          <div className="mt-3">
+            <BizPostEntry
+              bizID={bizID}
+              bizName={biz.display_name}
+              ownerUID={biz.owner?.id || null}
+              memberUIDs={(biz.members || []).map((r) => r.id)}
+            />
           </div>
           {biz.categories?.length > 0 && (
             <div className="flex gap-1.5 flex-wrap mt-2">
@@ -285,6 +322,40 @@ export default async function BusinessDetailPage({ params }) {
                   <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                     {ev.event_title}
                   </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 店舗としての投稿 */}
+        {bizPosts.length > 0 && (
+          <div>
+            <h2
+              className="text-sm font-semibold text-gray-500 dark:text-[var(--fg-secondary)] mb-2"
+              style={{ fontFamily: "'Urbanist', sans-serif" }}
+            >
+              posts
+            </h2>
+            <div className="space-y-2">
+              {bizPosts.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/posts/${p.userID}/${p.id}`}
+                  className="block px-3 py-2.5 border border-gray-100 dark:border-[var(--border-subtle)] rounded-xl hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
+                  style={{ textDecoration: "none" }}
+                >
+                  {p.postPhoto && (
+                    <img src={p.postPhoto} alt="" className="w-full rounded-lg object-cover mb-2 max-h-60" />
+                  )}
+                  {p.postDescription?.trim() && (
+                    <p
+                      className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] whitespace-pre-wrap"
+                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                    >
+                      {p.postDescription}
+                    </p>
+                  )}
                 </Link>
               ))}
             </div>

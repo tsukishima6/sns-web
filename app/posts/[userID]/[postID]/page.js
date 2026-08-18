@@ -20,6 +20,8 @@ import FavoriteButton from "../../../components/FavoriteButton";
 import RepostButton from "../../../components/RepostButton";
 import RepostEmbed from "../../../components/RepostEmbed";
 import NewsQuoteEmbed from "../../../components/NewsQuoteEmbed";
+import BizPostBadge from "../../../components/BizPostBadge";
+import BizQuoteEmbed from "../../../components/BizQuoteEmbed";
 import { isPostIndexable } from "../../../../lib/postIndexing";
 
 // fallback画像
@@ -188,6 +190,29 @@ export default async function PostPage({ params }) {
     }
   }
 
+  // 店舗として投稿(post.asbiz)/店舗引用(post.quote_biz)の取得
+  let asBizInfo = null;
+  if (post.asbiz) {
+    const bizSnap = await getDoc(post.asbiz);
+    if (bizSnap.exists()) {
+      const bizData = bizSnap.data();
+      asBizInfo = { id: bizSnap.id, name: bizData.display_name || "", photo: bizData.photo_1 || "" };
+    }
+  }
+  let quotedBiz = null;
+  if (post.quote_biz) {
+    const bizSnap = await getDoc(post.quote_biz);
+    if (bizSnap.exists()) {
+      const bizData = bizSnap.data();
+      quotedBiz = {
+        id: bizSnap.id,
+        name: bizData.display_name || "",
+        subname: bizData.subname || "",
+        photo: bizData.photo_1 || "",
+      };
+    }
+  }
+
   // 他の投稿を取得
   let otherPosts = [];
   if (profileData && post.postUser_profile) {
@@ -255,26 +280,30 @@ export default async function PostPage({ params }) {
       position: "relative",
     }}
   >
-          {/* 投稿者情報 */}
-          {profileData && (
-      <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
-        <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
-          <img
-            src={profileData.photo || fallbackProfilePhoto}
-            alt={profileData.name || "ユーザー"}
-            style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
-          />
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)" }}>
-              {profileData.name}
-            </span>
-            <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
-              @{profileData.ID || userID}
-            </span>
-          </div>
-        </div>
-      </Link>
-    )}
+          {/* 投稿者情報(店舗として投稿された場合は店舗バッジに差し替え) */}
+          {post.asbiz ? (
+            <BizPostBadge bizID={asBizInfo?.id} bizName={asBizInfo?.name} bizPhoto={asBizInfo?.photo} />
+          ) : (
+            profileData && (
+              <Link href={`/users/${userID}/profile/${profileID}`} style={{ textDecoration: "none" }}>
+                <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem", cursor: "pointer" }}>
+                  <img
+                    src={profileData.photo || fallbackProfilePhoto}
+                    alt={profileData.name || "ユーザー"}
+                    style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
+                  />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)" }}>
+                      {profileData.name}
+                    </span>
+                    <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
+                      @{profileData.ID || userID}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            )
+          )}
 
           {/* 投稿タイトル */}
           <h1
@@ -296,6 +325,9 @@ export default async function PostPage({ params }) {
 
           {/* ニュース引用の埋め込み表示 */}
           {post.quote_news && <NewsQuoteEmbed quotedNews={quotedNews} />}
+
+          {/* 店舗引用の埋め込み表示 */}
+          {post.quote_biz && <BizQuoteEmbed quotedBiz={quotedBiz} />}
 
           {/* 投稿写真 */}
     {post.postPhoto && (

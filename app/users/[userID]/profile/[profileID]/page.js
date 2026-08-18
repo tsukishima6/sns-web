@@ -123,7 +123,11 @@ export default async function ProfilePage({ params }) {
     orderBy("timePosted", "desc")
   );
   const postsSnap = await getDocs(q);
-  posts = postsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  // ネイティブ(profile_other_widget.dart)と同じく、店舗として投稿(asbiz)した投稿は
+  // 個人プロフィールの投稿一覧には出さない(店舗詳細ページ側にのみ表示する)
+  posts = postsSnap.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((p) => !p.asbiz);
 
   return (
     <>

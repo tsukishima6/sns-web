@@ -19,6 +19,8 @@ import FavoriteButton from "../components/FavoriteButton";
 import RepostButton from "../components/RepostButton";
 import RepostEmbed from "../components/RepostEmbed";
 import NewsQuoteEmbed from "../components/NewsQuoteEmbed";
+import BizPostBadge from "../components/BizPostBadge";
+import BizQuoteEmbed from "../components/BizQuoteEmbed";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -115,6 +117,35 @@ export default function FeedPage() {
               }
             } catch {}
           }
+
+          if (data.asbiz) {
+            try {
+              const bizSnap = await getDoc(data.asbiz);
+              if (bizSnap.exists()) {
+                const bizData = bizSnap.data();
+                post.asBizInfo = {
+                  id: bizSnap.id,
+                  name: bizData.display_name || "",
+                  photo: bizData.photo_1 || "",
+                };
+              }
+            } catch {}
+          }
+
+          if (data.quote_biz) {
+            try {
+              const bizSnap = await getDoc(data.quote_biz);
+              if (bizSnap.exists()) {
+                const bizData = bizSnap.data();
+                post.quotedBiz = {
+                  id: bizSnap.id,
+                  name: bizData.display_name || "",
+                  subname: bizData.subname || "",
+                  photo: bizData.photo_1 || "",
+                };
+              }
+            } catch {}
+          }
           return post;
         })
       );
@@ -182,23 +213,27 @@ function PostCard({ post }) {
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <div className="px-4 py-4 border-b border-gray-100 dark:border-[var(--border-subtle)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors">
-        {/* プロフィール行 */}
-        {post.profile && (
-          <div className="flex items-center gap-3 mb-3">
-            <img
-              src={post.profile.photo || fallbackPhoto}
-              alt={post.profile.name || "ユーザー"}
-              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-            />
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate">
-                {post.profile.name}
-              </p>
-              <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">
-                @{post.profile.ID || post.userID}
-              </p>
+        {/* プロフィール行(店舗として投稿された場合は店舗バッジに差し替え) */}
+        {post.asbiz ? (
+          <BizPostBadge bizID={post.asBizInfo?.id} bizName={post.asBizInfo?.name} bizPhoto={post.asBizInfo?.photo} />
+        ) : (
+          post.profile && (
+            <div className="flex items-center gap-3 mb-3">
+              <img
+                src={post.profile.photo || fallbackPhoto}
+                alt={post.profile.name || "ユーザー"}
+                className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate">
+                  {post.profile.name}
+                </p>
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">
+                  @{post.profile.ID || post.userID}
+                </p>
+              </div>
             </div>
-          </div>
+          )
         )}
 
         {/* 本文 */}
@@ -227,6 +262,9 @@ function PostCard({ post }) {
 
         {/* ニュース引用の埋め込み表示 */}
         {post.quote_news && <NewsQuoteEmbed quotedNews={post.quotedNews} />}
+
+        {/* 店舗引用の埋め込み表示 */}
+        {post.quote_biz && <BizQuoteEmbed quotedBiz={post.quotedBiz} />}
 
         {/* 時刻・いいね */}
         <div className="flex items-center justify-between">

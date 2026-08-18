@@ -15,6 +15,8 @@ kaiwai Web（https://kaiwai.vercel.app）。**ネイティブアプリ（Flutter
 - `npm run start` — 本番サーバー起動
 - lintコマンド・テストコマンドは未整備（`eslint.config.mjs`はあるが`package.json`にscript登録なし）
 - `npm run dev`実行中、Fast Refresh/HMRの再コンパイルが起きたタイミングと重なると、リンクをクリックしても遷移しないことがある（コード側のバグではなく`next dev`特有の現象）。「クリックしても反応しない」系の報告を受けたら、まずコードレビューで壊れていないか確認し、本番ビルド（`npm run build && npm run start`）や実際のVercelデプロイで再現するかどうかを切り分けること。実際に2026-08-11、`FooterNav`の遷移が反応しないという報告があったが、コードは`next/link`の素朴な実装で問題なく、devサーバー特有の現象と判断した
+- **`npm run build`は動的ルート（`ƒ`表記のページ）を実際には実行しない**（型チェック・コンパイルのみ）ため、ページ固有のランタイムバグ（クライアントコンポーネントの実行時エラー等）はビルド成功だけでは検出できない。新しいクライアントコンポーネントを追加した後は、実際にブラウザでそのページを開いて確認すること
+- devサーバーで新しいクライアントコンポーネントを追加した直後に「TypeError: Cannot read properties of undefined (reading 'call')」というエラーで全ページがクラッシュすることがある。`.next`削除＋devサーバー再起動をしても直らない場合、**ブラウザ側に登録済みのService Workerが古いJSチャンクをキャッシュして返している**のが原因のことがある（`navigator.serviceWorker.getRegistrations()`で登録解除し`caches.delete()`でキャッシュも消してからリロードすると解消する、2026-08-18に発見）。このアプリ自体はPWA/Service Workerを意図的に使っていない（`/sw.js`への404アクセスがログに出るのはその名残）ため、登録されていること自体が異常
 
 ## アーキテクチャ
 
@@ -51,3 +53,4 @@ kaiwai Web（https://kaiwai.vercel.app）。**ネイティブアプリ（Flutter
   - いずれも状態表現は色ではなくアイコン形状(塗り/線)のみ。ネイティブは両状態とも`FlutterFlowTheme.primaryText`固定で独自の差し色を使っていないので、web側でも新規に色を発明しないこと
 - **kaiwai編集の権限判定は`nowprofile`単体を見る**(`firestore.rules`の`isKaiwaiEditByCreator()`)。「呼び出し元の`users.nowprofile`自体がその界隈の`master:true`プロフィールか」だけを見ており、その人の**他のprofileに`master:true`があっても対象外**(profileコレクション全体の横断検索ではない)。UI側の権限表示もこれと厳密に一致させないと「編集リンクは出るのに保存時にpermission-denied」という壊れ方をする(`app/components/KaiwaiEditLink.js`・`app/kaiwai/[kaiwaiID]/edit/page.js`参照)
 - **`business.review_display`はフィールド名と意味が逆**: ネイティブ(`business_detail_widget.dart`)は`reviewDisplay == false`の場合のみレビュー欄を表示しており、`true`は「レビュー非表示」を意味する(店舗編集画面のトグルもこの値をそのままtoggleするだけで、ラベルや目のアイコンから受ける印象と実際の意味が食い違っている、ネイティブ側の命名の癖)。web側で新しく参照する時は`!biz.review_display`で判定すること。過去に`app/business/[bizID]/page.js`の平均評価バッジ表示だけが誤って`biz.review_display &&`(意味が逆)になっていたのを、レビュー機能追加(2026-08-18)のタイミングで修正した
+- **「店舗として投稿」(`posts.asbiz`)の権限チェックはUI側のみで、Firestoreルールにサーバー側検証が無い**(ネイティブ側も同じ設計、`firebase/firestore.rules`の`users/{parent}/posts`は`allow create: if true`)。`app/components/BizPostEntry.js`は`business.owner`/`business.members`と一致する場合のみボタンを表示するが、Firestore APIを直接叩けば任意のユーザーが任意の店舗の`asbiz`を騙って投稿できてしまう。これは移植元アプリに既にある制約でありweb版が新たに空けた穴ではないため今回はそのまま踏襲したが、本格的に締めるならFirestoreルールに`request.resource.data.asbiz`と`get(/databases/.../business/$(bizId)).data.owner`等を突き合わせる検証を追加する必要がある(2026-08-18時点で未着手)

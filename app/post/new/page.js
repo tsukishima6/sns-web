@@ -31,6 +31,12 @@ function NewPostForm() {
   // DocumentReferenceではなくURLに乗せられる文字列で受け渡す(他コンポーネントの
   // path文字列規約と同じ理由)。
   const quoteNewsPath = searchParams.get("quoteNews");
+  // 店舗詳細ページの「この店舗を引用して投稿」(誰でも可)/「{店舗名}として投稿」
+  // (オーナー・メンバー限定、権限チェックは店舗詳細ページ側で行う)から遷移してきた場合、
+  // それぞれ ?quoteBiz=business/{id} / ?asBiz=business/{id} が付与される。
+  // ネイティブ(postcreate_widget.dart)と同じく、この2つは同時には使わない
+  const quoteBizPath = searchParams.get("quoteBiz");
+  const asBizPath = searchParams.get("asBiz");
 
   const [text, setText] = useState("");
   const [images, setImages] = useState([]); // File[]
@@ -40,7 +46,9 @@ function NewPostForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [quoteNewsPreview, setQuoteNewsPreview] = useState(null);
+  const [bizPreview, setBizPreview] = useState(null);
   const fileRef = useRef(null);
+  const bizPath = quoteBizPath || asBizPath;
 
   // kaiwaiリストの名前を取得
   useEffect(() => {
@@ -65,17 +73,19 @@ function NewPostForm() {
     ).then((results) => {
       const valid = results.filter(Boolean);
       setKaiwaiOptions(valid);
-      // ニュース引用の場合、そのニュースが属するkaiwaiを初期選択にする
-      // (パスは"kaiwai/{kaiwaiID}/news/{newsID}"なので2番目のセグメントがkaiwaiID)
+      // ニュース/店舗引用の場合、その引用元が属するkaiwaiを初期選択にする
+      // (ニュースのパスは"kaiwai/{kaiwaiID}/news/{newsID}"なので2番目のセグメントがkaiwaiID。
+      // 店舗はbusinessPreview.kaiwaiIdとして別途非同期取得する)
       const quoteNewsKaiwaiID = quoteNewsPath?.split("/")[1];
-      const matched = valid.find((k) => k.id === quoteNewsKaiwaiID);
+      const preferredKaiwaiID = quoteNewsKaiwaiID || bizPreview?.kaiwaiId;
+      const matched = valid.find((k) => k.id === preferredKaiwaiID);
       if (matched) {
         setSelectedKaiwai(matched.id);
       } else if (valid.length > 0) {
-        setSelectedKaiwai(valid[0].id);
+        setSelectedKaiwai((prev) => prev || valid[0].id);
       }
     });
-  }, [user, userDoc, loading, quoteNewsPath]);
+  }, [user, userDoc, loading, quoteNewsPath, bizPreview]);
 
   // 引用元ニュースのプレビュー取得
   useEffect(() => {
@@ -97,6 +107,32 @@ function NewPostForm() {
       cancelled = true;
     };
   }, [quoteNewsPath]);
+
+  // 引用元/投稿主となる店舗のプレビュー取得
+  useEffect(() => {
+    if (!bizPath) {
+      setBizPreview(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, bizPath));
+        if (!cancelled && snap.exists()) {
+          const data = snap.data();
+          setBizPreview({
+            name: data.display_name || "",
+            subname: data.subname || "",
+            photo: data.photo_1 || "",
+            kaiwaiId: data.kaiwai?.id || null,
+          });
+        }
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [bizPath]);
 
   // 画像選択
   function handleImageChange(e) {
@@ -164,6 +200,8 @@ function NewPostForm() {
         users_favorited: [],
         hashtags: [],
         ...(quoteNewsPath ? { quote_news: doc(db, quoteNewsPath) } : {}),
+        ...(quoteBizPath ? { quote_biz: doc(db, quoteBizPath) } : {}),
+        ...(asBizPath ? { asbiz: doc(db, asBizPath) } : {}),
       };
 
       await addDoc(collection(db, "users", user.uid, "posts"), postData);
@@ -218,6 +256,27 @@ function NewPostForm() {
                 <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">このニュースを引用</p>
                 <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] truncate">
                   {quoteNewsPreview.title}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* 店舗の引用/店舗として投稿するプレビュー */}
+          {bizPath && bizPreview && (
+            <div className="flex items-center gap-3 border border-gray-200 dark:border-[var(--border-subtle)] rounded-xl px-3 py-2.5">
+              {bizPreview.photo && (
+                <img
+                  src={bizPreview.photo}
+                  alt=""
+                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                />
+              )}
+              <div className="min-w-0">
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">
+                  {asBizPath ? "この店舗として投稿" : "この店舗を引用"}
+                </p>
+                <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] truncate">
+                  {bizPreview.name}
                 </p>
               </div>
             </div>
