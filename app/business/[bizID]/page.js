@@ -1,9 +1,10 @@
-import { doc, getDoc } from "firebase/firestore";
+import { collectionGroup, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
 import BusinessLikeButton from "@/app/components/BusinessLikeButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import FollowBusinessButton from "@/app/components/FollowBusinessButton";
+import BizReviewSection from "@/app/components/BizReviewSection";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -45,6 +46,52 @@ export default async function BusinessDetailPage({ params }) {
       ? (ratingList.reduce((a, b) => a + b, 0) / ratingList.length).toFixed(1)
       : null;
   const favoritedCount = (biz.favorited || []).length;
+  // review_displayはネイティブ(business_detail_widget.dart)ではtrueの時に
+  // レビュー欄を「非表示」にするフラグとして使われている(名前と逆の意味、
+  // FlutterFlow側の命名の癖)。両プラットフォームで挙動を揃える
+  const showReviews = biz.review_display !== true;
+
+  // レビュー取得(ネイティブと同じくbusinessではなくreviewer=投稿者のuser配下に
+  // 平坦保存されたbizreviewをcollectionGroupクエリで取得。ネイティブ側もorderByを
+  // 付けていない(reviewee単一フィールドのCOLLECTION_GROUPインデックスしか無い)ため、
+  // ここでも新規の複合インデックスを避けるためorderByは付けない(並び替えは
+  // BizReviewSection側でクライアント処理)
+  let initialReviews = [];
+  if (showReviews) {
+    try {
+      const reviewsSnap = await getDocs(
+        query(collectionGroup(db, "bizreview"), where("reviewee", "==", doc(db, "business", bizID)))
+      );
+      initialReviews = await Promise.all(
+        reviewsSnap.docs.map(async (d) => {
+          const data = d.data();
+          let reviewerName = "";
+          let reviewerPhoto = "";
+          if (data.reviewer) {
+            try {
+              const uSnap = await getDoc(data.reviewer);
+              if (uSnap.exists()) {
+                reviewerName = uSnap.data().display_name || "";
+                reviewerPhoto = uSnap.data().photo_url || "";
+              }
+            } catch {}
+          }
+          return {
+            id: d.id,
+            reviewerName,
+            reviewerPhoto,
+            rating: data.rating || 0,
+            reviewComment: data.review_comment || "",
+            timestamp: data.timestamp
+              ? { seconds: data.timestamp.seconds, nanoseconds: data.timestamp.nanoseconds }
+              : null,
+          };
+        })
+      );
+    } catch (err) {
+      console.error("reviews fetch error:", err);
+    }
+  }
 
   let relatedEvents = [];
   if (biz.events?.length > 0) {
@@ -106,7 +153,7 @@ export default async function BusinessDetailPage({ params }) {
             </p>
           )}
           <div className="flex items-center gap-3 mt-1.5">
-            {biz.review_display && avgRating && (
+            {showReviews && avgRating && (
               <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-[var(--fg-secondary)]">
                 ⭐ {avgRating}
                 <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">({ratingList.length})</span>
@@ -243,6 +290,9 @@ export default async function BusinessDetailPage({ params }) {
             </div>
           </div>
         )}
+
+        {/* レビュー */}
+        {showReviews && <BizReviewSection bizID={bizID} initialReviews={initialReviews} />}
       </div>
     </div>
   );
