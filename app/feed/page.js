@@ -16,6 +16,8 @@ import { useAuth } from "@/lib/AuthContext";
 import Link from "next/link";
 import LikeButton from "../components/LikeButton";
 import FavoriteButton from "../components/FavoriteButton";
+import RepostButton from "../components/RepostButton";
+import RepostEmbed from "../components/RepostEmbed";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -64,6 +66,33 @@ export default function FeedPage() {
               const profileSnap = await getDoc(data.postUser_profile);
               if (profileSnap.exists()) {
                 post.profile = { id: profileSnap.id, ...profileSnap.data() };
+              }
+            } catch {}
+          }
+
+          if (data.repost) {
+            try {
+              const originalSnap = await getDoc(data.repost);
+              if (originalSnap.exists()) {
+                const originalData = originalSnap.data();
+                const originalUserID = originalSnap.ref.parent.parent?.id || null;
+                let originalProfile = null;
+                if (originalData.postUser_profile) {
+                  try {
+                    const opSnap = await getDoc(originalData.postUser_profile);
+                    if (opSnap.exists()) {
+                      originalProfile = { id: opSnap.id, ...opSnap.data() };
+                    }
+                  } catch {}
+                }
+                post.repostedPost = {
+                  id: originalSnap.id,
+                  userID: originalUserID,
+                  postDescription: originalData.postDescription || "",
+                  postPhoto: originalData.postPhoto || "",
+                  timePosted: originalData.timePosted || null,
+                  profile: originalProfile,
+                };
               }
             } catch {}
           }
@@ -154,7 +183,7 @@ function PostCard({ post }) {
         )}
 
         {/* 本文 */}
-        {post.postDescription && (
+        {post.postDescription?.trim() && (
           <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] mb-3 leading-relaxed whitespace-pre-wrap">
             {post.postDescription}
           </p>
@@ -174,6 +203,9 @@ function PostCard({ post }) {
           </div>
         )}
 
+        {/* リポスト元の埋め込み表示 */}
+        {post.repost && <RepostEmbed repostedPost={post.repostedPost} />}
+
         {/* 時刻・いいね */}
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-400 dark:text-[var(--fg-muted)]">{formatTime(post.timePosted)}</span>
@@ -182,6 +214,10 @@ function PostCard({ post }) {
             <FavoriteButton
               targetPath={`users/${post.userID}/posts/${post.id}`}
               fieldName="users_favorited"
+            />
+            <RepostButton
+              postPath={`users/${post.userID}/posts/${post.id}`}
+              kaiwaiPath={post.kaiwai?.path ?? null}
             />
           </div>
         </div>

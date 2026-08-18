@@ -17,6 +17,8 @@ import KaiwaiWordCloud from "../../../components/wordcloud";
 import CommentSection from "../../../components/CommentSection";
 import LikeButton from "../../../components/LikeButton";
 import FavoriteButton from "../../../components/FavoriteButton";
+import RepostButton from "../../../components/RepostButton";
+import RepostEmbed from "../../../components/RepostEmbed";
 import { isPostIndexable } from "../../../../lib/postIndexing";
 
 // fallback画像
@@ -59,7 +61,7 @@ export async function generateMetadata({ params }) {
   }
 
   const description =
-    `${profileData?.name || "ユーザー"}：${post.postDescription || ""} @${kaiwaiName}kaiwai`;
+    `${profileData?.name || "ユーザー"}：${post.postDescription?.trim() || ""} @${kaiwaiName}kaiwai`;
 
   // コメントが付いていれば内容が薄くても厚みがあるとみなす(件数のみ、集計クエリなので低コスト)
   const commentCountSnap = await getCountFromServer(
@@ -70,16 +72,16 @@ export async function generateMetadata({ params }) {
   const indexable = isPostIndexable({ post, authorUid: userID, commentCount });
 
   return {
-    title: post.postDescription || "KAIWAI 投稿",
+    title: post.postDescription?.trim() || "KAIWAI 投稿",
     description,
     openGraph: {
-      title: post.postDescription || "KAIWAI 投稿",
+      title: post.postDescription?.trim() || "KAIWAI 投稿",
       description,
       images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.postDescription || "KAIWAI 投稿",
+      title: post.postDescription?.trim() || "KAIWAI 投稿",
       description,
       images: [ogImage],
     },
@@ -131,6 +133,41 @@ export default async function PostPage({ params }) {
     const min = String(date.getMinutes()).padStart(2, "0");
     return `${y}年${m}月${d}日 ${h}:${min}`;
   };
+
+  // リポスト元投稿を取得(post.repostが元投稿へのDocumentReference)
+  let repostedPost = null;
+  if (post.repost) {
+    const originalSnap = await getDoc(post.repost);
+    if (originalSnap.exists()) {
+      const originalData = originalSnap.data();
+      const originalUserID = originalSnap.ref.parent.parent?.id || null;
+      let originalProfile = null;
+      if (originalData.postUser_profile) {
+        const opSnap = await getDoc(originalData.postUser_profile);
+        if (opSnap.exists()) {
+          // RepostEmbed(クライアントコンポーネント)へ渡すのはnameとphotoのみに絞る。
+          // opSnap.data()をそのままspreadすると、profileが持つkaiwai(DocumentReference)
+          // フィールドまで含まれてしまい、RSC境界を越える際にNext.jsが循環参照を持つ
+          // Firestore SDK内部オブジェクトをシリアライズしようとして
+          // "Maximum call stack size exceeded"で落ちる(DocumentReferenceは
+          // クライアントコンポーネントへpropsで直接渡せない、というCLAUDE.mdの注意点の一種)
+          const opData = opSnap.data();
+          originalProfile = { name: opData.name || "", photo: opData.photo || "" };
+        }
+      }
+      repostedPost = {
+        id: originalSnap.id,
+        userID: originalUserID,
+        postDescription: originalData.postDescription || "",
+        postPhoto: originalData.postPhoto || "",
+        // Timestampはクライアントコンポーネント(RepostEmbed)へプレーンな値でしか渡せない
+        timePosted: originalData.timePosted
+          ? { seconds: originalData.timePosted.seconds, nanoseconds: originalData.timePosted.nanoseconds }
+          : null,
+        profile: originalProfile,
+      };
+    }
+  }
 
   // 他の投稿を取得
   let otherPosts = [];
@@ -232,8 +269,11 @@ export default async function PostPage({ params }) {
 　　　　 fontFamily: "Urbanist",
       }}
     >
-      {post.postDescription}
+      {post.postDescription?.trim() ? post.postDescription : null}
     </h1>
+
+          {/* リポスト元の埋め込み表示 */}
+          {post.repost && <RepostEmbed repostedPost={repostedPost} />}
 
           {/* 投稿写真 */}
     {post.postPhoto && (
@@ -270,6 +310,7 @@ export default async function PostPage({ params }) {
     <div style={{ marginTop: "0.75rem", display: "flex", gap: "1rem" }}>
       <LikeButton postUserID={userID} postID={postID} kaiwaiPath={post.kaiwai?.path ?? null} />
       <FavoriteButton targetPath={`users/${userID}/posts/${postID}`} fieldName="users_favorited" />
+      <RepostButton postPath={`users/${userID}/posts/${postID}`} kaiwaiPath={post.kaiwai?.path ?? null} />
     </div>
   </div>
 
