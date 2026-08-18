@@ -289,11 +289,9 @@ try {
         }}
       >
         {newsList.map((n) => (
-          <a
+          <Link
             key={n.id}
-            href={n.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/news/${kaiwaiID}/${n.id}`}
             style={{
               minWidth: "220px",
               maxWidth: "220px",
@@ -346,7 +344,7 @@ try {
                 {n.sitename}
               </div>
             )}
-          </a>
+          </Link>
         ))}
       </div>
     </div>

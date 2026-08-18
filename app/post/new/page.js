@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   collection,
   addDoc,
@@ -15,8 +15,22 @@ import { useAuth } from "@/lib/AuthContext";
 import Link from "next/link";
 
 export default function NewPostPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewPostForm />
+    </Suspense>
+  );
+}
+
+function NewPostForm() {
   const { user, userDoc, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // ニュース詳細ページの「引用して投稿」から遷移してきた場合、
+  // ?quoteNews=kaiwai/{kaiwaiID}/news/{newsID} というパス文字列が付与される。
+  // DocumentReferenceではなくURLに乗せられる文字列で受け渡す(他コンポーネントの
+  // path文字列規約と同じ理由)。
+  const quoteNewsPath = searchParams.get("quoteNews");
 
   const [text, setText] = useState("");
   const [images, setImages] = useState([]); // File[]
@@ -25,6 +39,7 @@ export default function NewPostPage() {
   const [selectedKaiwai, setSelectedKaiwai] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [quoteNewsPreview, setQuoteNewsPreview] = useState(null);
   const fileRef = useRef(null);
 
   // kaiwaiリストの名前を取得
@@ -50,9 +65,38 @@ export default function NewPostPage() {
     ).then((results) => {
       const valid = results.filter(Boolean);
       setKaiwaiOptions(valid);
-      if (valid.length > 0) setSelectedKaiwai(valid[0].id);
+      // ニュース引用の場合、そのニュースが属するkaiwaiを初期選択にする
+      // (パスは"kaiwai/{kaiwaiID}/news/{newsID}"なので2番目のセグメントがkaiwaiID)
+      const quoteNewsKaiwaiID = quoteNewsPath?.split("/")[1];
+      const matched = valid.find((k) => k.id === quoteNewsKaiwaiID);
+      if (matched) {
+        setSelectedKaiwai(matched.id);
+      } else if (valid.length > 0) {
+        setSelectedKaiwai(valid[0].id);
+      }
     });
-  }, [user, userDoc, loading]);
+  }, [user, userDoc, loading, quoteNewsPath]);
+
+  // 引用元ニュースのプレビュー取得
+  useEffect(() => {
+    if (!quoteNewsPath) {
+      setQuoteNewsPreview(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, quoteNewsPath));
+        if (!cancelled && snap.exists()) {
+          const data = snap.data();
+          setQuoteNewsPreview({ title: data.title || "", img: data.img || "", sitename: data.sitename || "" });
+        }
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [quoteNewsPath]);
 
   // 画像選択
   function handleImageChange(e) {
@@ -119,6 +163,7 @@ export default function NewPostPage() {
         users_liked: [],
         users_favorited: [],
         hashtags: [],
+        ...(quoteNewsPath ? { quote_news: doc(db, quoteNewsPath) } : {}),
       };
 
       await addDoc(collection(db, "users", user.uid, "posts"), postData);
@@ -159,6 +204,25 @@ export default function NewPostPage() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* ニュース引用プレビュー */}
+          {quoteNewsPath && quoteNewsPreview && (
+            <div className="flex items-center gap-3 border border-gray-200 dark:border-[var(--border-subtle)] rounded-xl px-3 py-2.5">
+              {quoteNewsPreview.img && (
+                <img
+                  src={quoteNewsPreview.img}
+                  alt=""
+                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                />
+              )}
+              <div className="min-w-0">
+                <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5">このニュースを引用</p>
+                <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] truncate">
+                  {quoteNewsPreview.title}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* 界隈セレクタ */}
           <div>
             <label className="block text-xs font-medium text-gray-500 dark:text-[var(--fg-secondary)] mb-1.5">

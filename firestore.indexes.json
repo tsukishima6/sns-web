@@ -55,6 +55,14 @@
         { "fieldPath": "post", "order": "ASCENDING" },
         { "fieldPath": "timePosted", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "posts",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "quote_news", "order": "ASCENDING" },
+        { "fieldPath": "timePosted", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": [

@@ -18,6 +18,7 @@ import LikeButton from "../components/LikeButton";
 import FavoriteButton from "../components/FavoriteButton";
 import RepostButton from "../components/RepostButton";
 import RepostEmbed from "../components/RepostEmbed";
+import NewsQuoteEmbed from "../components/NewsQuoteEmbed";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -92,6 +93,24 @@ export default function FeedPage() {
                   postPhoto: originalData.postPhoto || "",
                   timePosted: originalData.timePosted || null,
                   profile: originalProfile,
+                };
+              }
+            } catch {}
+          }
+
+          if (data.quote_news) {
+            try {
+              const newsSnap = await getDoc(data.quote_news);
+              if (newsSnap.exists()) {
+                const newsData = newsSnap.data();
+                const kaiwaiId = newsSnap.ref.parent.parent?.id || null;
+                post.quotedNews = {
+                  id: newsSnap.id,
+                  kaiwaiId,
+                  title: newsData.title || "",
+                  sitename: newsData.sitename || "",
+                  img: newsData.img || "",
+                  time: newsData.time || null,
                 };
               }
             } catch {}
@@ -205,6 +224,9 @@ function PostCard({ post }) {
 
         {/* リポスト元の埋め込み表示 */}
         {post.repost && <RepostEmbed repostedPost={post.repostedPost} />}
+
+        {/* ニュース引用の埋め込み表示 */}
+        {post.quote_news && <NewsQuoteEmbed quotedNews={post.quotedNews} />}
 
         {/* 時刻・いいね */}
         <div className="flex items-center justify-between">

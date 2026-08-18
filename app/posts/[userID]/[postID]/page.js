@@ -19,6 +19,7 @@ import LikeButton from "../../../components/LikeButton";
 import FavoriteButton from "../../../components/FavoriteButton";
 import RepostButton from "../../../components/RepostButton";
 import RepostEmbed from "../../../components/RepostEmbed";
+import NewsQuoteEmbed from "../../../components/NewsQuoteEmbed";
 import { isPostIndexable } from "../../../../lib/postIndexing";
 
 // fallback画像
@@ -169,6 +170,24 @@ export default async function PostPage({ params }) {
     }
   }
 
+  // ニュース引用元を取得(post.quote_newsが元ニュースへのDocumentReference)
+  let quotedNews = null;
+  if (post.quote_news) {
+    const newsSnap = await getDoc(post.quote_news);
+    if (newsSnap.exists()) {
+      const newsData = newsSnap.data();
+      quotedNews = {
+        id: newsSnap.id,
+        kaiwaiId: newsSnap.ref.parent.parent?.id || null,
+        title: newsData.title || "",
+        sitename: newsData.sitename || "",
+        img: newsData.img || "",
+        // Timestampはクライアントコンポーネント(NewsQuoteEmbed)へプレーンな値でしか渡せない
+        time: newsData.time ? { seconds: newsData.time.seconds, nanoseconds: newsData.time.nanoseconds } : null,
+      };
+    }
+  }
+
   // 他の投稿を取得
   let otherPosts = [];
   if (profileData && post.postUser_profile) {
@@ -274,6 +293,9 @@ export default async function PostPage({ params }) {
 
           {/* リポスト元の埋め込み表示 */}
           {post.repost && <RepostEmbed repostedPost={repostedPost} />}
+
+          {/* ニュース引用の埋め込み表示 */}
+          {post.quote_news && <NewsQuoteEmbed quotedNews={quotedNews} />}
 
           {/* 投稿写真 */}
     {post.postPhoto && (
