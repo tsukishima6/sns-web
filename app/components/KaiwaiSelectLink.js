@@ -55,22 +55,24 @@ export default function KaiwaiSelectLink({ kaiwaiId, kaiwaiName, className, styl
 
       {confirming && (
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 px-4"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
           onClick={() => !pending && setConfirming(false)}
         >
           <div
-            className="w-full max-w-xs bg-white dark:bg-[var(--surface)] rounded-2xl p-5 space-y-4"
+            className="w-full max-w-xs bg-white dark:bg-[var(--surface)] rounded-[28px] shadow-2xl p-6 space-y-5 animate-[dialog-in_0.18s_ease-out]"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] text-center">
-              {kaiwaiName}KAIWAIに参加しますか？
+            <p className="text-sm font-medium text-gray-700 dark:text-[var(--fg-secondary)] text-center leading-relaxed">
+              {kaiwaiName}KAIWAIに
+              <br />
+              参加しますか？
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
                 disabled={pending}
-                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] disabled:opacity-40"
+                className="flex-1 py-2.5 rounded-full text-sm font-medium border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors disabled:opacity-40"
               >
                 キャンセル
               </button>
@@ -78,7 +80,8 @@ export default function KaiwaiSelectLink({ kaiwaiId, kaiwaiName, className, styl
                 type="button"
                 onClick={handleConfirm}
                 disabled={pending}
-                className="flex-1 py-2 rounded-lg text-sm bg-black text-white hover:bg-gray-800 disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-full text-sm font-semibold text-white shadow-md hover:brightness-110 active:scale-[0.97] transition disabled:opacity-60"
+                style={{ background: "linear-gradient(135deg, #152635, #8fa8a7)" }}
               >
                 {pending ? "処理中..." : "参加する"}
               </button>

@@ -66,8 +66,8 @@ export function ParentSelectModal({ onClose, onSelect }) {
   });
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/50 px-0 sm:px-4">
-      <div className="w-full sm:max-w-md bg-white dark:bg-[var(--surface)] rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col">
+    <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm px-0 sm:px-4">
+      <div className="w-full sm:max-w-md bg-white dark:bg-[var(--surface)] rounded-t-[28px] sm:rounded-[28px] shadow-2xl max-h-[85vh] flex flex-col animate-[dialog-in_0.18s_ease-out]">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[var(--border-subtle)]">
           <h2 className="text-sm font-semibold text-gray-800 dark:text-[var(--fg-primary)]">親KAIWAIを選択</h2>
           <button
@@ -126,21 +126,22 @@ export function ParentSelectModal({ onClose, onSelect }) {
 
         {pending && (
           <div className="border-t border-gray-100 dark:border-[var(--border-subtle)] p-4 space-y-3">
-            <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] text-center">
+            <p className="text-sm font-medium text-gray-700 dark:text-[var(--fg-secondary)] text-center">
               「{pending.name}」を親KAIWAIに設定しますか？
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setPending(null)}
-                className="flex-1 py-2 rounded-lg text-sm border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)]"
+                className="flex-1 py-2.5 rounded-full text-sm font-medium border border-gray-200 dark:border-[var(--border-subtle)] text-gray-600 dark:text-[var(--fg-secondary)] hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
               >
                 キャンセル
               </button>
               <button
                 type="button"
                 onClick={() => onSelect(pending)}
-                className="flex-1 py-2 rounded-lg text-sm bg-black text-white hover:bg-gray-800"
+                className="flex-1 py-2.5 rounded-full text-sm font-semibold text-white shadow-md hover:brightness-110 active:scale-[0.97] transition"
+                style={{ background: "linear-gradient(135deg, #152635, #8fa8a7)" }}
               >
                 設定する
               </button>

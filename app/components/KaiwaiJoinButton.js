@@ -16,6 +16,15 @@ const buttonStyle = {
   border: "1.5px solid var(--fg-primary)",
   background: "transparent",
   color: "var(--fg-primary)",
+  transition: "opacity 0.2s ease, transform 0.1s ease",
+};
+
+const primaryButtonStyle = {
+  ...buttonStyle,
+  border: "none",
+  color: "#ffffff",
+  background: "linear-gradient(135deg, #152635, #8fa8a7)",
+  boxShadow: "0 4px 14px rgba(21, 38, 53, 0.28)",
 };
 
 // ネイティブ(kaiwai_items_widget.dartのカードタップ)と同じ挙動:
@@ -128,18 +137,30 @@ export default function KaiwaiJoinButton({ kaiwaiID, kaiwaiName }) {
       )}
 
       {status === "not_member" && confirming && (
-        <div style={{ display: "inline-flex", flexDirection: "column", gap: "0.5rem", alignItems: "center" }}>
-          <p style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", margin: 0 }}>
+        <div
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            gap: "0.7rem",
+            alignItems: "center",
+            padding: "1.1rem 1.4rem",
+            borderRadius: "24px",
+            background: "var(--card-bg)",
+            border: "1px solid var(--card-border)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
+          }}
+        >
+          <p style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--fg-secondary)", margin: 0 }}>
             {kaiwaiName}KAIWAIに参加しますか？
           </p>
-          <div style={{ display: "flex", gap: "0.5rem" }}>
+          <div style={{ display: "flex", gap: "0.6rem" }}>
             <button
               onClick={() => setConfirming(false)}
               style={{ ...buttonStyle, background: "transparent", color: "var(--fg-secondary)" }}
             >
               キャンセル
             </button>
-            <button onClick={handleJoin} style={buttonStyle}>
+            <button onClick={handleJoin} style={primaryButtonStyle}>
               参加する
             </button>
           </div>
