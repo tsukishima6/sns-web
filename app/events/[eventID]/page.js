@@ -4,6 +4,7 @@ import Link from "next/link";
 import EventLikeButton from "@/app/components/EventLikeButton";
 import EventJoinButton from "@/app/components/EventJoinButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
+import { isEventIndexable } from "@/lib/postIndexing";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -31,6 +32,8 @@ export async function generateMetadata({ params }) {
       title: `${ev.event_title || "イベント"} | kaiwai`,
       description: ev.event_description || "",
       openGraph: { images: [ev.event_photo || fallbackImg] },
+      // noindexでもfollowはtrueにして、界隈ページ等へのリンク評価は通す
+      robots: isEventIndexable(ev) ? { index: true, follow: true } : { index: false, follow: true },
     };
   } catch {
     return { title: "イベント | kaiwai" };
@@ -65,7 +68,33 @@ export default async function EventDetailPage({ params }) {
 
   const photos = [ev.event_photo, ev.event_photo2, ev.event_photo3, ev.event_photo4].filter(Boolean);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": ev.event_title,
+    "description": ev.event_description || undefined,
+    "startDate": ev.event_schedule ? ev.event_schedule.toDate().toISOString() : undefined,
+    "endDate": ev.event_end ? ev.event_end.toDate().toISOString() : undefined,
+    "eventStatus": "https://schema.org/EventScheduled",
+    "image": photos[0] || fallbackImg,
+    "url": `https://kaiwai.vercel.app/events/${eventID}`,
+    ...(ev.event_location
+      ? {
+          "location": {
+            "@type": "Place",
+            "name": ev.event_location,
+            "address": ev.event_locationadress || undefined,
+          },
+        }
+      : {}),
+  };
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="max-w-[960px] mx-auto">
       {/* ヘッダー画像 */}
       <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
@@ -191,6 +220,7 @@ export default async function EventDetailPage({ params }) {
         )}
       </div>
     </div>
+    </>
   );
 }
 

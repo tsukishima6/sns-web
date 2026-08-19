@@ -262,8 +262,32 @@ export default async function PostPage({ params }) {
     })
   );
 
+  // 構造化データはrobotsメタでnoindexにしているページ(=薄いページ)には出さない。
+  // noindexなページにDiscussionForumPostingを出しても評価対象にならないため無駄なだけでなく、
+  // 「中身が薄いのに構造化データだけ整っている」page品質のちぐはぐさを避ける
+  const indexable = isPostIndexable({ post, authorUid: userID, commentCount: initialComments.length });
+  const jsonLd = indexable
+    ? {
+        "@context": "https://schema.org",
+        "@type": "DiscussionForumPosting",
+        "headline": post.postDescription?.trim() || undefined,
+        "articleBody": post.postContent || undefined,
+        "image": post.postPhoto || undefined,
+        "datePublished": post.timePosted ? post.timePosted.toDate().toISOString() : undefined,
+        "author": profileData?.name ? { "@type": "Person", "name": profileData.name } : undefined,
+        "url": `https://kaiwai.vercel.app/posts/${userID}/${postID}`,
+        "commentCount": initialComments.length,
+      }
+    : null;
+
   return (
     <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <PageHeader kaiwaiName={kaiwaiName} kaiwaiID={post.kaiwai?.id ?? ""} />
 
 

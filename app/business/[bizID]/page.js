@@ -6,6 +6,7 @@ import FavoriteButton from "@/app/components/FavoriteButton";
 import FollowBusinessButton from "@/app/components/FollowBusinessButton";
 import BizReviewSection from "@/app/components/BizReviewSection";
 import BizPostEntry from "@/app/components/BizPostEntry";
+import { isBusinessIndexable } from "@/lib/postIndexing";
 
 const fallbackImg =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
@@ -20,6 +21,8 @@ export async function generateMetadata({ params }) {
       title: `${biz.display_name || "ビジネス"} | kaiwai`,
       description: biz.discription || "",
       openGraph: { images: [biz.photo_1 || fallbackImg] },
+      // noindexでもfollowはtrueにして、界隈ページ等へのリンク評価は通す
+      robots: isBusinessIndexable(biz) ? { index: true, follow: true } : { index: false, follow: true },
     };
   } catch {
     return { title: "ビジネス | kaiwai" };
@@ -143,7 +146,23 @@ export default async function BusinessDetailPage({ params }) {
     { label: "Facebook", url: biz.facebook, icon: "📘" },
   ].filter((s) => s.url);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": biz.display_name,
+    "description": biz.discription || undefined,
+    "image": photos[0] || fallbackImg,
+    "url": `https://kaiwai.vercel.app/business/${bizID}`,
+    ...(biz.location_adress ? { "address": { "@type": "PostalAddress", "streetAddress": biz.location_adress } } : {}),
+    ...(avgRating ? { "aggregateRating": { "@type": "AggregateRating", "ratingValue": avgRating, "reviewCount": ratingList.length } } : {}),
+  };
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="max-w-[960px] mx-auto">
       {/* カバー画像 */}
       {photos[0] && (
@@ -366,5 +385,6 @@ export default async function BusinessDetailPage({ params }) {
         {showReviews && <BizReviewSection bizID={bizID} initialReviews={initialReviews} />}
       </div>
     </div>
+    </>
   );
 }
