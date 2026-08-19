@@ -16,6 +16,7 @@ import KaiwaiWordCloud from "../../components/wordcloud";
 import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
 import PageHeader from "../../components/PageHeader";
 import KaiwaiEditLink from "../../components/KaiwaiEditLink";
+import KaiwaiJoinButton from "../../components/KaiwaiJoinButton";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -159,15 +160,29 @@ try {
       postsSnap.docs.map(async (d) => {
         const data = d.data();
         let userID = d.ref.parent.parent ? d.ref.parent.parent.id : null;
-        const postObj = { id: d.id, userID, ...data };
+        // dataを丸ごとspreadしない: postUser/postUser_profile/kaiwai等のDocumentReference
+        // フィールドが混入すると、RSCシリアライズ時にFirestore SDK内部の巨大な内部オブジェクト
+        // グラフを再帰的に辿ろうとしRangeError: Maximum call stack size exceededでページごと
+        // 落ちる(kaiwai-web/CLAUDE.md記載の既知の罠と同じパターン、実際に参加機能のテストで発見)
+        const postObj = {
+          id: d.id,
+          userID,
+          postDescription: data.postDescription || "",
+          postPhoto: data.postPhoto || "",
+          postContent: data.postContent || "",
+          timePosted: data.timePosted || null,
+        };
 
         if (data.postUser_profile) {
           try {
             const profileSnap = await getDoc(data.postUser_profile);
             if (profileSnap.exists()) {
+              const profileData = profileSnap.data() || {};
               postObj.profile = {
                 id: profileSnap.id,
-                ...(profileSnap.data() || {}),
+                name: profileData.name || "",
+                photo: profileData.photo || "",
+                ID: profileData.ID || "",
               };
             }
           } catch (e) {
@@ -243,6 +258,7 @@ try {
   <AppDownloadDialogTrigger /> から
 </h2>
 
+<KaiwaiJoinButton kaiwaiID={kaiwaiID} kaiwaiName={kaiwai.name} />
 <KaiwaiEditLink kaiwaiID={kaiwaiID} />
 
 {/* 🔹 kaiwai news */}
