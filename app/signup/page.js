@@ -34,7 +34,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signup(email, password, displayName);
-      router.push("/feed");
+      router.push("/onboarding");
     } catch (err) {
       setError(getErrorMessage(err.code));
     } finally {
@@ -47,7 +47,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await loginWithGoogle();
-      router.push("/feed");
+      router.push("/onboarding");
     } catch (err) {
       if (err.code !== "auth/popup-closed-by-user") {
         setError("Googleログインに失敗しました");
