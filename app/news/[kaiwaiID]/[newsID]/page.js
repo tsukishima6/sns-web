@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import { fetchOgImage } from "../../../../lib/fetchOgImage";
+import { BOT_POST_ACCOUNT_UIDS } from "../../../../lib/postIndexing";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
 
@@ -37,10 +38,16 @@ export async function generateMetadata({ params }) {
   // (orderByなしの単純な等号クエリだと別のインデックス要求になり、
   // "COLLECTION_GROUP_ASC index for collection posts and field quote_news"
   // というエラーになる)
+  // bot(賑わい演出用の4アカウント)による引用投稿は独自コンテンツとしてカウントしない。
+  // bot自身の短いコメントだけでindex許可されると、実質ニュースサイトの要約の転載に近い
+  // ページまでインデックスされてしまうため、人間による引用投稿の有無だけで判定する
   const picksCountSnap = await getDocs(
     query(collectionGroup(db, "posts"), where("quote_news", "==", newsRef), orderBy("timePosted", "desc"))
   );
-  const indexable = picksCountSnap.size > 0;
+  const humanPicksCount = picksCountSnap.docs.filter(
+    (d) => !BOT_POST_ACCOUNT_UIDS.includes(d.ref.parent.parent?.id)
+  ).length;
+  const indexable = humanPicksCount > 0;
 
   return {
     title,

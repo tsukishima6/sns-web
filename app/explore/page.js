@@ -227,8 +227,13 @@ function sortByName(list) {
 function sortByNumberAsc(list) {
   return [...list].sort((a, b) => (a.number || 0) - (b.number || 0));
 }
-function sortByNumberDesc(list) {
-  return [...list].sort((a, b) => (b.number || 0) - (a.number || 0));
+// 直近ユーザーが新規参加した順(last_joined_atはCloud Functions側の
+// onKaiwaiMemberJoinedがbotを除く新規参加を検知して更新する。未設定のkaiwaiは
+// 末尾に回る)
+function sortByLastJoined(list) {
+  return [...list].sort(
+    (a, b) => (b.last_joined_at?.seconds || 0) - (a.last_joined_at?.seconds || 0)
+  );
 }
 
 function KaiwaiTab() {
@@ -269,10 +274,10 @@ function KaiwaiTab() {
       if (c.key === "other") return !k.hobbies && !k.local && !k.alumni;
       return !!k[c.key];
     });
-    // 地域・その他は人数順（地域は少ない順、その他は多い順）、それ以外は名前順
+    // 地域は人数順(少ない順)、趣味・その他は直近参加順、同窓・OBは名前順
     let list;
     if (c.key === "local") list = sortByNumberAsc(base);
-    else if (c.key === "other") list = sortByNumberDesc(base);
+    else if (c.key === "hobbies" || c.key === "other") list = sortByLastJoined(base);
     else list = sortByName(base);
     return { ...c, list };
   }).filter((c) => c.list.length > 0);
