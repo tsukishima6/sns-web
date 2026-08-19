@@ -8,6 +8,7 @@ import {
   orderBy,
   getDocs,
   limit,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import Image from "next/image";
@@ -26,6 +27,24 @@ const fallbackOGP =
 
 // ISRでキャッシュさせる（毎リクエストFirestore叩く no-store状態を解消し、TTFBとクロール効率を改善）
 export const revalidate = 1800;
+
+// 投稿ごとのgetDoc(投稿者profile取得)を無制限にPromise.allで同時実行すると、
+// 投稿数の多いkaiwai(全新規サインアップのデフォルト着地先である000htmz「ビギナーズ」で
+// 実測390件超)でFirestore Web SDK内部がRangeError: Maximum call stack size exceededで
+// 落ち、ページがハングする(2026-08-19発見)。同時実行数を絞って順に処理する
+async function mapWithConcurrency(items, concurrency, fn) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  async function worker() {
+    while (nextIndex < items.length) {
+      const current = nextIndex++;
+      results[current] = await fn(items[current], current);
+    }
+  }
+  const workers = Array.from({ length: Math.min(concurrency, items.length) }, worker);
+  await Promise.all(workers);
+  return results;
+}
 
 // --- generateMetadata（SEO強化版）---
 export async function generateMetadata({ params }) {
@@ -149,62 +168,60 @@ try {
 }
 
   try {
+    const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+    const ninetyDaysAgo = Timestamp.fromDate(new Date(Date.now() - NINETY_DAYS_MS));
+
+    // timePostedの範囲指定+limitをFirestoreクエリ自体に持たせる(以前はorderByのみで
+    // 全件取得してからJS側で90日フィルタしており、投稿数の多いkaiwaiで下のprofile取得が
+    // 数百件同時実行になりハングする原因になっていた。同じフィールドへのrange filter+
+    // orderByなので追加の複合インデックスは不要)
     const q = query(
       collectionGroup(db, "posts"),
       where("kaiwai", "==", kaiwaiRef),
-      orderBy("timePosted", "desc")
+      where("timePosted", ">=", ninetyDaysAgo),
+      orderBy("timePosted", "desc"),
+      limit(80)
     );
     const postsSnap = await getDocs(q);
 
-    posts = await Promise.all(
-      postsSnap.docs.map(async (d) => {
-        const data = d.data();
-        let userID = d.ref.parent.parent ? d.ref.parent.parent.id : null;
-        // dataを丸ごとspreadしない: postUser/postUser_profile/kaiwai等のDocumentReference
-        // フィールドが混入すると、RSCシリアライズ時にFirestore SDK内部の巨大な内部オブジェクト
-        // グラフを再帰的に辿ろうとしRangeError: Maximum call stack size exceededでページごと
-        // 落ちる(kaiwai-web/CLAUDE.md記載の既知の罠と同じパターン、実際に参加機能のテストで発見)
-        const postObj = {
-          id: d.id,
-          userID,
-          postDescription: data.postDescription || "",
-          postPhoto: data.postPhoto || "",
-          postContent: data.postContent || "",
-          timePosted: data.timePosted || null,
-        };
+    // 投稿ごとのpostUser_profile取得(getDoc)を無制限に同時実行しない(mapWithConcurrency参照)
+    posts = await mapWithConcurrency(postsSnap.docs, 10, async (d) => {
+      const data = d.data();
+      let userID = d.ref.parent.parent ? d.ref.parent.parent.id : null;
+      // dataを丸ごとspreadしない: postUser/postUser_profile/kaiwai等のDocumentReference
+      // フィールドが混入すると、RSCシリアライズ時にFirestore SDK内部の巨大な内部オブジェクト
+      // グラフを再帰的に辿ろうとしRangeError: Maximum call stack size exceededでページごと
+      // 落ちる(kaiwai-web/CLAUDE.md記載の既知の罠と同じパターン、実際に参加機能のテストで発見)
+      const postObj = {
+        id: d.id,
+        userID,
+        postDescription: data.postDescription || "",
+        postPhoto: data.postPhoto || "",
+        postContent: data.postContent || "",
+        timePosted: data.timePosted || null,
+      };
 
-        if (data.postUser_profile) {
-          try {
-            const profileSnap = await getDoc(data.postUser_profile);
-            if (profileSnap.exists()) {
-              const profileData = profileSnap.data() || {};
-              postObj.profile = {
-                id: profileSnap.id,
-                name: profileData.name || "",
-                photo: profileData.photo || "",
-                ID: profileData.ID || "",
-              };
-            }
-          } catch (e) {
-            console.error("profile fetch error for post", d.id, e);
+      if (data.postUser_profile) {
+        try {
+          const profileSnap = await getDoc(data.postUser_profile);
+          if (profileSnap.exists()) {
+            const profileData = profileSnap.data() || {};
+            postObj.profile = {
+              id: profileSnap.id,
+              name: profileData.name || "",
+              photo: profileData.photo || "",
+              ID: profileData.ID || "",
+            };
           }
+        } catch (e) {
+          console.error("profile fetch error for post", d.id, e);
         }
+      }
 
-        return postObj;
-      })
-    );
-    // 🔹 30日以内の投稿だけ残す
-    const now = Date.now();
-    const NINETY_DAYS = 90 * 24 * 60 * 60 * 1000;
-
-    posts = posts.filter((post) => {
-      if (!post.profile || !post.timePosted) return false;
-      const postTime = post.timePosted.seconds
-        ? post.timePosted.seconds * 1000
-        : post.timePosted.toMillis?.();
-      if (!postTime) return false;
-      return now - postTime <= NINETY_DAYS;
+      return postObj;
     });
+
+    posts = posts.filter((post) => post.profile);
 
     console.log(`Kaiwai ${kaiwaiID} posts after filter:`, posts.length);
   } catch (err) {
