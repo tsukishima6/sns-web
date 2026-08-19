@@ -12,6 +12,7 @@ import {
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
 import Link from "next/link";
+import KaiwaiSelectLink from "@/app/components/KaiwaiSelectLink";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -388,8 +389,9 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
   return (
     <div>
       <div className="flex items-center">
-        <Link
-          href={`/kaiwai/${k.id}`}
+        <KaiwaiSelectLink
+          kaiwaiId={k.id}
+          kaiwaiName={k.name}
           style={{ textDecoration: "none", color: "inherit", paddingLeft: `${depth * 1.2}rem` }}
           className="flex-1 min-w-0 flex flex-col py-3 px-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
         >
@@ -407,7 +409,7 @@ function KaiwaiRow({ k, allKaiwai, depth = 0 }) {
               {k.name_english}
             </span>
           )}
-        </Link>
+        </KaiwaiSelectLink>
 
         {isOya && (
           <span

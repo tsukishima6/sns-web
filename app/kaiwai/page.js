@@ -1,6 +1,7 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import Link from "next/link";
+import KaiwaiSelectLink from "../components/KaiwaiSelectLink";
 
 export const metadata = {
   title: "界隈一覧｜kaiwai",
@@ -69,7 +70,7 @@ export default async function KaiwaiListPage() {
           marginBottom: "1.2rem",
         }}
       >
-        気になる界隈をタップして投稿を見てみよう。参加はアプリから。
+        気になる界隈をタップして参加しよう。
       </p>
 
       <Link
@@ -137,8 +138,9 @@ function KaiwaiGrid({ list }) {
 
 function KaiwaiCard({ kaiwai }) {
   return (
-    <Link
-      href={`/kaiwai/${kaiwai.id}`}
+    <KaiwaiSelectLink
+      kaiwaiId={kaiwai.id}
+      kaiwaiName={kaiwai.name}
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <div
@@ -238,6 +240,6 @@ function KaiwaiCard({ kaiwai }) {
           </div>
         </div>
       </div>
-    </Link>
+    </KaiwaiSelectLink>
   );
 }
