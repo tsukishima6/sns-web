@@ -328,7 +328,10 @@ try {
           overflowX: "auto",
         }}
       >
-        {newsList.map((n) => (
+        {newsList.map((n) => {
+          const title =
+            n.title && n.title.length > 40 ? `${n.title.slice(0, 40)}…` : n.title;
+          return (
           <Link
             key={n.id}
             href={`/news/${kaiwaiID}/${n.id}`}
@@ -337,11 +340,13 @@ try {
               maxWidth: "220px",
               background: "var(--surface)",
               borderRadius: "22px",
-              padding: "1.4rem",
+              overflow: "hidden",
               textDecoration: "none",
               color: "var(--fg-primary)",
               fontFamily: "'Urbanist','Montserrat',sans-serif",
               position: "relative",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             {n.img && (
@@ -349,43 +354,45 @@ try {
                 src={n.img}
                 alt=""
                 style={{
+                  display: "block",
                   width: "100%",
                   height: "120px",
                   objectFit: "cover",
-                  borderRadius: "16px",
-                  marginBottom: "0.6rem",
                 }}
               />
             )}
 
-            <h3
-              style={{
-                fontSize: "1.0rem",
-                fontWeight: 500,
-                lineHeight: "1.4",
-                margin: 0,
-                paddingBottom: "1.2rem",
-              }}
-            >
-              {n.title}
-            </h3>
-
-            {n.sitename && (
-              <div
+            <div style={{ padding: "1.4rem" }}>
+              <h3
                 style={{
-                  position: "absolute",
-                  right: "0.9rem",
-                  bottom: "0.8rem",
-                  fontSize: "0.85rem",
-                  color: "#8fa8a7",
-                  whiteSpace: "nowrap",
+                  fontSize: "1.0rem",
+                  fontWeight: 500,
+                  lineHeight: "1.4",
+                  margin: 0,
+                  paddingBottom: "1.2rem",
                 }}
               >
-                {n.sitename}
-              </div>
-            )}
+                {title}
+              </h3>
+
+              {n.sitename && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "0.9rem",
+                    bottom: "0.8rem",
+                    fontSize: "0.85rem",
+                    color: "#8fa8a7",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {n.sitename}
+                </div>
+              )}
+            </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   </>

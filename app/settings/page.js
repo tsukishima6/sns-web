@@ -90,7 +90,11 @@ export default function SettingsPage() {
       {/* プロフィールカード */}
       {profile && (
         <Link
-          href={`/users/${user.uid}/profile/${user.uid}`}
+          href={
+            profileRef
+              ? `/users/${profileRef.parent.parent.id}/profile/${profileRef.id}`
+              : `/users/${user.uid}/profile/${user.uid}`
+          }
           className="flex items-center gap-4 p-4 bg-white dark:bg-[var(--surface)] rounded-2xl border border-gray-100 dark:border-[var(--border-subtle)] shadow-sm mb-6 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors"
           style={{ textDecoration: "none", color: "inherit" }}
         >

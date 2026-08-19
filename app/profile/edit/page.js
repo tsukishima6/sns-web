@@ -198,7 +198,14 @@ export default function ProfileEditPage() {
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-base font-semibold text-gray-800 dark:text-[var(--fg-primary)]">プロフィール編集</h1>
-        <Link href={`/users/${user.uid}/profile/${user.uid}`} className="text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]">
+        <Link
+          href={
+            userDoc?.nowprofile
+              ? `/users/${userDoc.nowprofile.parent.parent.id}/profile/${userDoc.nowprofile.id}`
+              : `/users/${user.uid}/profile/${user.uid}`
+          }
+          className="text-sm text-gray-400 dark:text-[var(--fg-muted)] hover:text-gray-600 dark:hover:text-[var(--fg-secondary)]"
+        >
           キャンセル
         </Link>
       </div>

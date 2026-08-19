@@ -72,10 +72,16 @@ function PersonIcon({ active }) {
 
 export default function FooterNav() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, userDoc } = useAuth();
 
+  // ネイティブ発のアカウントはprofileが常にランダムID(uid=profileIDでは
+  // ない)なので、users.nowprofileから実在するプロフィールへのパスを組み立てる。
+  // userDoc読み込み中はuid=profileIDにフォールバック(web発アカウントの
+  // デフォルトprofileはこの形なので多くの場合はそのまま機能する)
   const profileHref = user
-    ? `/users/${user.uid}/profile/${user.uid}`
+    ? userDoc?.nowprofile
+      ? `/users/${userDoc.nowprofile.parent.parent.id}/profile/${userDoc.nowprofile.id}`
+      : `/users/${user.uid}/profile/${user.uid}`
     : "/login";
 
   const chatHref = user ? "/chat" : "/login";
