@@ -516,7 +516,7 @@ export default async function PostPage({ params }) {
   >
     <div
       style={{
-        maxWidth: "720px",
+        maxWidth: "960px",
         margin: "0 auto",
         padding: "0 1.4rem",
         textAlign: "left",

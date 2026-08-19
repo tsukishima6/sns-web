@@ -248,10 +248,11 @@ try {
       <div
         style={{
           fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
-          maxWidth: "720px",
+          maxWidth: "960px",
+          margin: "0 auto",
           paddingTop: "7.4rem",
-          paddingLeft: "0rem",
-          paddingRight: "0rem",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
           paddingBottom: "2.5rem",
         }}
       >
@@ -313,7 +314,7 @@ try {
       {/* 中身はいつもの幅に戻す */}
       <div
         style={{
-          maxWidth: "720px",
+          maxWidth: "960px",
           margin: "0 auto",
           padding: "0 1rem",
           display: "flex",
@@ -581,7 +582,7 @@ try {
     {/* 中身はいつもの幅 */}
     <div
       style={{
-        maxWidth: "720px",
+        maxWidth: "960px",
         margin: "0 auto",
         padding: "0 1.4rem",
         textAlign: "left",

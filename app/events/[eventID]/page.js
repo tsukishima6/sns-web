@@ -43,7 +43,7 @@ export default async function EventDetailPage({ params }) {
   const snap = await getDoc(doc(db, "events", eventID));
   if (!snap.exists()) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
+      <div className="max-w-[960px] mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
         イベントが見つかりません
       </div>
     );
@@ -66,7 +66,7 @@ export default async function EventDetailPage({ params }) {
   const photos = [ev.event_photo, ev.event_photo2, ev.event_photo3, ev.event_photo4].filter(Boolean);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[960px] mx-auto">
       {/* ヘッダー画像 */}
       <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
         <img

@@ -44,7 +44,7 @@ export default async function KaiwaiListPage() {
   return (
     <div
       style={{
-        maxWidth: "720px",
+        maxWidth: "960px",
         margin: "0 auto",
         padding: "1.5rem 1rem 3rem",
         fontFamily: "'Noto Sans JP', 'Urbanist', sans-serif",

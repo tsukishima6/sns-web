@@ -170,7 +170,7 @@ export default function FeedPage() {
 
   if (posts.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+      <div className="max-w-[960px] mx-auto px-4 py-16 text-center">
         <p className="text-gray-500 dark:text-[var(--fg-secondary)] text-sm mb-4">
           フィードに表示する投稿がありません。
         </p>
@@ -182,7 +182,7 @@ export default function FeedPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[960px] mx-auto">
       <div>
         {posts.map((post) => (
           <PostCard key={`${post.userID}-${post.id}`} post={post} />

@@ -111,7 +111,7 @@ export default async function NewsDetailPage({ params }) {
     <>
       <PageHeader kaiwaiName={kaiwaiName} kaiwaiID={kaiwaiID} />
 
-      <div style={{ maxWidth: "720px", margin: "0 auto", padding: "120px 1rem 2.5rem" }}>
+      <div style={{ maxWidth: "960px", margin: "0 auto", padding: "120px 1rem 2.5rem" }}>
         <div
           style={{
             borderBottom: "1px solid var(--border-subtle)",

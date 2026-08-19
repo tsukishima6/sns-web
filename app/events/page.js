@@ -76,7 +76,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-5">
+    <div className="max-w-[960px] mx-auto px-4 py-5">
       <h1
         className="text-lg font-medium text-gray-800 dark:text-[var(--fg-primary)] mb-5"
         style={{ fontFamily: "'Urbanist', sans-serif" }}

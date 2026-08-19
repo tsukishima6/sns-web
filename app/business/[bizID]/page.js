@@ -32,7 +32,7 @@ export default async function BusinessDetailPage({ params }) {
   const snap = await getDoc(doc(db, "business", bizID));
   if (!snap.exists()) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
+      <div className="max-w-[960px] mx-auto px-4 py-10 text-center text-gray-400 dark:text-[var(--fg-muted)]">
         ビジネス情報が見つかりません
       </div>
     );
@@ -144,7 +144,7 @@ export default async function BusinessDetailPage({ params }) {
   ].filter((s) => s.url);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[960px] mx-auto">
       {/* カバー画像 */}
       {photos[0] && (
         <div className="relative w-full" style={{ aspectRatio: "16/9" }}>

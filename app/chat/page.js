@@ -106,7 +106,7 @@ export default function ChatListPage() {
   if (!user) return null;
 
   return (
-    <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+    <div style={{ maxWidth: "960px", margin: "0 auto" }}>
       <h1
         style={{
           fontSize: "1.1rem",

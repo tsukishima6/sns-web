@@ -21,7 +21,7 @@ export default function ExplorePage() {
   const [tab, setTab] = useState("user"); // "user" | "kaiwai"
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[960px] mx-auto">
       {/* タブバー */}
       <div className="flex border-b border-gray-100 dark:border-[var(--border-subtle)] sticky top-14 bg-white dark:bg-[var(--surface)] z-10">
         {[

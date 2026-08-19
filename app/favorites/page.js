@@ -153,7 +153,7 @@ export default function FavoritesPage() {
   if (!user) return null;
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-[960px] mx-auto">
       <div className="px-4 py-4 border-b border-gray-100 dark:border-[var(--border-subtle)]">
         <h1
           className="text-base font-medium text-gray-800 dark:text-[var(--fg-primary)]"

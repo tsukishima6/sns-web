@@ -86,7 +86,7 @@ export default async function CategoryPage({ params }) {
       <div
         style={{
           fontFamily: "'Noto Sans JP', 'Urbanist', sans-serif",
-          maxWidth: "720px",
+          maxWidth: "960px",
           margin: "0 auto",
           paddingTop: "7.4rem",
           padding: "7.4rem 1rem 3rem",
