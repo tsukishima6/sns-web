@@ -13,7 +13,7 @@ import { db } from "../../../../lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
-import KaiwaiWordCloud from "../../../components/wordcloud";
+import WordCloudSphere from "../../../components/WordCloudSphere";
 import CommentSection from "../../../components/CommentSection";
 import LikeButton from "../../../components/LikeButton";
 import FavoriteButton from "../../../components/FavoriteButton";
@@ -549,8 +549,9 @@ export default async function PostPage({ params }) {
     </div>
   </div>
 </div>
-<div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
-  <KaiwaiWordCloud />
+{/* トップページのMVと同じフィボナッチ球ワードクラウドを背景として設置 */}
+<div style={{ position: "relative", height: "320px", overflow: "hidden" }}>
+  <WordCloudSphere />
 </div>
 
     </>

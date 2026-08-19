@@ -8,6 +8,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
+import { fetchOgImage } from "../../../../lib/fetchOgImage";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
 
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }) {
   const news = newsSnap.data();
   const title = news.title || "KAIWAI ニュース";
   const description = news.description || news.sitename || "";
-  const ogImage = news.img || fallbackOGP;
+  const ogImage = news.img || (news.url ? await fetchOgImage(news.url) : null) || fallbackOGP;
 
   // 引用投稿(picks)が付いていれば独自コンテンツとしての厚みがあるとみなす。
   // orderByを付けているのは本文側のpicksクエリと全く同じクエリ形にして、
@@ -67,6 +68,9 @@ export default async function NewsDetailPage({ params }) {
 
   const news = newsSnap.data();
   const kaiwaiName = kaiwaiSnap.exists() ? kaiwaiSnap.data().name || "" : "";
+  if (!news.img && news.url) {
+    news.img = (await fetchOgImage(news.url)) || "";
+  }
 
   const formatTime = (timestamp) => {
     if (!timestamp) return "";

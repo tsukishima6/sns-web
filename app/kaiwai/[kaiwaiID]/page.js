@@ -11,9 +11,10 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
+import { fetchOgImage } from "../../../lib/fetchOgImage";
 import Image from "next/image";
 import Link from "next/link";
-import KaiwaiWordCloud from "../../components/wordcloud";
+import WordCloudSphere from "../../components/WordCloudSphere";
 import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
 import PageHeader from "../../components/PageHeader";
 import KaiwaiEditLink from "../../components/KaiwaiEditLink";
@@ -159,10 +160,15 @@ try {
     )
   );
 
-  newsList = newsSnap.docs.map((d) => ({
-    id: d.id,
-    ...d.data(),
-  }));
+  // Google News RSS由来のニュースはimgフィールドが空のことが多いため、
+  // 無ければリンク先からog:imageを動的に取得する(最大5件なので同時実行のまま)
+  newsList = await Promise.all(
+    newsSnap.docs.map(async (d) => {
+      const data = d.data();
+      const img = data.img || (data.url ? (await fetchOgImage(data.url)) || "" : "");
+      return { id: d.id, ...data, img };
+    })
+  );
 } catch (err) {
   console.error("news fetch error:", err);
 }
@@ -650,8 +656,9 @@ try {
   </div>
 </div>
 
-      <div style={{ marginTop: "0rem", marginBottom: "0rem" }}>
-        <KaiwaiWordCloud />
+      {/* トップページのMVと同じフィボナッチ球ワードクラウドを背景として設置 */}
+      <div style={{ position: "relative", height: "320px", overflow: "hidden" }}>
+        <WordCloudSphere />
       </div>
 
     </>
