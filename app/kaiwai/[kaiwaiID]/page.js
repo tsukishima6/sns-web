@@ -572,8 +572,8 @@ try {
     marginTop: "0.5rem",
     backgroundImage:
       "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundSize: "contain",
+    backgroundPosition: "right center",
     backgroundRepeat: "no-repeat",
   }}
 >
@@ -592,7 +592,7 @@ try {
         margin: "0 auto",
         padding: "0 1.4rem",
         textAlign: "left",
-        color: "#152635",
+        color: "var(--fg-primary)",
       }}
     >
       <p
@@ -602,7 +602,7 @@ try {
           lineHeight: "1.6",
           letterSpacing: "0.02em",
           fontFamily: "Noto Sans JP, Arial",
-          color: "#152635",
+          color: "var(--fg-primary)",
         }}
       >
         界隈の数だけ、snsがあっていい。
