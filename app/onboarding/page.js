@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
 import { joinKaiwai } from "@/lib/kaiwaiJoin";
+import { compressImageFile } from "@/lib/compressImage";
 
 const fallbackPhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -130,9 +131,10 @@ export default function OnboardingPage() {
       const profileRef = userDoc?.nowprofile || doc(db, "users", user.uid, "profile", user.uid);
       let photoURL = currentPhoto;
       if (imageFile) {
-        const ext = imageFile.name.split(".").pop();
+        const compressed = await compressImageFile(imageFile);
+        const ext = compressed.name.split(".").pop();
         const storageRef = ref(storage, `users/${user.uid}/profile_${Date.now()}.${ext}`);
-        await uploadBytes(storageRef, imageFile);
+        await uploadBytes(storageRef, compressed);
         photoURL = await getDownloadURL(storageRef);
       }
       await updateDoc(profileRef, { name: (name || "").trim() || "名無し", photo: photoURL });

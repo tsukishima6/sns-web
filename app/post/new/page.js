@@ -12,6 +12,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { compressImageFile } from "@/lib/compressImage";
 import Link from "next/link";
 
 export default function NewPostPage() {
@@ -173,7 +174,8 @@ function NewPostForm() {
 
       // 画像をStorageにアップロード
       const photoURLs = [];
-      for (const file of images) {
+      for (const rawFile of images) {
+        const file = await compressImageFile(rawFile);
         const ext = file.name.split(".").pop();
         const storageRef = ref(
           storage,

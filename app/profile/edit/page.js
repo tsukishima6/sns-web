@@ -17,6 +17,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { compressImageFile } from "@/lib/compressImage";
 import Link from "next/link";
 
 const fallbackPhoto =
@@ -154,9 +155,10 @@ export default function ProfileEditPage() {
 
       let photoURL = currentPhoto;
       if (imageFile) {
-        const ext = imageFile.name.split(".").pop();
+        const compressed = await compressImageFile(imageFile);
+        const ext = compressed.name.split(".").pop();
         const storageRef = ref(storage, `users/${user.uid}/profile_${Date.now()}.${ext}`);
-        await uploadBytes(storageRef, imageFile);
+        await uploadBytes(storageRef, compressed);
         photoURL = await getDownloadURL(storageRef);
       }
 
