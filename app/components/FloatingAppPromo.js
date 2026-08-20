@@ -1,43 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FloatingAppPromo() {
   const [open, setOpen] = useState(false);
-  const modelRef = useRef(null);
-
-  // model-viewer はブラウザ専用のカスタム要素なのでクライアント側でのみ読み込む
-  useEffect(() => {
-    import("@google/model-viewer");
-  }, []);
-
-  // スクロール量に応じて自転させる。CSSのrotate3dでDOM要素そのものを回すと
-  // （WebGLの描画結果を1枚の画像として回転させることになるため）90°付近で
-  // 真横から見た状態になり紙のように薄く見えてしまう。model-viewerのcameraOrbit
-  // で3Dカメラ自体をモデルの周りで回すと、常に立体として見える。
-  // スニーカーは全方向に厚みがあるモデルなので、そのままフルスピンして良い
-  useEffect(() => {
-    let ticking = false;
-    function updateOrbit() {
-      const azimuth = window.scrollY * 0.5;
-      const polar = 65 + Math.sin(window.scrollY * 0.006) * 25;
-      const el = modelRef.current;
-      if (el) {
-        el.cameraOrbit = `${azimuth}deg ${polar}deg 105%`;
-      }
-      ticking = false;
-    }
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(updateOrbit);
-        ticking = true;
-      }
-    }
-    updateOrbit();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <>
@@ -45,6 +13,10 @@ export default function FloatingAppPromo() {
         @keyframes floatSpin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
+        }
+        @keyframes floatBob {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+          50% { transform: translate(-50%, -50%) translateY(-6px); }
         }
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -61,31 +33,28 @@ export default function FloatingAppPromo() {
           width: "130px",
           height: "130px",
           cursor: "pointer",
-          perspective: "400px",
         }}
       >
-        {/* 中央: 3Dモデル（テキストより奥） */}
-        {/* eslint-disable-next-line react/no-unknown-property */}
-        <model-viewer
-          ref={modelRef}
-          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/sneaker.glb?alt=media&token=05b056e7-24ad-4419-bc4a-78ab0432bd52"
-          disable-zoom
-          interaction-prompt="none"
+        {/* 中央: ロゴ（テキストより奥）。以前は3Dスニーカーモデル(model-viewer)
+            だったが、パフォーマンス実測でLCP/TBTを大きく悪化させていたため撤去 */}
+        <Image
+          src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
+          alt="KAIWAI"
+          width={72}
+          height={72}
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "104px",
-            height: "104px",
             zIndex: 1,
             pointerEvents: "none",
-            "--poster-color": "transparent",
-            backgroundColor: "transparent",
+            objectFit: "contain",
+            animation: "floatBob 3s ease-in-out infinite",
           }}
         />
 
-        {/* 回転テキスト（3Dモデルより手前） */}
+        {/* 回転テキスト（ロゴより手前） */}
         <svg
           viewBox="0 0 130 130"
           style={{
