@@ -97,7 +97,7 @@ export default async function CategoryPage({ params }) {
             fontSize: "1.6rem",
             fontWeight: 600,
             margin: "0 0 0.3rem",
-            fontFamily: "'Urbanist','Montserrat',sans-serif",
+            fontFamily: "'Urbanist',sans-serif",
             background: "linear-gradient(135deg, #152635, #8fa8a7)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",

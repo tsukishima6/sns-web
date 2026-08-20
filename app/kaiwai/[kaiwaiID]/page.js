@@ -296,7 +296,7 @@ try {
     margin: 0,
     padding: "0.2rem 0 0.3rem",
     marginLeft: "2.2rem",
-    fontFamily: "'Urbanist','Montserrat',sans-serif",
+    fontFamily: "'Urbanist',sans-serif",
 
     background: "linear-gradient(135deg, #96acaa, #a7bebc)",
     WebkitBackgroundClip: "text",
@@ -343,7 +343,7 @@ try {
               overflow: "hidden",
               textDecoration: "none",
               color: "var(--fg-primary)",
-              fontFamily: "'Urbanist','Montserrat',sans-serif",
+              fontFamily: "'Urbanist',sans-serif",
               position: "relative",
               display: "flex",
               flexDirection: "column",
@@ -423,7 +423,7 @@ try {
     fontWeight: 600,
     margin: "1.8rem 0 0.6rem",
     marginLeft: "1.0rem",
-    fontFamily: "'Urbanist','Montserrat',sans-serif",
+    fontFamily: "'Urbanist',sans-serif",
   }}
 >
   posts
@@ -620,7 +620,7 @@ try {
           margin: "0.4rem 0 1.1rem",
           fontSize: "2.5rem",
           fontWeight: 700,
-          fontFamily: "'Urbanist','Montserrat',sans-serif",
+          fontFamily: "'Urbanist',sans-serif",
           background: "linear-gradient(135deg, #152635, #8fa8a7)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",

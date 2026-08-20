@@ -374,7 +374,7 @@ export default async function PostPage({ params }) {
       marginTop: "0.5rem",
       fontSize: "1rem",
       color: "var(--fg-muted)",
-      fontFamily: "'Urbanist','Montserrat',sans-serif",
+      fontFamily: "'Urbanist',sans-serif",
       textAlign: "right",   // ← 追加
       marginRight: "2.4rem",
 
@@ -503,7 +503,7 @@ export default async function PostPage({ params }) {
                   fontSize: "1rem",
                   color: "var(--fg-muted)",
                   textAlign: "right",
-                  fontFamily: "'Urbanist','Montserrat',sans-serif",
+                  fontFamily: "'Urbanist',sans-serif",
                   marginRight: "2.4rem",
                 }}
               >
@@ -555,7 +555,7 @@ export default async function PostPage({ params }) {
           margin: "0.4rem 0 1.1rem",
           fontSize: "2.5rem",
           fontWeight: 700,
-          fontFamily: "'Urbanist','Montserrat',sans-serif",
+          fontFamily: "'Urbanist',sans-serif",
           background: "linear-gradient(135deg, #152635, #8fa8a7)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",

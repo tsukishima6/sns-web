@@ -319,7 +319,7 @@ export default async function ProfilePage({ params }) {
           margin: "0.4rem 0 1.1rem",
           fontSize: "2.5rem",
           fontWeight: 700,
-          fontFamily: "'Urbanist','Montserrat',sans-serif",
+          fontFamily: "'Urbanist',sans-serif",
           background: "linear-gradient(135deg, #152635, #8fa8a7)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",

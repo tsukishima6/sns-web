@@ -1,9 +1,6 @@
 import {
   Urbanist,
-  Montserrat,
   Shippori_Mincho,
-  Geist,
-  Geist_Mono,
   Zen_Antique,
   Klee_One,
   Noto_Sans_JP, // ← 追加！
@@ -15,26 +12,10 @@ import Providers from "./providers";
 import { ThemeProvider } from "@/lib/ThemeContext";
 
 // 各フォントの設定
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-urbanist",
-});
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-montserrat",
 });
 
 const shipporiMincho = Shippori_Mincho({
@@ -97,10 +78,7 @@ export default function RootLayout({ children }) {
     <html lang="ja">
       <body
         className={`
-          ${geistSans.variable}
-          ${geistMono.variable}
           ${urbanist.variable}
-          ${montserrat.variable}
           ${shipporiMincho.variable}
           ${zenAntique.variable}
           ${kleeOne.variable}

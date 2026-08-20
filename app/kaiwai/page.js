@@ -55,7 +55,7 @@ export default async function KaiwaiListPage() {
           fontSize: "1.5rem",
           fontWeight: 600,
           marginBottom: "0.3rem",
-          fontFamily: "'Urbanist', 'Montserrat', sans-serif",
+          fontFamily: "'Urbanist', sans-serif",
           background: "linear-gradient(135deg, #152635, #8fa8a7)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",

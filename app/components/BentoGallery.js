@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
 import app from "../../lib/firebase";
 
 export default function BentoGallery() {
@@ -116,6 +117,7 @@ function BentoItem({ url, onClick }) {
     <div
       onClick={onClick}
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
         borderRadius: "13px",
@@ -126,12 +128,12 @@ function BentoItem({ url, onClick }) {
       onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
       onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
-      <img
+      <Image
         src={url}
         alt=""
+        fill
+        sizes="(max-width: 1000px) 33vw, 333px"
         style={{
-          width: "100%",
-          height: "100%",
           objectFit: "cover",
           filter: "grayscale(100%)", // モノクロ化
           transition: "filter 0.3s ease",

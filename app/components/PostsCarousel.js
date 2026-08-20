@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -92,9 +93,11 @@ export default function PostsCarousel({ posts }) {
               >
                 {post.profile && (
                   <div style={{ display: "flex", alignItems: "center", marginBottom: "0.6rem" }}>
-                    <img
+                    <Image
                       src={post.profile.photo || fallbackProfilePhoto}
                       alt={post.profile.name || "ユーザー"}
+                      width={48}
+                      height={48}
                       style={{
                         width: "48px",
                         height: "48px",
@@ -126,10 +129,13 @@ export default function PostsCarousel({ posts }) {
                 </h4>
 
                 {post.postPhoto && (
-                  <img
+                  <Image
                     src={post.postPhoto}
                     alt="投稿画像"
-                    style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
+                    width={580}
+                    height={326}
+                    sizes="290px"
+                    style={{ width: "100%", height: "auto", borderRadius: "8px", marginBottom: "1rem" }}
                   />
                 )}
 

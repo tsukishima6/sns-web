@@ -23,7 +23,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          fontFamily: "'Urbanist','Montserrat',sans-serif",
+          fontFamily: "'Urbanist',sans-serif",
         }}
       >
         {/* ロゴ */}
@@ -48,7 +48,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
               gap: 0,
               margin: 0,
               marginLeft: "1rem",
-              fontFamily: "'Urbanist','Montserrat',sans-serif",
+              fontFamily: "'Urbanist',sans-serif",
             }}
           >
             <span
