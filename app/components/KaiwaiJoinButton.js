@@ -104,7 +104,7 @@ export default function KaiwaiJoinButton({ kaiwaiID, kaiwaiName }) {
 
   if (status === "main") {
     return (
-      <div style={{ textAlign: "center", marginTop: "0.6rem" }}>
+      <div style={{ textAlign: "center", marginTop: "0.6rem", marginBottom: "12px" }}>
         <span
           style={{
             fontSize: "0.85rem",
@@ -119,7 +119,7 @@ export default function KaiwaiJoinButton({ kaiwaiID, kaiwaiName }) {
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "0.6rem" }}>
+    <div style={{ textAlign: "center", marginTop: "0.6rem", marginBottom: "12px" }}>
       {error && (
         <p style={{ fontSize: "0.8rem", color: "#e04b4b", marginBottom: "0.4rem" }}>{error}</p>
       )}

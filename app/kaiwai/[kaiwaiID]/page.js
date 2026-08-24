@@ -27,6 +27,19 @@ const fallbackProfilePhoto =
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
+// フィボナッチ球の上にテキストを重ねる箇所で使う: 文字の周囲だけを白背景にして可読性を上げる。
+// box-decoration-break:cloneで折り返し行ごとに背景を分割することで、テキストの矩形全体ではなく
+// 行の文字幅にぴったり沿ったハイライトになる。
+// backdrop-filterは box-decoration-break:clone で行ごとに分割されず、Chromeでは複数行の
+// バウンディングボックス全体にまとめてブラーがかかってしまう(段落全体を覆う意図しないブラーになる)ため使わない
+const textOnBgHighlightStyle = {
+  background: "rgba(255, 255, 255, 0.78)",
+  boxDecorationBreak: "clone",
+  WebkitBoxDecorationBreak: "clone",
+  padding: "2px",
+  borderRadius: "4px",
+};
+
 // ISRでキャッシュさせる（毎リクエストFirestore叩く no-store状態を解消し、TTFBとクロール効率を改善）
 export const revalidate = 1800;
 
@@ -311,48 +324,49 @@ try {
 {/* 🔹 kaiwai news */}
 {newsList.length > 0 && (
   <>
-    {/* 見出し（帯と隙間なし） */}
-    <h2
-  style={{
-    fontSize: "1.2rem",
-    fontWeight: 600,
-    margin: 0,
-    padding: "0.2rem 0 0.3rem",
-    marginLeft: "2.2rem",
-    fontFamily: "'Urbanist',sans-serif",
-
-    background: "linear-gradient(135deg, #96acaa, #a7bebc)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  }}
->
-  {kaiwai.name}界隈<span style={{ fontFamily: "'Urbanist', sans-serif" }}>news</span>
-</h2>
-
-
-
-    {/* 横幅いっぱいの帯 */}
+    {/* 横幅いっぱいの帯（見出しも中に内包） */}
     <div
       style={{
         width: "100vw",
         marginLeft: "calc(50% - 50vw)",
-        backgroundImage: "url(/news.jpg)",
+        marginTop: "10px",
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url(/news.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "1.5rem 0 1.8rem",
       }}
     >
-      {/* 中身はいつもの幅に戻す */}
+      {/* 中身はいつもの幅に戻す（見出しも同じ列に内包し、投稿一覧の左端と揃える） */}
       <div
         style={{
           maxWidth: "960px",
           margin: "0 auto",
           padding: "0 1rem",
-          display: "flex",
-          gap: "1.5rem",
-          overflowX: "auto",
         }}
       >
+        {/* 見出し */}
+        <h2
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: 600,
+            margin: 0,
+            padding: "0.2rem 0 0.3rem",
+            marginLeft: "32px",
+            fontFamily: "'Urbanist',sans-serif",
+            color: "#fff",
+          }}
+        >
+          {kaiwai.name}界隈<span style={{ fontFamily: "'Urbanist', sans-serif" }}>news</span>
+        </h2>
+
+        {/* カード横スクロール行 */}
+        <div
+          style={{
+            display: "flex",
+            gap: "1.5rem",
+            overflowX: "auto",
+          }}
+        >
         {newsList.map((n) => {
           const title =
             n.title && n.title.length > 40 ? `${n.title.slice(0, 40)}…` : n.title;
@@ -422,6 +436,7 @@ try {
           </Link>
           );
         })}
+        </div>
       </div>
     </div>
   </>
@@ -448,14 +463,17 @@ try {
         )}
 <h2
   style={{
-    fontSize: "1.6rem",
+    fontSize: "1.2rem",
     fontWeight: 600,
     margin: "1.8rem 0 0.6rem",
     marginLeft: "1.0rem",
     fontFamily: "'Urbanist',sans-serif",
+    background: "linear-gradient(135deg, #152635, #8fa8a7)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   }}
 >
-  posts
+  {kaiwai.name}界隈のposts
 </h2>
 
         {/* 投稿リスト */}
@@ -479,7 +497,6 @@ try {
     borderBottom: "1px solid var(--border-subtle)",
     backgroundColor: "transparent",
     fontFamily: "Arial, sans-serif",
-    position: "relative",
     width: "100%",
   }}
 >
@@ -579,9 +596,11 @@ try {
                   {post.timePosted && (
                     <span
                       style={{
-                        position: "absolute",
-                        right: "1.2rem",
-                        bottom: "0.8rem",
+                        display: "block",
+                        textAlign: "right",
+                        marginTop: "18px",
+                        marginLeft: "1.0rem",
+                        marginRight: "1.2rem",
                         fontSize: "1.0rem",
                         color: "var(--fg-muted)",
                         fontFamily: "Urbanist",
@@ -606,28 +625,32 @@ try {
           )}
         </div>
       </div>
-{/* 🔻 posts 下のブランド紹介セクション */}
+{/* 🔻 posts 下のブランド紹介セクション（背景にフィボナッチ球ワードクラウド） */}
 <div
   style={{
     width: "100vw",
     marginLeft: "calc(50% - 50vw)",
     marginTop: "0.5rem",
-    backgroundImage:
-      "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
-    backgroundSize: "contain",
-    backgroundPosition: "right center",
-    backgroundRepeat: "no-repeat",
+    position: "relative",
+    // フィボナッチ球の半径190px(WordCloudSphere.js)+ラベル文字分の余白を確保しないと
+    // 上下の点(極付近)がoverflow:hiddenで切れる
+    height: "400px",
+    overflow: "hidden",
   }}
 >
+  {/* 背景: フィボナッチ球（PC/スマホ共通） */}
+  <WordCloudSphere />
+
   {/* うっすら読みやすくするオーバーレイ */}
   <div
     style={{
+      position: "relative",
       backdropFilter: "blur(0px)",
       WebkitBackdropFilter: "blur(0px)",
       padding: "2.2rem 0",
     }}
   >
-    {/* 中身はいつもの幅 */}
+    {/* 中身はいつもの幅（画像の右端をメインカラムの右端に揃える） */}
     <div
       style={{
         maxWidth: "960px",
@@ -635,6 +658,11 @@ try {
         padding: "0 1.4rem",
         textAlign: "left",
         color: "var(--fg-primary)",
+        backgroundImage:
+          "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
+        backgroundSize: "contain",
+        backgroundPosition: "right center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <p
@@ -675,8 +703,10 @@ try {
           whiteSpace: "pre-line",
         }}
       >
-        趣味、地域、職種、悩み・・
-        {"\n"}各界隈のユーザーが集う国産SNS。
+        <span style={textOnBgHighlightStyle}>
+          趣味、地域、職種、悩み・・
+          {"\n"}各界隈のユーザーが集う国産SNS。
+        </span>
       </p>
 
       <p
@@ -689,19 +719,16 @@ try {
           whiteSpace: "pre-line",
         }}
       >
-        {kaiwai.name}だけではありません。
-        {"\n"}界隈は自由に追加・切り替え。
-        {"\n"}ご自身で界隈を立ち上げ、
+        <span style={textOnBgHighlightStyle}>
+          {kaiwai.name}だけではありません。
+          {"\n"}界隈は自由に追加・切り替え。
+          {"\n"}ご自身で界隈を立ち上げ、
 　　　　　{"\n"}メンバーを募ることも。
+        </span>
       </p>
     </div>
   </div>
 </div>
-
-      {/* トップページのMVと同じフィボナッチ球ワードクラウドを背景として設置 */}
-      <div style={{ position: "relative", height: "320px", overflow: "hidden" }}>
-        <WordCloudSphere />
-      </div>
 
     </>
   );

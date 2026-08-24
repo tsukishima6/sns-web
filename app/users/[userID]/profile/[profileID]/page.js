@@ -12,6 +12,19 @@ const fallbackProfilePhoto =
 const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
+// フィボナッチ球の上にテキストを重ねる箇所で使う: 文字の周囲だけを白背景にして可読性を上げる。
+// box-decoration-break:cloneで折り返し行ごとに背景を分割することで、テキストの矩形全体ではなく
+// 行の文字幅にぴったり沿ったハイライトになる。
+// backdrop-filterは box-decoration-break:clone で行ごとに分割されず、Chromeでは複数行の
+// バウンディングボックス全体にまとめてブラーがかかってしまう(段落全体を覆う意図しないブラーになる)ため使わない
+const textOnBgHighlightStyle = {
+  background: "rgba(255, 255, 255, 0.78)",
+  boxDecorationBreak: "clone",
+  WebkitBoxDecorationBreak: "clone",
+  padding: "2px",
+  borderRadius: "4px",
+};
+
 // 日付フォーマット関数
 function formatDate(timestamp) {
   if (!timestamp) return "";
@@ -282,21 +295,25 @@ export default async function ProfilePage({ params }) {
         ))}
       </div>
 
-{/* 🔻 ブランド紹介セクション */}
+{/* 🔻 ブランド紹介セクション（背景にフィボナッチ球ワードクラウド） */}
 <div
   style={{
     width: "100vw",
     marginLeft: "calc(50% - 50vw)",
     marginTop: "0.5rem",
-    backgroundImage:
-      "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
-    backgroundSize: "contain",
-    backgroundPosition: "right center",
-    backgroundRepeat: "no-repeat",
+    position: "relative",
+    // フィボナッチ球の半径190px(WordCloudSphere.js)+ラベル文字分の余白を確保しないと
+    // 上下の点(極付近)がoverflow:hiddenで切れる
+    height: "400px",
+    overflow: "hidden",
   }}
 >
+  {/* 背景: フィボナッチ球（PC/スマホ共通） */}
+  <WordCloudSphere />
+
   <div
     style={{
+      position: "relative",
       backdropFilter: "blur(0px)",
       WebkitBackdropFilter: "blur(0px)",
       padding: "2.2rem 0",
@@ -309,6 +326,11 @@ export default async function ProfilePage({ params }) {
         padding: "0 1.4rem",
         textAlign: "left",
         color: "var(--fg-primary)",
+        backgroundImage:
+          "url(https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_back.png?alt=media&token=e9b9293d-2a97-4b14-b4ee-c9b285e38372)",
+        backgroundSize: "contain",
+        backgroundPosition: "right center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <p style={{ margin: 0, fontSize: "1.0rem", lineHeight: "1.6", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", color: "var(--fg-primary)" }}>
@@ -329,17 +351,17 @@ export default async function ProfilePage({ params }) {
         kaiwai
       </h2>
       <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
-        趣味、地域、職種、悩み・・{"\n"}各界隈のユーザーが集う国産SNS。
+        <span style={textOnBgHighlightStyle}>
+          趣味、地域、職種、悩み・・{"\n"}各界隈のユーザーが集う国産SNS。
+        </span>
       </p>
       <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
-        {kaiwaiName}だけではありません。{"\n"}界隈は自由に追加・切り替え。{"\n"}ご自身で界隈を立ち上げ、{"\n"}メンバーを募ることも。
+        <span style={textOnBgHighlightStyle}>
+          {kaiwaiName}だけではありません。{"\n"}界隈は自由に追加・切り替え。{"\n"}ご自身で界隈を立ち上げ、{"\n"}メンバーを募ることも。
+        </span>
       </p>
     </div>
   </div>
-</div>
-{/* トップページのMVと同じフィボナッチ球ワードクラウドを背景として設置 */}
-<div style={{ position: "relative", height: "320px", overflow: "hidden" }}>
-  <WordCloudSphere />
 </div>
 
     </>
