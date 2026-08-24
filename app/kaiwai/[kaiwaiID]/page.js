@@ -61,6 +61,19 @@ async function mapWithConcurrency(items, concurrency, fn) {
   return results;
 }
 
+// generateMetadataとJSON-LD(WebPageのdescription)で同じ文言を使うための共通ロジック。
+// 別々に書くと表記がずれる(以前はJSON-LD側だけkaiwai.descriptionの生値を使っていた)
+function buildKaiwaiDescription(kaiwai) {
+  const cleanedDescription = (kaiwai.description || "")
+    .replace(/\s+/g, " ") // 改行・余分な空白除去
+    .trim()
+    .slice(0, 140); // 約140文字でカット（安全圏）
+
+  return cleanedDescription.length > 0
+    ? `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。${cleanedDescription}`
+    : `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。`;
+}
+
 // --- generateMetadata（SEO強化版）---
 export async function generateMetadata({ params }) {
   const { kaiwaiID } = params;
@@ -88,16 +101,7 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    // 🔹 description整形（改行除去 + 文字数調整）
-    const cleanedDescription = (kaiwai.description || "")
-      .replace(/\s+/g, " ")  // 改行・余分な空白除去
-      .trim()
-      .slice(0, 140);        // 約140文字でカット（安全圏）
-
-    const finalDescription =
-      cleanedDescription.length > 0
-        ? `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。${cleanedDescription}`
-        : `${kaiwai.name}界隈のSNS「kaiwai」。${kaiwai.name}好きが集まり、投稿・交流できます。`;
+    const finalDescription = buildKaiwaiDescription(kaiwai);
 
     return {
       title: `${kaiwai.name}界隈のSNS｜kaiwai`,
@@ -158,6 +162,51 @@ export default async function KaiwaiPage({ params }) {
       }
     } catch (err) {
       console.error("parent fetch error:", err);
+    }
+  }
+
+  // 🔹 タグ一覧取得（kaiwai固有・準静的な語彙。posts/newsと違い投稿のたび変わらない）
+  // orderByをFirestoreクエリに持たせると`amount`フィールドが無いドキュメントが結果から
+  // 丸ごと消える(explore一覧の`orderBy("number")`と同じ既知の罠)ため、全件取得してJS側でソートする
+  let tags = [];
+  try {
+    const tagsSnap = await getDocs(collection(db, "kaiwai", kaiwaiID, "category"));
+    tags = tagsSnap.docs
+      .map((d) => ({ id: d.id, name: d.data().category_name || "", amount: d.data().amount || 0 }))
+      .filter((t) => t.name)
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 10);
+  } catch (err) {
+    console.error("tags fetch error:", err);
+  }
+
+  // 🔹 子kaiwai取得（自分がoya=trueの場合のサブkaiwai一覧）
+  let childKaiwaiList = [];
+  if (kaiwai.oya === true) {
+    try {
+      const childSnap = await getDocs(
+        query(collection(db, "kaiwai"), where("parent", "==", kaiwaiRef))
+      );
+      childKaiwaiList = childSnap.docs
+        .filter((d) => d.data().noindex !== true)
+        .map((d) => ({ id: d.id, name: d.data().name || "" }));
+    } catch (err) {
+      console.error("child kaiwai fetch error:", err);
+    }
+  }
+
+  // 🔹 兄弟kaiwai取得（親kaiwaiが同じで自分以外の子kaiwai）
+  let siblingKaiwaiList = [];
+  if (kaiwai.parent) {
+    try {
+      const siblingSnap = await getDocs(
+        query(collection(db, "kaiwai"), where("parent", "==", kaiwai.parent))
+      );
+      siblingKaiwaiList = siblingSnap.docs
+        .filter((d) => d.id !== kaiwaiID && d.data().noindex !== true)
+        .map((d) => ({ id: d.id, name: d.data().name || "" }));
+    } catch (err) {
+      console.error("sibling kaiwai fetch error:", err);
     }
   }
 
@@ -275,8 +324,26 @@ try {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": `${kaiwai.name}界隈のSNS｜kaiwai`,
-    "description": kaiwai.description || `${kaiwai.name}界隈のSNS「kaiwai」`,
+    "description": buildKaiwaiDescription(kaiwai),
     "url": `https://kaiwai.vercel.app/kaiwai/${kaiwaiID}`,
+    "dateModified": kaiwai.last_joined_at
+      ? new Date(kaiwai.last_joined_at.seconds * 1000).toISOString()
+      : undefined,
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "kaiwai", "item": "https://kaiwai.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "界隈を探す", "item": "https://kaiwai.vercel.app/explore" },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": `${kaiwai.name}界隈`,
+        "item": `https://kaiwai.vercel.app/kaiwai/${kaiwaiID}`,
+      },
+    ],
   };
 
   return (
@@ -284,6 +351,10 @@ try {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <PageHeader kaiwaiName={kaiwai.name} kaiwaiID={kaiwaiID} />
 
@@ -299,6 +370,30 @@ try {
           paddingBottom: "2.5rem",
         }}
       >
+        <nav
+          aria-label="パンくずリスト"
+          style={{
+            fontSize: "0.75rem",
+            color: "var(--fg-muted)",
+            marginTop: "0",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            flexWrap: "wrap",
+            fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
+          }}
+        >
+          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+            kaiwai
+          </Link>
+          <span>›</span>
+          <Link href="/explore" style={{ color: "inherit", textDecoration: "none" }}>
+            界隈を探す
+          </Link>
+          <span>›</span>
+          <span style={{ color: "var(--fg-secondary)" }}>{kaiwai.name}界隈</span>
+        </nav>
+
         <h2
   style={{
     textAlign: "center",
@@ -321,6 +416,38 @@ try {
 <KaiwaiJoinButton kaiwaiID={kaiwaiID} kaiwaiName={kaiwai.name} />
 <KaiwaiEditLink kaiwaiID={kaiwaiID} />
 
+{/* 🔹 タグ一覧（kaiwai固有・準静的なコンテンツ） */}
+{tags.length > 0 && (
+  <div
+    style={{
+      marginTop: "1.2rem",
+      marginBottom: "0.4rem",
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "0.5rem",
+      justifyContent: "center",
+    }}
+  >
+    {tags.map((tag) => (
+      <Link
+        key={tag.id}
+        href={`/kaiwai/${kaiwaiID}/category/${tag.id}`}
+        style={{
+          fontSize: "0.8rem",
+          color: "var(--fg-secondary)",
+          backgroundColor: "var(--surface-muted)",
+          borderRadius: "999px",
+          padding: "0.3rem 0.8rem",
+          textDecoration: "none",
+          fontFamily: "'Urbanist', sans-serif",
+        }}
+      >
+        #{tag.name}
+      </Link>
+    ))}
+  </div>
+)}
+
 {/* 🔹 kaiwai news */}
 {newsList.length > 0 && (
   <>
@@ -329,7 +456,8 @@ try {
       style={{
         width: "100vw",
         marginLeft: "calc(50% - 50vw)",
-        marginTop: "10px",
+        marginTop: "24px",
+        marginBottom: "24px",
         backgroundImage: "linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url(/news.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -395,7 +523,9 @@ try {
             {n.img && (
               <img
                 src={n.img}
-                alt=""
+                alt={n.title || `${kaiwai.name}界隈のニュース`}
+                width={220}
+                height={120}
                 style={{
                   display: "block",
                   width: "100%",
@@ -458,9 +588,69 @@ try {
               textAlign: "center",
             }}
           >
-            {parentKaiwai.name}のサブkaiwaiです
+            <Link
+              href={`/kaiwai/${parentKaiwai.id}`}
+              style={{ color: "inherit", fontWeight: 600, textDecoration: "underline" }}
+            >
+              {parentKaiwai.name}
+            </Link>
+            のサブkaiwaiです
           </p>
         )}
+
+        {/* 🔹 サブkaiwai・関連kaiwai（内部リンクによる回遊性向上） */}
+        {childKaiwaiList.length > 0 && (
+          <div style={{ marginBottom: "1.4rem", marginLeft: "0.8rem", marginRight: "0.8rem" }}>
+            <p style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", marginBottom: "0.5rem", marginLeft: "8px" }}>
+              サブ界隈：
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+              {childKaiwaiList.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/kaiwai/${c.id}`}
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "var(--fg-primary)",
+                    backgroundColor: "var(--surface-muted)",
+                    borderRadius: "16px",
+                    padding: "0.4rem 0.9rem",
+                    textDecoration: "none",
+                  }}
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {siblingKaiwaiList.length > 0 && (
+          <div style={{ marginBottom: "1.4rem", marginLeft: "0.8rem", marginRight: "0.8rem" }}>
+            <p style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", marginBottom: "0.5rem" }}>
+              関連する界隈
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+              {siblingKaiwaiList.map((s) => (
+                <Link
+                  key={s.id}
+                  href={`/kaiwai/${s.id}`}
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "var(--fg-primary)",
+                    backgroundColor: "var(--surface-muted)",
+                    borderRadius: "16px",
+                    padding: "0.4rem 0.9rem",
+                    textDecoration: "none",
+                  }}
+                >
+                  {s.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
 <h2
   style={{
     fontSize: "1.2rem",
@@ -572,7 +762,11 @@ try {
                   {post.postPhoto && (
                     <img
                       src={post.postPhoto}
-                      alt="投稿画像"
+                      alt={
+                        post.postDescription
+                          ? post.postDescription.slice(0, 60)
+                          : `${kaiwai.name}界隈の投稿画像`
+                      }
                       style={{
                         width: "100%",
                         borderRadius: "8px",

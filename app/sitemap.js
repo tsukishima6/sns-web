@@ -13,12 +13,18 @@ export default async function sitemap() {
     const snap = await getDocs(collection(db, "kaiwai"));
     kaiwaiUrls = snap.docs
       .filter((doc) => doc.data().noindex !== true)
-      .map((doc) => ({
-        url: `${baseUrl}/kaiwai/${doc.id}`,
-        lastModified: new Date(),
-        changeFrequency: "daily",
-        priority: 0.8,
-      }));
+      .map((doc) => {
+        // last_joined_atはネイティブ側Cloud Function(onKaiwaiMemberJoined)が書き込む
+        // 「直近参加日時」。実際の更新シグナルが無いkaiwaiまで毎回new Date()を返すと
+        // クロール頻度の指標として機能しないため、あれば優先して使う
+        const lastJoinedAt = doc.data().last_joined_at;
+        return {
+          url: `${baseUrl}/kaiwai/${doc.id}`,
+          lastModified: lastJoinedAt ? lastJoinedAt.toDate() : new Date(),
+          changeFrequency: "daily",
+          priority: 0.8,
+        };
+      });
   } catch (e) {
     console.error("sitemap kaiwai fetch error:", e);
   }

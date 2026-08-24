@@ -62,10 +62,10 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
             >
               {kaiwaiID ? (
                 <>
-                  {kaiwaiName}<ruby style={{ rubyAlign: "center" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "var(--fg-secondary)", letterSpacing: "0.05em" }}>kaiwai</rt></ruby>
+                  {kaiwaiName}<ruby style={{ rubyAlign: "start" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "var(--fg-secondary)", letterSpacing: "0" }}>kaiwaiSNS</rt></ruby>
                 </>
               ) : (
-                "kaiwai"
+                "kaiwaiSNS"
               )}
             </span>
             <div
