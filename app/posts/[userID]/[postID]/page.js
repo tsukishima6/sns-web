@@ -305,10 +305,11 @@ export default async function PostPage({ params }) {
 
 
       {/* コンテンツ */}
-      <div style={{ paddingTop: "120px" }}>
+      <div style={{ paddingTop: "60px" }}>
         {/* メイン投稿カード */}
         <div
     style={{
+      maxWidth: "960px",
       margin: "0 auto",
       padding: "1.3rem 1rem" ,
       borderBottom: "1px solid var(--border-subtle)",
@@ -347,7 +348,7 @@ export default async function PostPage({ params }) {
       style={{
         fontSize: "1rem",
         fontWeight: "400",
-        marginBottom: post.postPhoto ? "1rem" : "1.6rem",
+        marginBottom: post.postPhoto ? "1rem" : "10px",
         color: "var(--fg-primary)",
         marginLeft: "0.2rem",
         marginRight: "1.2rem",
