@@ -10,6 +10,7 @@ import Script from "next/script";
 import FloatingAppPromo from "./components/FloatingAppPromo";
 import Providers from "./providers";
 import { ThemeProvider } from "@/lib/ThemeContext";
+import { AppPromoProvider } from "@/lib/AppPromoContext";
 
 // 各フォントの設定
 const urbanist = Urbanist({
@@ -99,12 +100,14 @@ export default function RootLayout({ children }) {
           }}
         />
         <ThemeProvider>
-          <Providers>
-            <main className="pb-16">
-              {children}
-            </main>
-            <FloatingAppPromo />
-          </Providers>
+          <AppPromoProvider>
+            <Providers>
+              <main className="pb-16">
+                {children}
+              </main>
+              <FloatingAppPromo />
+            </Providers>
+          </AppPromoProvider>
         </ThemeProvider>
 
         {/* Google Analytics */}

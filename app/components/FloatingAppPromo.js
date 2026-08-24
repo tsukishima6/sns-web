@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAppPromo } from "@/lib/AppPromoContext";
 
 export default function FloatingAppPromo() {
-  const [open, setOpen] = useState(false);
+  const { open, openAppPromo, closeAppPromo } = useAppPromo();
 
   return (
     <>
@@ -18,13 +18,13 @@ export default function FloatingAppPromo() {
           0%, 100% { transform: translate(-50%, -50%) translateY(0); }
           50% { transform: translate(-50%, -50%) translateY(-6px); }
         }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes slideUpPill {
+          from { opacity: 0; transform: translate(-50%, 30px); }
+          to   { opacity: 1; transform: translate(-50%, 0); }
         }
       `}</style>
       <div
-        onClick={() => setOpen(true)}
+        onClick={openAppPromo}
         style={{
           position: "fixed",
           bottom: "76px",
@@ -87,142 +87,166 @@ export default function FloatingAppPromo() {
         </svg>
       </div>
 
-      {/* ダイアログ */}
+      {/* ダイアログ: 各ボタンをbackdrop-filterで個別にブラーさせたい(オーバーレイ全体は
+          ブラーしない)場合、ボタンをposition:fixedの共通ラッパーに入れてはいけない。
+          position:fixed(sticky も同様)の祖先はz-indexの有無に関わらず必ず独自の
+          stacking contextを作り、それがbackdrop-rootの境界になって子のbackdrop-filterが
+          実ページを拾えなくなる(実機検証で確認、疑うなら祖先を1つずつposition:staticに
+          戻して切り分ける)。そのため4つのボタンをラッパー無しでそれぞれ直接
+          position:fixedにし、topを手計算で積み上げて縦に並べている */}
       {open && (
-        <div
-          onClick={() => setOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "transparent",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: "10vh",
-            zIndex: 2000,
-            isolation: "isolate",
-            transform: "translateZ(0)",
-          }}
-        >
+        <>
+          {/* 背景クリックで閉じる透明キャッチャー。ボタン側とDOM上の親子関係を持たない
+              (兄弟)ので、ボタンをクリックしてもここへは伝播せず閉じない */}
           <div
-            onClick={(e) => e.stopPropagation()}
+            onClick={closeAppPromo}
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "18px",
+              position: "fixed",
+              inset: 0,
+              width: "100vw",
+              height: "100vh",
+              backgroundColor: "transparent",
+              zIndex: 2000,
+            }}
+          />
+
+          {/* App Store */}
+          <a
+            href="https://apps.apple.com/jp/app/kaiwai-%E7%95%8C%E9%9A%88%E3%83%81%E3%83%A3%E3%83%83%E3%83%88sns/id6469412765"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              position: "fixed",
+              top: "10vh",
+              left: "50%",
               width: "85%",
               maxWidth: "300px",
-              marginBottom: "0",
-              animation: "slideUp 0.35s ease forwards",
+              height: "52px",
+              zIndex: 2001,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
               isolation: "isolate",
-              transform: "translateZ(0)",
+              animation: "slideUpPill 0.35s ease forwards",
+              border: "1px solid var(--card-border)",
+              color: "#fff",
+              borderRadius: "16px",
+              textDecoration: "none",
+              fontWeight: "600",
+              fontSize: "1rem",
+              fontFamily: "'Urbanist', sans-serif",
+              textAlign: "center",
             }}
           >
-            {/* App Store */}
-            <a
-              href="https://apps.apple.com/jp/app/kaiwai-%E7%95%8C%E9%9A%88%E3%83%81%E3%83%A3%E3%83%83%E3%83%88sns/id6469412765"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                isolation: "isolate",
-                transform: "translateZ(0)",
-                border: "1px solid var(--card-border)",
-                color: "#fff",
-                padding: "13px 15px",
-                borderRadius: "16px",
-                textDecoration: "none",
-                fontWeight: "600",
-                fontSize: "1rem",
-                fontFamily: "'Urbanist', sans-serif",
-                textAlign: "center",
-              }}
-            >
-              App Store
-            </a>
+            App Store
+          </a>
 
-            {/* Google Play */}
-            <a
-              href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                isolation: "isolate",
-                transform: "translateZ(0)",
-                border: "1px solid var(--card-border)",
-                color: "#fff",
-                padding: "13px 15px",
-                borderRadius: "16px",
-                textDecoration: "none",
-                fontWeight: "600",
-                fontSize: "1rem",
-                fontFamily: "'Urbanist', sans-serif",
-                textAlign: "center",
-              }}
-            >
-              Google Play
-            </a>
+          {/* Google Play */}
+          <a
+            href="https://play.google.com/store/apps/details?id=com.flutterflow.tsukishima6"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              position: "fixed",
+              top: "calc(10vh + 70px)",
+              left: "50%",
+              width: "85%",
+              maxWidth: "300px",
+              height: "52px",
+              zIndex: 2001,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              isolation: "isolate",
+              animation: "slideUpPill 0.35s ease forwards",
+              border: "1px solid var(--card-border)",
+              color: "#fff",
+              borderRadius: "16px",
+              textDecoration: "none",
+              fontWeight: "600",
+              fontSize: "1rem",
+              fontFamily: "'Urbanist', sans-serif",
+              textAlign: "center",
+            }}
+          >
+            Google Play
+          </a>
 
-            {/* ブラウザでサインアップ */}
-            <Link
-              href="/signup"
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block",
-                background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                isolation: "isolate",
-                transform: "translateZ(0)",
-                border: "1px solid var(--card-border)",
-                color: "#fff",
-                padding: "13px 15px",
-                borderRadius: "16px",
-                textDecoration: "none",
-                fontWeight: "600",
-                fontSize: "1rem",
-                fontFamily: "'Urbanist', sans-serif",
-                textAlign: "center",
-              }}
-            >
-              ブラウザでサインアップ
-            </Link>
+          {/* ブラウザでサインアップ */}
+          <Link
+            href="/signup"
+            onClick={closeAppPromo}
+            style={{
+              position: "fixed",
+              top: "calc(10vh + 140px)",
+              left: "50%",
+              width: "85%",
+              maxWidth: "300px",
+              height: "52px",
+              zIndex: 2001,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              background: "linear-gradient(135deg, rgba(21,38,53,0.5), rgba(143,168,167,0.45))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              isolation: "isolate",
+              animation: "slideUpPill 0.35s ease forwards",
+              border: "1px solid var(--card-border)",
+              color: "#fff",
+              borderRadius: "16px",
+              textDecoration: "none",
+              fontWeight: "600",
+              fontSize: "1rem",
+              fontFamily: "'Urbanist', sans-serif",
+              textAlign: "center",
+            }}
+          >
+            ブラウザでサインアップ
+          </Link>
 
-            {/* 閉じる */}
-            <button
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "11px",
-                borderRadius: "16px",
-                border: "1px solid var(--card-border)",
-                background: "var(--card-bg)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                isolation: "isolate",
-                transform: "translateZ(0)",
-                appearance: "none",
-                WebkitAppearance: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
-                color: "var(--fg-primary)",
-              }}
-            >
-              閉じる
-            </button>
-          </div>
-        </div>
+          {/* 閉じる */}
+          <button
+            onClick={closeAppPromo}
+            style={{
+              position: "fixed",
+              top: "calc(10vh + 210px)",
+              left: "50%",
+              width: "85%",
+              maxWidth: "300px",
+              height: "44px",
+              zIndex: 2001,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              borderRadius: "16px",
+              border: "1px solid var(--card-border)",
+              background: "var(--card-bg)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              isolation: "isolate",
+              animation: "slideUpPill 0.35s ease forwards",
+              appearance: "none",
+              WebkitAppearance: "none",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+              color: "var(--fg-primary)",
+            }}
+          >
+            閉じる
+          </button>
+        </>
       )}
     </>
   );

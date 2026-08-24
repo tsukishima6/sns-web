@@ -15,10 +15,11 @@ import { fetchOgImage } from "../../../lib/fetchOgImage";
 import Image from "next/image";
 import Link from "next/link";
 import WordCloudSphere from "../../components/WordCloudSphere";
-import AppDownloadDialogTrigger from "../../components/AppDownloadDialogTrigger";
+import AppPromoLink from "../../components/AppPromoLink";
 import PageHeader from "../../components/PageHeader";
 import KaiwaiEditLink from "../../components/KaiwaiEditLink";
 import KaiwaiJoinButton from "../../components/KaiwaiJoinButton";
+import NewsQuoteEmbed from "../../components/NewsQuoteEmbed";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -224,6 +225,29 @@ try {
         }
       }
 
+      // ニュース引用元を取得(data.quote_newsが元ニュースへのDocumentReference、
+      // app/posts/[userID]/[postID]/page.jsと同じ取得パターン)
+      if (data.quote_news) {
+        try {
+          const newsSnap = await getDoc(data.quote_news);
+          if (newsSnap.exists()) {
+            const newsData = newsSnap.data();
+            postObj.quotedNews = {
+              id: newsSnap.id,
+              kaiwaiId: newsSnap.ref.parent.parent?.id || null,
+              title: newsData.title || "",
+              sitename: newsData.sitename || "",
+              img: newsData.img || "",
+              time: newsData.time
+                ? { seconds: newsData.time.seconds, nanoseconds: newsData.time.nanoseconds }
+                : null,
+            };
+          }
+        } catch (e) {
+          console.error("quote_news fetch error for post", d.id, e);
+        }
+      }
+
       return postObj;
     });
 
@@ -252,11 +276,11 @@ try {
 
       {/* コンテンツ */}
       <div
+        className="pt-[75px] md:pt-[90px]"
         style={{
           fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
           maxWidth: "960px",
           margin: "0 auto",
-          paddingTop: "7.4rem",
           paddingLeft: "1rem",
           paddingRight: "1rem",
           paddingBottom: "2.5rem",
@@ -278,8 +302,7 @@ try {
 >
   {kaiwai.description}
   <br />
-  他の界隈・アカウント作成は{" "}
-  <AppDownloadDialogTrigger /> から
+  他の界隈・アカウント作成は<AppPromoLink>こちら</AppPromoLink>から
 </h2>
 
 <KaiwaiJoinButton kaiwaiID={kaiwaiID} kaiwaiName={kaiwai.name} />
@@ -313,7 +336,9 @@ try {
       style={{
         width: "100vw",
         marginLeft: "calc(50% - 50vw)",
-        background: "linear-gradient(135deg, #8fa8a7, #eef2f3)",
+        backgroundImage: "url(/news.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         padding: "1.5rem 0 1.8rem",
       }}
     >
@@ -338,7 +363,11 @@ try {
             style={{
               minWidth: "220px",
               maxWidth: "220px",
-              background: "var(--surface)",
+              background: "var(--card-bg)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              isolation: "isolate",
+              transform: "translateZ(0)",
               borderRadius: "22px",
               overflow: "hidden",
               textDecoration: "none",
@@ -507,7 +536,7 @@ try {
                     style={{
                       fontSize: "0.9rem",
                       fontWeight: "400",
-                      marginBottom: post.postPhoto ? "0.9rem" : "1.8rem",
+                      marginBottom: post.postPhoto ? "0.9rem" : "14px",
                       color: "var(--fg-primary)",
                       marginLeft: "1.0rem",
                       marginRight: "1.0rem",
@@ -516,6 +545,12 @@ try {
                   >
                     {post.postDescription || "（本文なし）"}
                   </p>
+
+                  {post.quotedNews && (
+                    <div style={{ marginLeft: "1.0rem", marginRight: "1.0rem" }}>
+                      <NewsQuoteEmbed quotedNews={post.quotedNews} />
+                    </div>
+                  )}
 
                   {post.postPhoto && (
                     <img
