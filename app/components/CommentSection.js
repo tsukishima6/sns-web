@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   collection,
   collectionGroup,
@@ -28,6 +28,16 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
+
+  function handleTextChange(e) {
+    setText(e.target.value);
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  }
 
   async function loadComments() {
     try {
@@ -104,6 +114,9 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
       });
 
       setText("");
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
       await loadComments();
     } catch (e) {
       console.error("comment submit error:", e);
@@ -133,7 +146,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
   };
 
   return (
-    <div style={{ borderTop: "1px solid var(--border-subtle)", marginTop: "0.5rem" }}>
+    <div style={{ borderTop: "none", maxWidth: "960px", margin: "0.5rem auto 0" }}>
       {/* コメント一覧 */}
       <div>
         {loading ? (
@@ -208,25 +221,26 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
             display: "flex",
             gap: "0.5rem",
             padding: "0.8rem 1rem",
-            borderTop: "1px solid var(--border-subtle)",
+            borderTop: "none",
             alignItems: "flex-end",
           }}
         >
           <textarea
+            ref={textareaRef}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={handleTextChange}
             placeholder="コメントを入力…"
-            rows={2}
+            rows={1}
             style={{
               flex: 1,
-              border: "1px solid var(--border-subtle)",
+              border: "none",
               borderRadius: "10px",
-              padding: "0.6rem 0.8rem",
+              padding: "0.5rem 1rem",
               fontSize: "0.9rem",
               fontFamily: "Noto Sans JP, sans-serif",
               resize: "none",
               outline: "none",
-              lineHeight: "1.5",
+              overflow: "hidden",
               backgroundColor: "var(--surface)",
               color: "var(--fg-primary)",
             }}
@@ -238,8 +252,8 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
               background: "linear-gradient(135deg, #152635, #8fa8a7)",
               color: "#fff",
               border: "none",
-              borderRadius: "10px",
-              padding: "0.6rem 1rem",
+              borderRadius: "20px",
+              padding: "0.5rem 1rem",
               fontSize: "0.85rem",
               cursor: submitting || !text.trim() ? "not-allowed" : "pointer",
               opacity: submitting || !text.trim() ? 0.5 : 1,

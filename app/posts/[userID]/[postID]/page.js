@@ -390,7 +390,7 @@ export default async function PostPage({ params }) {
       color: "var(--fg-muted)",
       fontFamily: "'Urbanist',sans-serif",
       textAlign: "right",   // ← 追加
-      marginRight: "2.4rem",
+      marginRight: "8px",
 
     }}
   >
@@ -518,7 +518,7 @@ export default async function PostPage({ params }) {
                   color: "var(--fg-muted)",
                   textAlign: "right",
                   fontFamily: "'Urbanist',sans-serif",
-                  marginRight: "2.4rem",
+                  marginRight: "8px",
                 }}
               >
                 {formattedOtherTime}
