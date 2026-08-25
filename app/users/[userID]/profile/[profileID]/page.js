@@ -161,13 +161,13 @@ export default async function ProfilePage({ params }) {
           alt={profile.name || "ユーザー"}
           style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover" }}
         />
-        <h2 style={{ fontFamily: "Arial , Urbanist" , margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center", color: "var(--fg-primary)" }}>
+        <h2 style={{ fontFamily: "Urbanist, 'Noto Sans JP', Arial" , margin: "0.2rem", marginTop: "1.1rem", fontSize: "1.1rem", fontWeight: "500", textAlign: "center", color: "var(--fg-primary)" }}>
           {profile.name}
         </h2>
         <p style={{ fontFamily: "Urbanist", fontSize: "1.1rem", color: "var(--fg-secondary)", margin: "0rem 0", textAlign: "center" }}>
           @{profile.ID}
         </p>
-        <p style={{ fontFamily: "Arial , Urbanist" , fontSize: "1rem", color: "var(--fg-secondary)", marginTop: "1.0rem", textAlign: "center" }}>
+        <p style={{ fontFamily: "Urbanist, 'Noto Sans JP', Arial" , fontSize: "1rem", color: "var(--fg-secondary)", marginTop: "1.0rem", textAlign: "center" }}>
           {profile.bio && profile.bio.trim() !== "" ? profile.bio : "よろしくお願いします。"}
         </p>
         {tags.length > 0 && (
@@ -191,7 +191,7 @@ export default async function ProfilePage({ params }) {
                   borderRadius: "999px",
                   padding: "0.3rem 0.8rem",
                   textDecoration: "none",
-                  fontFamily: "Urbanist",
+                  fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
                 }}
               >
                 #{tag.name}
@@ -226,7 +226,7 @@ export default async function ProfilePage({ params }) {
                 borderRadius: "12px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                 backgroundColor: "var(--surface)",
-                fontFamily: "Arial, sans-serif",
+                fontFamily: "Urbanist, Arial, sans-serif",
                 position: "relative",
               }}
             >
@@ -284,7 +284,7 @@ export default async function ProfilePage({ params }) {
                     bottom: "0.6rem",
                     fontSize: "1.0rem",
                     color: "var(--fg-muted)",
-                    fontFamily: "Urbanist",
+                    fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
                   }}
                 >
                   {formatDate(post.timePosted)}
@@ -333,7 +333,7 @@ export default async function ProfilePage({ params }) {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <p style={{ margin: 0, fontSize: "1.0rem", lineHeight: "1.6", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", color: "var(--fg-primary)" }}>
+      <p style={{ margin: 0, fontSize: "1.0rem", lineHeight: "1.6", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", color: "var(--fg-primary)" }}>
         界隈の数だけ、snsがあっていい。
       </p>
       <h2
@@ -350,12 +350,12 @@ export default async function ProfilePage({ params }) {
       >
         kaiwai
       </h2>
-      <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
+      <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
         <span style={textOnBgHighlightStyle}>
           趣味、地域、職種、悩み・・{"\n"}各界隈のユーザーが集う国産SNS。
         </span>
       </p>
-      <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
+      <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
         <span style={textOnBgHighlightStyle}>
           {kaiwaiName}だけではありません。{"\n"}界隈は自由に追加・切り替え。{"\n"}ご自身で界隈を立ち上げ、{"\n"}メンバーを募ることも。
         </span>

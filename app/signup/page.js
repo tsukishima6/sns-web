@@ -108,7 +108,7 @@ export default function SignupPage() {
         {error && (
           <p
             className="text-sm text-red-500 bg-red-50 dark:bg-red-950/40 dark:text-red-400 px-4 py-2.5 rounded-2xl mb-3 mt-1"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {error}
           </p>
@@ -116,7 +116,7 @@ export default function SignupPage() {
 
         <p
           className="text-xs text-center mb-4 mt-2"
-          style={{ color: "var(--fg-muted)", fontFamily: "'Noto Sans JP', sans-serif" }}
+          style={{ color: "var(--fg-muted)", fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
         >
           アカウントを作成すると利用規約に同意いただいたものとします
         </p>

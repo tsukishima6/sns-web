@@ -196,7 +196,7 @@ export default function NoticePage() {
                     fontSize: "0.88rem",
                     color: "var(--fg-primary)",
                     lineHeight: "1.5",
-                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                   }}
                 >
                   {getNotificationText(r)}

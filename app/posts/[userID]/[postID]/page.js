@@ -353,7 +353,7 @@ export default async function PostPage({ params }) {
         color: "var(--fg-primary)",
         marginLeft: "0.2rem",
         marginRight: "1.2rem",
-　　　　 fontFamily: "Urbanist",
+        fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
       }}
     >
       {post.postDescription?.trim() ? post.postDescription : null}
@@ -379,7 +379,7 @@ export default async function PostPage({ params }) {
 
     {/* 投稿本文 */}
     {post.postContent && (
-      <p style={{ fontFamily: "Urbanist", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "var(--fg-secondary)", marginRight: "1.8rem"}}>{post.postContent}</p>
+      <p style={{ fontFamily: "Urbanist, 'Noto Sans JP', sans-serif", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.6", color: "var(--fg-secondary)", marginRight: "1.8rem"}}>{post.postContent}</p>
     )}
 
     {/* 投稿日時 */}
@@ -460,7 +460,7 @@ export default async function PostPage({ params }) {
                   style={{ width: "48px", height: "48px", borderRadius: "50%", marginRight: "0.75rem" }}
                 />
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)", fontFamily: "Urbanist" }}>
+                  <span style={{ fontWeight: "500", fontSize: "0.95rem", color: "var(--fg-primary)" }}>
                     {profileData.name}
                   </span>
                   <span style={{ fontSize: "0.85rem", color: "var(--fg-secondary)", fontFamily: "Urbanist" }}>
@@ -482,7 +482,7 @@ export default async function PostPage({ params }) {
                   marginBottom: other.postPhoto ? "1rem" : "1.5rem",
                   color: "var(--fg-primary)",
                   marginRight: "1.8rem",
-                  fontFamily: "Urbanist",
+                  fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
                 }}
               >
                 {other.postDescription}
@@ -571,7 +571,7 @@ export default async function PostPage({ params }) {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <p style={{ margin: 0, fontSize: "1.0rem", lineHeight: "1.6", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", color: "var(--fg-primary)" }}>
+      <p style={{ margin: 0, fontSize: "1.0rem", lineHeight: "1.6", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", color: "var(--fg-primary)" }}>
         界隈の数だけ、snsがあっていい。
       </p>
       <h2
@@ -588,12 +588,12 @@ export default async function PostPage({ params }) {
       >
         kaiwai
       </h2>
-      <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
+      <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
         <span style={textOnBgHighlightStyle}>
           趣味、地域、職種、悩み・・{"\n"}各界隈のユーザーが集う国産SNS。
         </span>
       </p>
-      <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Noto Sans JP, Arial", whiteSpace: "pre-line" }}>
+      <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
         <span style={textOnBgHighlightStyle}>
           {kaiwaiName}だけではありません。{"\n"}界隈は自由に追加・切り替え。{"\n"}ご自身で界隈を立ち上げ、{"\n"}メンバーを募ることも。
         </span>

@@ -206,7 +206,7 @@ export default function ChatThreadPage() {
           style={{
             fontWeight: 600,
             fontSize: "0.95rem",
-            fontFamily: "'Noto Sans JP', sans-serif",
+            fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
             color: "var(--fg-primary)",
           }}
         >
@@ -266,7 +266,7 @@ export default function ChatThreadPage() {
                     style={{
                       fontSize: "0.7rem",
                       color: "var(--fg-muted)",
-                      fontFamily: "'Noto Sans JP', sans-serif",
+                      fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                     }}
                   >
                     {senderProfile.name}
@@ -282,7 +282,7 @@ export default function ChatThreadPage() {
                       : "18px 18px 18px 4px",
                     fontSize: "0.9rem",
                     lineHeight: "1.5",
-                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                     wordBreak: "break-word",
                     whiteSpace: "pre-wrap",
                   }}
@@ -337,7 +337,7 @@ export default function ChatThreadPage() {
             borderRadius: "20px",
             padding: "0.55rem 1rem",
             fontSize: "0.9rem",
-            fontFamily: "'Noto Sans JP', sans-serif",
+            fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
             resize: "none",
             outline: "none",
             lineHeight: "1.5",

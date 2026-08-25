@@ -97,7 +97,7 @@ export default function LoginPage() {
           <Link
             href="/settings/password"
             className="text-xs hover:underline"
-            style={{ color: "var(--fg-secondary)", fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ color: "var(--fg-secondary)", fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             パスワードをお忘れの場合
           </Link>
@@ -106,7 +106,7 @@ export default function LoginPage() {
         {error && (
           <p
             className="text-sm text-red-500 bg-red-50 dark:bg-red-950/40 dark:text-red-400 px-4 py-2.5 rounded-2xl mb-3"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {error}
           </p>

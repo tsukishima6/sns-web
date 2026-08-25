@@ -37,7 +37,7 @@ export function AuthScreen({ title, switchPrompt, switchLabel, switchHref, child
 
           <p
             className="text-sm text-center mt-6"
-            style={{ color: "var(--fg-secondary)", fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ color: "var(--fg-secondary)", fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {switchPrompt}{" "}
             <Link
@@ -123,7 +123,7 @@ export function FloatingInput({ id, type, label, value, onChange, autoComplete, 
       <label
         htmlFor={id}
         className="absolute left-5 top-1/2 -translate-y-1/2 text-sm pointer-events-none transition-all duration-150 peer-focus:top-4 peer-focus:text-[0.68rem] peer-[:not(:placeholder-shown)]:top-4 peer-[:not(:placeholder-shown)]:text-[0.68rem]"
-        style={{ color: "var(--fg-muted)", fontFamily: "'Noto Sans JP', sans-serif" }}
+        style={{ color: "var(--fg-muted)", fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
       >
         {label}
       </label>

@@ -362,7 +362,7 @@ try {
       <div
         className="pt-[75px] md:pt-[90px]"
         style={{
-          fontFamily: "Noto Sans JP , Shippori Mincho, Arial, Urbanist",
+          fontFamily: "Urbanist, 'Noto Sans JP', 'Shippori Mincho', Arial",
           maxWidth: "960px",
           margin: "0 auto",
           paddingLeft: "1rem",
@@ -686,7 +686,7 @@ try {
     padding: "1.1rem 0",
     borderBottom: "1px solid var(--border-subtle)",
     backgroundColor: "transparent",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "Urbanist, Arial, sans-serif",
     width: "100%",
   }}
 >
@@ -865,7 +865,7 @@ try {
           fontSize: "1.0rem",
           lineHeight: "1.6",
           letterSpacing: "0.02em",
-          fontFamily: "Noto Sans JP, Arial",
+          fontFamily: "Urbanist, 'Noto Sans JP', Arial",
           color: "var(--fg-primary)",
         }}
       >
@@ -893,7 +893,7 @@ try {
           fontSize: "0.90rem",
           lineHeight: "1.9",
           letterSpacing: "0.02em",
-          fontFamily: "Noto Sans JP, Arial",
+          fontFamily: "Urbanist, 'Noto Sans JP', Arial",
           whiteSpace: "pre-line",
         }}
       >
@@ -909,7 +909,7 @@ try {
           fontSize: "0.90rem",
           lineHeight: "1.9",
           letterSpacing: "0.02em",
-          fontFamily: "Noto Sans JP, Arial",
+          fontFamily: "Urbanist, 'Noto Sans JP', Arial",
           whiteSpace: "pre-line",
         }}
       >

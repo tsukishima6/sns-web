@@ -111,7 +111,7 @@ export default async function HomePage() {
         {/* コンテンツ */}
         <div
           style={{
-            fontFamily: "'Shippori Mincho', Urbanist, serif",
+            fontFamily: "Urbanist, 'Shippori Mincho', serif",
             maxWidth: "720px",
             padding: "0rem 0rem 2rem 0rem",
             margin: "0 auto",
@@ -149,7 +149,7 @@ export default async function HomePage() {
                   fontSize: "1.1rem",
                   lineHeight: "1.6",
                   color: "#fff",
-                  fontFamily: "'Noto Sans JP', 'Urbanist', sans-serif",
+                  fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                   margin: "0 1.5rem",
                   padding: "0.7rem 1.3rem",
                   background: "linear-gradient(135deg, rgba(21,38,53,0.75), rgba(143,168,167,0.7))",

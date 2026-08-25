@@ -240,7 +240,7 @@ export default function FloatingAppPromo() {
               WebkitAppearance: "none",
               cursor: "pointer",
               fontSize: "0.9rem",
-              fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+              fontFamily: `"Urbanist","Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
               color: "var(--fg-primary)",
             }}
           >

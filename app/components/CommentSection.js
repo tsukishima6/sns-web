@@ -195,14 +195,14 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
                         color: "var(--fg-muted)",
                         fontSize: "0.78rem",
                         cursor: "pointer",
-                        fontFamily: "Noto Sans JP, sans-serif",
+                        fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
                       }}
                     >
                       削除
                     </button>
                   )}
                 </div>
-                <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--fg-primary)", lineHeight: "1.5", fontFamily: "Noto Sans JP, sans-serif" }}>
+                <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--fg-primary)", lineHeight: "1.5", fontFamily: "Urbanist, 'Noto Sans JP', sans-serif" }}>
                   {c.comment}
                 </p>
               </div>
@@ -235,7 +235,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
               borderRadius: "10px",
               padding: "0.5rem 0.2rem",
               fontSize: "0.9rem",
-              fontFamily: "Noto Sans JP, sans-serif",
+              fontFamily: "Urbanist, 'Noto Sans JP', sans-serif",
               resize: "none",
               outline: "none",
               overflow: "hidden",

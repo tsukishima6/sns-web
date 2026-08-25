@@ -26,11 +26,15 @@
 }
 
 /* ブラウザデフォルトの body margin をリセット */
+/* font-familyはUrbanistを先頭に置き、Urbanistにグリフが無い文字（日本語等）だけ
+   Noto Sans JPにフォールバックさせる。これにより個別にfont-family指定の無い要素でも
+   英数字は自動的にUrbanistで表示される */
 body {
   margin: 0;
   padding: 0;
   background: var(--bg-page);
   color: var(--fg-primary);
+  font-family: var(--font-urbanist), var(--font-noto-sans-jp), sans-serif;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 

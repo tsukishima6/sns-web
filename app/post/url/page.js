@@ -180,7 +180,7 @@ export default function PostUrlPage() {
                 {ogp.sitename}
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2"
-                 style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                 style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                 {ogp.title}
               </p>
             </div>
@@ -242,7 +242,7 @@ export default function PostUrlPage() {
                     <img src={k.image} alt={k.name} className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
                   )}
                   <span className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)]"
-                        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                        style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                     {k.name}
                   </span>
                   {selectedKaiwai?.id === k.id && (

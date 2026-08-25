@@ -92,7 +92,7 @@ export default function SignupPromptDialog() {
 
         <p
           style={{
-            fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+            fontFamily: `"Urbanist","Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
             fontWeight: 700,
             fontSize: "1.05rem",
             color: "#fff",
@@ -103,7 +103,7 @@ export default function SignupPromptDialog() {
         </p>
         <p
           style={{
-            fontFamily: `"Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
+            fontFamily: `"Urbanist","Hiragino Sans","ヒラギノ角ゴ ProN",sans-serif`,
             fontSize: "0.85rem",
             color: "rgba(255,255,255,0.85)",
             margin: "0 0 1.5rem",

@@ -127,13 +127,13 @@ export default async function EventDetailPage({ params }) {
         <div>
           <h1
             className="text-xl font-bold text-gray-800 dark:text-[var(--fg-primary)] leading-snug mb-1"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {ev.event_title}
           </h1>
           {ev.event_subtitle && (
             <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)]"
-               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+               style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
               {ev.event_subtitle}
             </p>
           )}
@@ -173,7 +173,7 @@ export default async function EventDetailPage({ params }) {
               詳細
             </h2>
             <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
-               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+               style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
               {ev.event_description}
             </p>
           </div>
@@ -187,7 +187,7 @@ export default async function EventDetailPage({ params }) {
               注意事項
             </h2>
             <p className="text-sm text-gray-500 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
-               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+               style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
               {ev.event_notice}
             </p>
           </div>
@@ -232,7 +232,7 @@ function InfoRow({ icon, label, value }) {
         <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)] mb-0.5"
            style={{ fontFamily: "'Urbanist', sans-serif" }}>{label}</p>
         <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)]"
-           style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>{value}</p>
+           style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>{value}</p>
       </div>
     </div>
   );

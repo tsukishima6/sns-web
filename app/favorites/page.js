@@ -180,7 +180,7 @@ export default function FavoritesPage() {
                 className="w-10 h-10 rounded-full object-cover flex-shrink-0"
               />
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate" style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                   {p.name}
                 </p>
                 <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]" style={{ fontFamily: "'Urbanist', sans-serif" }}>
@@ -205,7 +205,7 @@ export default function FavoritesPage() {
                 alt={ev.event_title || ""}
                 className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
               />
-              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                 {ev.event_title}
               </p>
             </Link>
@@ -226,7 +226,7 @@ export default function FavoritesPage() {
                 alt={biz.display_name || ""}
                 className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
               />
-              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+              <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] line-clamp-2" style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                 {biz.display_name}
               </p>
             </Link>
@@ -303,7 +303,7 @@ function PostCard({ post }) {
             />
             <div className="min-w-0">
               <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate"
-                 style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                 style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                 {post.profile.name}
               </p>
               <p className="text-xs text-gray-400 dark:text-[var(--fg-muted)]"
@@ -316,7 +316,7 @@ function PostCard({ post }) {
 
         {post.postDescription && (
           <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] mb-3 leading-relaxed whitespace-pre-wrap"
-             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+             style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
             {post.postDescription}
           </p>
         )}

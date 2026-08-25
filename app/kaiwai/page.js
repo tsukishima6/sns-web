@@ -47,7 +47,7 @@ export default async function KaiwaiListPage() {
         maxWidth: "960px",
         margin: "0 auto",
         padding: "1.5rem 1rem 3rem",
-        fontFamily: "'Noto Sans JP', 'Urbanist', sans-serif",
+        fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
       }}
     >
       <h1

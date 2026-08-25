@@ -190,7 +190,7 @@ export default function ChatListPage() {
                       fontWeight: chat.isUnread ? 700 : 500,
                       fontSize: "0.92rem",
                       color: "var(--fg-primary)",
-                      fontFamily: "'Noto Sans JP', sans-serif",
+                      fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                     }}
                   >
                     {chat.otherProfile?.name || "ユーザー"}
@@ -211,7 +211,7 @@ export default function ChatListPage() {
                     margin: 0,
                     fontSize: "0.83rem",
                     color: chat.isUnread ? "var(--fg-secondary)" : "var(--fg-muted)",
-                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",

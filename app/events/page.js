@@ -127,13 +127,13 @@ function EventCard({ event }) {
           )}
           <h2
             className="text-sm font-semibold text-gray-800 dark:text-[var(--fg-primary)] leading-snug mb-1 line-clamp-2"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {event.event_title}
           </h2>
           {event.event_subtitle && (
             <p className="text-xs text-gray-500 dark:text-[var(--fg-secondary)] mb-2 truncate"
-               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+               style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
               {event.event_subtitle}
             </p>
           )}

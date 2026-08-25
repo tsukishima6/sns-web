@@ -136,7 +136,7 @@ function UserSearchTab() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           className="w-full h-9 pl-9 pr-4 bg-gray-50 dark:bg-[var(--surface-muted)] border border-gray-100 dark:border-[var(--border-subtle)] rounded-full text-sm text-[var(--fg-primary)] focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+          style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
         />
         {keyword && (
           <button
@@ -177,7 +177,7 @@ function UserSearchTab() {
                 />
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-gray-800 dark:text-[var(--fg-primary)] truncate"
-                     style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                     style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                     {u.name}
                   </p>
                   <p className="text-sm text-gray-400 dark:text-[var(--fg-muted)] truncate"
@@ -316,7 +316,7 @@ function KaiwaiTab() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           className="w-full h-9 pl-9 pr-4 bg-gray-50 dark:bg-[var(--surface-muted)] border border-gray-100 dark:border-[var(--border-subtle)] rounded-full text-sm text-[var(--fg-primary)] focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+          style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
         />
         {keyword && (
           <button

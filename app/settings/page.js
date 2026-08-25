@@ -147,7 +147,7 @@ export default function SettingsPage() {
           >
             <span
               className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
-              style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+              style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
             >
               {t.label}
             </span>
@@ -204,7 +204,7 @@ function ThemeMenuRow() {
     <div className="flex items-center gap-3 px-4 py-3.5">
       <span
         className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
-        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
       >
         テーマ
       </span>
@@ -274,7 +274,7 @@ function MenuItem({ href, label, icon, external }) {
     <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-[var(--surface-muted)] transition-colors border-b border-gray-50 dark:border-[var(--border-subtle)] last:border-0">
       <span className="text-gray-400 dark:text-[var(--fg-muted)] flex-shrink-0">{icon}</span>
       <span className="text-sm text-gray-700 dark:text-[var(--fg-primary)] flex-1"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
         {label}
       </span>
       <svg className="text-gray-300 dark:text-[var(--fg-muted)] flex-shrink-0" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -85,7 +85,7 @@ export default async function CategoryPage({ params }) {
 
       <div
         style={{
-          fontFamily: "'Noto Sans JP', 'Urbanist', sans-serif",
+          fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif",
           maxWidth: "960px",
           margin: "0 auto",
           paddingTop: "7.4rem",
@@ -161,7 +161,7 @@ export default async function CategoryPage({ params }) {
                   }}
                 >
                   {profile.otherTags && profile.otherTags.length > 0 && (
-                    <span style={{ fontSize: "0.75rem", color: "#8fa8a7", fontFamily: "Urbanist" }}>
+                    <span style={{ fontSize: "0.75rem", color: "#8fa8a7", fontFamily: "Urbanist, 'Noto Sans JP', sans-serif" }}>
                       {profile.otherTags.map((t) => `#${t}`).join(" ")}
                     </span>
                   )}

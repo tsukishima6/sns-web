@@ -188,7 +188,7 @@ export default async function BusinessDetailPage({ params }) {
         <div>
           <h1
             className="text-xl font-bold text-gray-800 dark:text-[var(--fg-primary)]"
-            style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
           >
             {biz.display_name}
           </h1>
@@ -242,7 +242,7 @@ export default async function BusinessDetailPage({ params }) {
         {/* 説明 */}
         {biz.discription && (
           <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] leading-relaxed whitespace-pre-wrap"
-             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+             style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
             {biz.discription}
           </p>
         )}
@@ -338,7 +338,7 @@ export default async function BusinessDetailPage({ params }) {
                     alt={ev.event_title || ""}
                     className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                   />
-                  <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] line-clamp-2" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
+                  <p className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] line-clamp-2" style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
                     {ev.event_title}
                   </p>
                 </Link>
@@ -370,7 +370,7 @@ export default async function BusinessDetailPage({ params }) {
                   {p.postDescription?.trim() && (
                     <p
                       className="text-sm text-gray-700 dark:text-[var(--fg-secondary)] whitespace-pre-wrap"
-                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                      style={{ fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}
                     >
                       {p.postDescription}
                     </p>
