@@ -29,7 +29,7 @@ export default function RepostEmbed({ repostedPost }) {
     return (
       <div
         style={{
-          border: "1px solid var(--border-subtle)",
+          border: "0.5px solid var(--border-subtle)",
           borderRadius: "12px",
           padding: "0.75rem",
           marginBottom: "0.75rem",
@@ -54,7 +54,7 @@ export default function RepostEmbed({ repostedPost }) {
       role="link"
       tabIndex={0}
       style={{
-        border: "1px solid var(--border-subtle)",
+        border: "0.5px solid var(--border-subtle)",
         borderRadius: "12px",
         padding: "0.75rem",
         marginBottom: "0.75rem",

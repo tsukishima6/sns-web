@@ -69,16 +69,18 @@ export default function FavoriteButton({ targetPath, fieldName = "users_favorite
         background: "none",
         border: "none",
         padding: 0,
+        display: "inline-flex",
         cursor: pending ? "not-allowed" : "pointer",
-        fontSize: "1.2rem",
-        lineHeight: 1,
         // いいねボタンと同じ考え方(ネイティブは色ではなくアイコン形状で状態を表す)で、
         // 独自の差し色は使わずprimaryText相当の色に統一する
         color: "var(--fg-primary)",
         opacity: pending ? 0.6 : 1,
       }}
     >
-      {favorited ? "★" : "☆"}
+      {/* ネイティブ(a_dashbord_widget.dart)のIcons.bookmark_border_sharpと同じMaterial Iconsの形状 */}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill={favorited ? "currentColor" : "none"} stroke="currentColor" strokeWidth={favorited ? 0 : 1.8}>
+        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+      </svg>
     </button>
   );
 }

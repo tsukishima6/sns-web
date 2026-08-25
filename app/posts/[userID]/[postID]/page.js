@@ -348,7 +348,8 @@ export default async function PostPage({ params }) {
       style={{
         fontSize: "1rem",
         fontWeight: "400",
-        marginBottom: post.postPhoto ? "1rem" : "10px",
+        marginTop: "12px",
+        marginBottom: "12px",
         color: "var(--fg-primary)",
         marginLeft: "0.2rem",
         marginRight: "1.2rem",
@@ -399,7 +400,7 @@ export default async function PostPage({ params }) {
 )}
 
     {/* いいね・お気に入り */}
-    <div style={{ marginTop: "0.75rem", display: "flex", gap: "1rem" }}>
+    <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
       <LikeButton postUserID={userID} postID={postID} kaiwaiPath={post.kaiwai?.path ?? null} />
       <FavoriteButton targetPath={`users/${userID}/posts/${postID}`} fieldName="users_favorited" />
       <RepostButton postPath={`users/${userID}/posts/${postID}`} kaiwaiPath={post.kaiwai?.path ?? null} />

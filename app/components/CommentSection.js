@@ -153,11 +153,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
           <p style={{ padding: "1rem", color: "var(--fg-muted)", fontSize: "0.85rem", textAlign: "center" }}>
             読み込み中…
           </p>
-        ) : comments.length === 0 ? (
-          <p style={{ padding: "1.2rem 1rem", color: "var(--fg-muted)", fontSize: "0.85rem" }}>
-            まだコメントはありません
-          </p>
-        ) : (
+        ) : comments.length === 0 ? null : (
           comments.map((c) => (
             <div
               key={c.id}
@@ -235,7 +231,7 @@ export default function CommentSection({ postUserID, postID, kaiwaiPath, initial
               flex: 1,
               border: "none",
               borderRadius: "10px",
-              padding: "0.5rem 1rem",
+              padding: "0.5rem 0.2rem",
               fontSize: "0.9rem",
               fontFamily: "Noto Sans JP, sans-serif",
               resize: "none",

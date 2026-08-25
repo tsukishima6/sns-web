@@ -74,16 +74,18 @@ export default function LikeButton({ postUserID, postID, kaiwaiPath }) {
         background: "none",
         border: "none",
         padding: 0,
+        display: "inline-flex",
         cursor: pending ? "not-allowed" : "pointer",
-        fontSize: "1.3rem",
-        lineHeight: 1,
         // ネイティブ(posts_widget.dart)は塗り/線のアイコン形状だけで状態を表し、
         // 色は両状態ともprimaryTextで固定しているため、ここでも独自の差し色を足さない
         color: "var(--fg-primary)",
         opacity: pending ? 0.6 : 1,
       }}
     >
-      {liked ? "♥" : "♡"}
+      {/* ネイティブのIcons.favorite_sharp/favorite_border_sharpと同じMaterial Iconsの形状 */}
+      <svg width="22" height="22" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth={liked ? 0 : 1.8}>
+        <path d="M12.1 18.55l-.1.1-.11-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+      </svg>
     </button>
   );
 }

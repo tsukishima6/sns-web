@@ -85,16 +85,18 @@ export default function RepostButton({ postPath, kaiwaiPath }) {
           background: "none",
           border: "none",
           padding: 0,
+          display: "inline-flex",
           cursor: pending ? "not-allowed" : "pointer",
-          fontSize: "1.2rem",
-          lineHeight: 1,
           // いいね・お気に入りボタンと同じ考え方(ネイティブは色ではなくアイコン形状/状態変化で
           // 表現する)で、独自の差し色は使わずprimaryText相当の色に統一する
           color: "var(--fg-primary)",
           opacity: pending ? 0.6 : 1,
         }}
       >
-        ↻
+        {/* ネイティブ(posts_widget.dart)のIcons.repeatと同じMaterial Iconsの形状 */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v5z" />
+        </svg>
       </button>
 
       {menuOpen && (
