@@ -57,12 +57,28 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
                 fontWeight: "600",
                 color: "var(--fg-primary)",
                 lineHeight: "1",
-                paddingBottom: "0.7rem",
               }}
             >
               {kaiwaiID ? (
                 <>
-                  {kaiwaiName}<ruby style={{ rubyAlign: "start" }}>界隈<rt style={{ fontSize: "0.75rem", fontWeight: "400", color: "var(--fg-secondary)", letterSpacing: "0" }}>kaiwaiSNS</rt></ruby>
+                  {kaiwaiName}
+                  <span style={{ position: "relative", display: "inline-block" }}>
+                    界隈
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "-1.1em",
+                        right: 0,
+                        fontSize: "0.75rem",
+                        fontWeight: "400",
+                        color: "var(--fg-secondary)",
+                        letterSpacing: "0",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      kaiwaiSNS
+                    </span>
+                  </span>
                 </>
               ) : (
                 "kaiwaiSNS"
@@ -78,8 +94,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
                 fontWeight: "500",
                 marginLeft: "0.3rem",
                 lineHeight: "1",
-                // ruby注記がある時だけ高さが増えるので、その分だけ引き上げて揃える
-                transform: kaiwaiID ? "translateY(-5px)" : "translateY(0)",
+                transform: kaiwaiID ? "translateY(-4px)" : "translateY(0)",
               }}
             >
               web版

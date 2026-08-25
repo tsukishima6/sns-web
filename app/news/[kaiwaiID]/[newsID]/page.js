@@ -82,7 +82,7 @@ export default async function NewsDetailPage({ params }) {
   const formatTime = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate();
-    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
   };
 
   // この記事を引用した投稿(picks)
@@ -122,7 +122,15 @@ export default async function NewsDetailPage({ params }) {
     <>
       <PageHeader kaiwaiName={kaiwaiName} kaiwaiID={kaiwaiID} />
 
-      <div style={{ maxWidth: "960px", margin: "0 auto", padding: "120px 1rem 2.5rem" }}>
+      <div style={{ width: "100%", marginTop: "75px" }}>
+        <img
+          src={news.img || "/news.jpg"}
+          alt=""
+          style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
+        />
+      </div>
+
+      <div style={{ maxWidth: "960px", margin: "0 auto", padding: "1.5rem 1rem 2.5rem" }}>
         <div
           style={{
             borderBottom: "1px solid var(--border-subtle)",
@@ -131,7 +139,7 @@ export default async function NewsDetailPage({ params }) {
           }}
         >
           {news.sitename && (
-            <p style={{ fontSize: "0.85rem", color: "var(--fg-muted)", margin: "0 0 0.4rem" }}>
+            <p style={{ fontSize: "0.85rem", color: "var(--fg-muted)", margin: "0 0 0.4rem", fontFamily: "'Urbanist', sans-serif" }}>
               {news.sitename}
               {news.time && <span> ・ {formatTime(news.time)}</span>}
             </p>
@@ -148,14 +156,6 @@ export default async function NewsDetailPage({ params }) {
           >
             {news.title}
           </h1>
-
-          {news.img && (
-            <img
-              src={news.img}
-              alt=""
-              style={{ width: "100%", borderRadius: "16px", marginBottom: "1rem", objectFit: "cover" }}
-            />
-          )}
 
           {news.description && (
             <p style={{ fontSize: "0.9rem", color: "var(--fg-secondary)", lineHeight: 1.7, margin: "0 0 1.2rem" }}>

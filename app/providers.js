@@ -12,6 +12,7 @@ const HAS_OWN_HEADER = [
   /^\/kaiwai\/(?!new$)[^/]+$/,
   /^\/kaiwai\/[^/]+\/category\/[^/]+$/,
   /^\/users\/[^/]+\/profile\/[^/]+$/,
+  /^\/news\/[^/]+\/[^/]+$/,
   /^\/login$/,
   /^\/signup$/,
 ];

@@ -22,12 +22,16 @@ export default function NewsQuoteEmbed({ quotedNews }) {
     return (
       <div
         style={{
-          border: "1px solid var(--border-subtle)",
+          border: "1px solid transparent",
           borderRadius: "12px",
           padding: "0.75rem",
           marginBottom: "0.75rem",
           fontSize: "0.8rem",
           color: "var(--fg-muted)",
+          backgroundImage:
+            "linear-gradient(var(--bg-page), var(--bg-page)), linear-gradient(135deg, #152635, #8fa8a7)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
         }}
       >
         引用元のニュースは見つかりませんでした
@@ -50,11 +54,15 @@ export default function NewsQuoteEmbed({ quotedNews }) {
         display: "flex",
         gap: "0.75rem",
         alignItems: "center",
-        border: "1px solid var(--border-subtle)",
+        border: "1px solid transparent",
         borderRadius: "12px",
         padding: "0.75rem",
         marginBottom: "0.75rem",
         cursor: "pointer",
+        backgroundImage:
+          "linear-gradient(var(--bg-page), var(--bg-page)), linear-gradient(135deg, #152635, #8fa8a7)",
+        backgroundOrigin: "border-box",
+        backgroundClip: "padding-box, border-box",
       }}
     >
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -75,10 +83,12 @@ export default function NewsQuoteEmbed({ quotedNews }) {
         <div
           style={{
             display: "flex",
+            justifyContent: "flex-end",
             gap: "0.5rem",
             marginTop: "0.4rem",
             fontSize: "0.75rem",
             color: "var(--fg-muted)",
+            fontFamily: "'Urbanist', sans-serif",
           }}
         >
           {quotedNews.sitename && <span>{quotedNews.sitename}</span>}
