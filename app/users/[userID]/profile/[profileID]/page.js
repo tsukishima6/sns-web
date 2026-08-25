@@ -13,17 +13,7 @@ const fallbackOGP =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwai_admin.png?alt=media&token=a3a36f2a-d37f-49fb-a3a6-0914f24131a8";
 
 // フィボナッチ球の上にテキストを重ねる箇所で使う: 文字の周囲だけを白背景にして可読性を上げる。
-// box-decoration-break:cloneで折り返し行ごとに背景を分割することで、テキストの矩形全体ではなく
-// 行の文字幅にぴったり沿ったハイライトになる。
-// backdrop-filterは box-decoration-break:clone で行ごとに分割されず、Chromeでは複数行の
-// バウンディングボックス全体にまとめてブラーがかかってしまう(段落全体を覆う意図しないブラーになる)ため使わない
-const textOnBgHighlightStyle = {
-  background: "rgba(255, 255, 255, 0.78)",
-  boxDecorationBreak: "clone",
-  WebkitBoxDecorationBreak: "clone",
-  padding: "2px",
-  borderRadius: "4px",
-};
+// スタイル本体は globals.css の .text-onbg-highlight（ダークモードでは透過にするため .dark 上書きが必要でCSSクラス化している）
 
 // 日付フォーマット関数
 function formatDate(timestamp) {
@@ -351,12 +341,12 @@ export default async function ProfilePage({ params }) {
         kaiwai
       </h2>
       <p style={{ margin: "0 0 0.9rem", fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
-        <span style={textOnBgHighlightStyle}>
+        <span className="text-onbg-highlight">
           趣味、地域、職種、悩み・・{"\n"}各界隈のユーザーが集う国産SNS。
         </span>
       </p>
       <p style={{ margin: 0, fontSize: "0.90rem", lineHeight: "1.9", letterSpacing: "0.02em", fontFamily: "Urbanist, 'Noto Sans JP', Arial", whiteSpace: "pre-line" }}>
-        <span style={textOnBgHighlightStyle}>
+        <span className="text-onbg-highlight">
           {kaiwaiName}だけではありません。{"\n"}界隈は自由に追加・切り替え。{"\n"}ご自身で界隈を立ち上げ、{"\n"}メンバーを募ることも。
         </span>
       </p>

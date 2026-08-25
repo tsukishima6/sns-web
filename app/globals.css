@@ -38,6 +38,20 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* ブランド紹介セクション: ワードクラウド背景に重なるテキストの可読性用ハイライト（ライトモードのみ） */
+.text-onbg-highlight {
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 2px;
+  border-radius: 4px;
+}
+.dark .text-onbg-highlight {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
 /* 確認ダイアログの出現アニメーション */
 @keyframes dialog-in {
   from {
