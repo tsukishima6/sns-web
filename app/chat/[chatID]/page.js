@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
@@ -29,6 +30,7 @@ function formatTime(ts) {
 
 export default function ChatThreadPage() {
   const { user, userDoc } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const params = useParams();
   const chatID = params.chatID;
@@ -44,7 +46,10 @@ export default function ChatThreadPage() {
   const fetchedRef = useRef({}); // プロフィール二重取得防止
 
   useEffect(() => {
-    if (user === null) router.push("/login");
+    if (user === null) {
+      openSignupPrompt();
+      router.push("/");
+    }
   }, [user]);
 
   // チャット情報と相手プロフィールを取得

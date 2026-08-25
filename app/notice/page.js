@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -54,6 +55,7 @@ function formatTime(ts) {
 
 export default function NoticePage() {
   const { user, userDoc, loading: authLoading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +64,8 @@ export default function NoticePage() {
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     loadReceipts();

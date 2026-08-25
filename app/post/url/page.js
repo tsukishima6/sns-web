@@ -14,10 +14,12 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 
 export default function PostUrlPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
 
   const [step, setStep] = useState("url"); // "url" | "preview" | "kaiwai"
@@ -33,7 +35,10 @@ export default function PostUrlPage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) router.push("/login");
+    if (!user) {
+      openSignupPrompt();
+      router.push("/");
+    }
   }, [user, loading]);
 
   useEffect(() => {

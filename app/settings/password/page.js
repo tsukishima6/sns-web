@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 
 export default function SettingsPasswordPage() {
   const { user, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
@@ -18,7 +20,8 @@ export default function SettingsPasswordPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     setEmail(user.email || "");

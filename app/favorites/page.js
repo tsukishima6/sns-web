@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 import LikeButton from "../components/LikeButton";
 import FavoriteButton from "../components/FavoriteButton";
@@ -23,6 +24,7 @@ const fallbackPhoto =
 
 export default function FavoritesPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [profiles, setProfiles] = useState([]);
@@ -33,7 +35,8 @@ export default function FavoritesPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     if (userDoc) fetchFavorites();

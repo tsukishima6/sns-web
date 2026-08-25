@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { ToggleRow, ParentSelectModal } from "@/app/components/KaiwaiFormControls";
 
 // ネイティブ(kaiwai_edit_widget.dart)が編集対象にしているのはname/name_english/
@@ -19,6 +20,7 @@ import { ToggleRow, ParentSelectModal } from "@/app/components/KaiwaiFormControl
 export default function EditKaiwaiPage({ params }) {
   const { kaiwaiID } = params;
   const { user, userDoc, loading: authLoading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
 
   const [checking, setChecking] = useState(true);
@@ -38,7 +40,8 @@ export default function EditKaiwaiPage({ params }) {
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     if (!userDoc?.nowprofile) {

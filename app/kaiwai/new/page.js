@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 import {
   fallbackKaiwaiImage as fallbackImage,
@@ -23,6 +24,7 @@ import {
 
 export default function NewKaiwaiPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -41,7 +43,8 @@ export default function NewKaiwaiPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
     }
   }, [user, loading]);
 

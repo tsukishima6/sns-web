@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
@@ -29,6 +30,7 @@ const fallbackPhoto =
 
 export default function SettingsPage() {
   const { user, userDoc, loading, logout } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [profile, setProfile] = useState(null);
   const [profileRef, setProfileRef] = useState(null);
@@ -36,7 +38,8 @@ export default function SettingsPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     loadProfile();

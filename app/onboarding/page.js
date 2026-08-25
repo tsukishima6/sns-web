@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc, collection, query, orderBy, limit, getDocs } fr
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { joinKaiwai } from "@/lib/kaiwaiJoin";
 import { compressImageFile } from "@/lib/compressImage";
 
@@ -25,6 +26,7 @@ const DEFAULT_KAIWAI_ID = "000htmz";
 // 重複しないよう(自動参加は参加済みならスキップ)冪等に作ってある。
 export default function OnboardingPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
 
   const [step, setStep] = useState(1);
@@ -51,7 +53,8 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
     }
   }, [user, loading]);
 

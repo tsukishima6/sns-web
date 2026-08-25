@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 
 // ---- icons ----
 
@@ -73,6 +74,7 @@ function PersonIcon({ active }) {
 export default function FooterNav() {
   const pathname = usePathname();
   const { user, userDoc } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
 
   // ネイティブ発のアカウントはprofileが常にランダムID(uid=profileIDでは
   // ない)なので、users.nowprofileから実在するプロフィールへのパスを組み立てる。
@@ -82,10 +84,8 @@ export default function FooterNav() {
     ? userDoc?.nowprofile
       ? `/users/${userDoc.nowprofile.parent.parent.id}/profile/${userDoc.nowprofile.id}`
       : `/users/${user.uid}/profile/${user.uid}`
-    : "/login";
+    : null;
 
-  const chatHref = user ? "/chat" : "/login";
-  const noticeHref = user ? "/notice" : "/login";
   const homeHref = user ? "/feed" : "/";
 
   const tabs = [
@@ -94,30 +94,35 @@ export default function FooterNav() {
       href: homeHref,
       icon: (a) => <FeedIcon active={a} />,
       active: pathname === homeHref,
+      requiresAuth: false,
     },
     {
       label: "チャット",
-      href: chatHref,
+      href: "/chat",
       icon: (a) => <ChatIcon active={a} />,
       active: !!user && (pathname === "/chat" || pathname?.startsWith("/chat/")),
+      requiresAuth: true,
     },
     {
       label: "探す",
       href: "/explore",
       icon: (a) => <SearchIcon active={a} />,
       active: pathname === "/explore" || pathname?.startsWith("/explore/"),
+      requiresAuth: false,
     },
     {
       label: "お知らせ",
-      href: noticeHref,
+      href: "/notice",
       icon: (a) => <BellIcon active={a} />,
       active: !!user && (pathname === "/notice" || pathname?.startsWith("/notice/")),
+      requiresAuth: true,
     },
     {
       label: "マイページ",
-      href: profileHref,
+      href: profileHref || "/feed",
       icon: (a) => <PersonIcon active={a} />,
-      active: !!user && (pathname === profileHref || pathname?.startsWith(profileHref + "/")),
+      active: !!user && !!profileHref && (pathname === profileHref || pathname?.startsWith(profileHref + "/")),
+      requiresAuth: true,
     },
   ];
 
@@ -146,22 +151,43 @@ export default function FooterNav() {
     >
       {tabs.map((tab) => {
         const color = tab.active ? activeColor : inactiveColor;
+        const locked = tab.requiresAuth && !user;
+
+        const itemStyle = {
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textDecoration: "none",
+          color,
+          transition: "color 0.15s",
+        };
+
+        // 未ログインで保護タブを押した場合は/loginへ遷移させず、その場で
+        // サインアップダイアログ(グラスモーフィズム)を開く
+        if (locked) {
+          return (
+            <button
+              key={tab.label}
+              type="button"
+              onClick={() => openSignupPrompt()}
+              aria-label={tab.label}
+              style={{
+                ...itemStyle,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                appearance: "none",
+                WebkitAppearance: "none",
+              }}
+            >
+              {tab.icon(tab.active)}
+            </button>
+          );
+        }
 
         return (
-          <Link
-            key={tab.label}
-            href={tab.href}
-            aria-label={tab.label}
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              color,
-              transition: "color 0.15s",
-            }}
-          >
+          <Link key={tab.label} href={tab.href} aria-label={tab.label} style={itemStyle}>
             {tab.icon(tab.active)}
           </Link>
         );

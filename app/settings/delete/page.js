@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 
 // アカウント削除時、Firestore上の関連データを一通り削除する。
@@ -90,6 +91,7 @@ async function deleteUserData(uid) {
 
 export default function SettingsDeletePage() {
   const { user, loading, logout } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [step, setStep] = useState("confirm"); // "confirm" | "reauth" | "done"
   const [password, setPassword] = useState("");
@@ -100,7 +102,10 @@ export default function SettingsDeletePage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) router.push("/login");
+    if (!user) {
+      openSignupPrompt();
+      router.push("/");
+    }
   }, [user, loading]);
 
   async function handleReauthAndDelete() {

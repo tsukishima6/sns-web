@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import Link from "next/link";
 import LikeButton from "../components/LikeButton";
 import FavoriteButton from "../components/FavoriteButton";
@@ -27,6 +28,7 @@ const fallbackPhoto =
 
 export default function FeedPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [fetching, setFetching] = useState(true);
@@ -34,7 +36,8 @@ export default function FeedPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     fetchFeed();

@@ -12,6 +12,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { compressImageFile } from "@/lib/compressImage";
 import Link from "next/link";
 
@@ -25,6 +26,7 @@ export default function NewPostPage() {
 
 function NewPostForm() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const searchParams = useSearchParams();
   // ニュース詳細ページの「引用して投稿」から遷移してきた場合、
@@ -55,7 +57,8 @@ function NewPostForm() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     const list = userDoc?.kaiwai_list || [];

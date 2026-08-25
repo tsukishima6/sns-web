@@ -17,6 +17,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
+import { useSignupPrompt } from "@/lib/SignupPromptContext";
 import { compressImageFile } from "@/lib/compressImage";
 import Link from "next/link";
 
@@ -42,6 +43,7 @@ function TagChip({ tag, selectedTags, onToggle }) {
 
 export default function ProfileEditPage() {
   const { user, userDoc, loading } = useAuth();
+  const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -62,7 +64,8 @@ export default function ProfileEditPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.push("/login");
+      openSignupPrompt();
+      router.push("/");
       return;
     }
     loadProfile();

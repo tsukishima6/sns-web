@@ -8,9 +8,11 @@ import {
 import "./globals.css";
 import Script from "next/script";
 import FloatingAppPromo from "./components/FloatingAppPromo";
+import SignupPromptDialog from "./components/SignupPromptDialog";
 import Providers from "./providers";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { AppPromoProvider } from "@/lib/AppPromoContext";
+import { SignupPromptProvider } from "@/lib/SignupPromptContext";
 
 // 各フォントの設定
 const urbanist = Urbanist({
@@ -101,12 +103,15 @@ export default function RootLayout({ children }) {
         />
         <ThemeProvider>
           <AppPromoProvider>
-            <Providers>
-              <main className="pb-16">
-                {children}
-              </main>
-              <FloatingAppPromo />
-            </Providers>
+            <SignupPromptProvider>
+              <Providers>
+                <main className="pb-16">
+                  {children}
+                </main>
+                <FloatingAppPromo />
+                <SignupPromptDialog />
+              </Providers>
+            </SignupPromptProvider>
           </AppPromoProvider>
         </ThemeProvider>
 
