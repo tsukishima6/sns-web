@@ -46,16 +46,17 @@ export default function FeedPage() {
   async function fetchFeed() {
     setFetching(true);
     try {
-      const kaiwaiList = userDoc?.kaiwai_list || [];
-      if (kaiwaiList.length === 0) {
+      if (!userDoc?.kaiwai) {
         setPosts([]);
         setFetching(false);
         return;
       }
 
+      // ネイティブ(a_home_page_widget.dart「kaiwai」タブ)と同じく、参加している
+      // 全界隈(kaiwai_list)ではなく、現在アクティブな界隈(kaiwai、単数)だけで絞り込む
       const q = query(
         collectionGroup(db, "posts"),
-        where("kaiwai", "in", kaiwaiList.slice(0, 10)),
+        where("kaiwai", "==", userDoc.kaiwai),
         orderBy("timePosted", "desc"),
         limit(30)
       );
@@ -178,7 +179,9 @@ export default function FeedPage() {
           フィードに表示する投稿がありません。
         </p>
         <p className="text-gray-400 dark:text-[var(--fg-muted)] text-xs">
-          アプリから界隈に参加すると投稿が表示されます。
+          {userDoc?.kaiwai
+            ? "今参加中の界隈にはまだ投稿がないようです。"
+            : "界隈に参加すると投稿が表示されます。"}
         </p>
       </div>
     );

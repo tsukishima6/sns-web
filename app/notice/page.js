@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   collection,
   query,
+  where,
   orderBy,
   getDocs,
   getDoc,
@@ -58,6 +59,7 @@ export default function NoticePage() {
   const { openSignupPrompt } = useSignupPrompt();
   const router = useRouter();
   const [receipts, setReceipts] = useState([]);
+  const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [responding, setResponding] = useState(null);
 
@@ -69,12 +71,44 @@ export default function NoticePage() {
       return;
     }
     loadReceipts();
-  }, [user, authLoading]);
+    loadNews();
+  }, [user, authLoading, userDoc?.kaiwai]);
+
+  // ネイティブ(a_notice_widget.dart)は現在アクティブな界隈(kaiwai、単数)の
+  // ニュースを最新5件、お知らせ画面の先頭に表示する
+  async function loadNews() {
+    if (!userDoc?.kaiwai) {
+      setNews([]);
+      return;
+    }
+    try {
+      const snap = await getDocs(
+        query(
+          collection(db, "kaiwai", userDoc.kaiwai.id, "news"),
+          orderBy("score", "desc"),
+          limit(5)
+        )
+      );
+      setNews(
+        snap.docs.map((d) => ({ id: d.id, kaiwaiId: userDoc.kaiwai.id, ...d.data() }))
+      );
+    } catch (e) {
+      console.error("notice news fetch error:", e);
+    }
+  }
 
   async function loadReceipts() {
+    if (!userDoc?.kaiwai) {
+      setReceipts([]);
+      setLoading(false);
+      return;
+    }
     try {
+      // ネイティブ(a_notice_widget.dart)と同じく、現在アクティブな界隈(kaiwai、単数)の
+      // 通知だけに絞り込む(他の参加界隈の通知は混ぜない)
       const q = query(
         collection(db, "users", user.uid, "receipt"),
+        where("kaiwai", "==", userDoc.kaiwai),
         orderBy("time", "desc"),
         limit(30)
       );
@@ -154,6 +188,58 @@ export default function NoticePage() {
       >
         お知らせ
       </h1>
+
+      {news.length > 0 && (
+        <div style={{ padding: "1rem 0 0.25rem", borderBottom: "1px solid var(--border-subtle)" }}>
+          <p
+            style={{
+              margin: "0 0 0.6rem",
+              padding: "0 1rem",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              color: "var(--fg-secondary)",
+              fontFamily: "'Urbanist', sans-serif",
+            }}
+          >
+            界隈news
+          </p>
+          <div style={{ display: "flex", gap: "0.75rem", overflowX: "auto", padding: "0 1rem 1rem" }}>
+            {news.map((n) => {
+              const title = n.title && n.title.length > 32 ? `${n.title.slice(0, 32)}…` : n.title;
+              return (
+                <Link
+                  key={n.id}
+                  href={`/news/${n.kaiwaiId}/${n.id}`}
+                  style={{
+                    minWidth: "180px",
+                    maxWidth: "180px",
+                    flexShrink: 0,
+                    borderRadius: "16px",
+                    overflow: "hidden",
+                    textDecoration: "none",
+                    color: "var(--fg-primary)",
+                    background: "var(--surface-muted)",
+                    border: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  {n.img && (
+                    <img
+                      src={n.img}
+                      alt={n.title || ""}
+                      style={{ display: "block", width: "100%", height: "90px", objectFit: "cover" }}
+                    />
+                  )}
+                  <div style={{ padding: "0.6rem 0.7rem" }}>
+                    <p style={{ margin: 0, fontSize: "0.78rem", lineHeight: "1.4", fontFamily: "'Urbanist', 'Noto Sans JP', sans-serif" }}>
+                      {title}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p style={{ padding: "3rem", textAlign: "center", color: "var(--fg-muted)", fontSize: "0.9rem" }}>
