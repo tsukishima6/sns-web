@@ -82,7 +82,17 @@ export default async function NewsDetailPage({ params }) {
   const formatTime = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate();
-    return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+    // Server ComponentはVercel上ではUTCで実行されるため、getFullYear()等の
+    // ローカルgetterを使うとJSTから9時間ズレ、0時台〜8時台の記事は日付自体が
+    // 前日にズレてしまう。timeZoneを明示して変換する
+    const parts = new Intl.DateTimeFormat("ja-JP", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }).formatToParts(date);
+    const get = (type) => parts.find((p) => p.type === type)?.value;
+    return `${get("year")}.${get("month")}.${get("day")}`;
   };
 
   // この記事を引用した投稿(picks)

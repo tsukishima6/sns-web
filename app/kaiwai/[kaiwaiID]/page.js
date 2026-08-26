@@ -794,6 +794,7 @@ try {
                       {new Date(
                         post.timePosted.seconds * 1000
                       ).toLocaleString("ja-JP", {
+                        timeZone: "Asia/Tokyo",
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",

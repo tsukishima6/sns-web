@@ -16,15 +16,22 @@ const fallbackOGP =
 // スタイル本体は globals.css の .text-onbg-highlight（ダークモードでは透過にするため .dark 上書きが必要でCSSクラス化している）
 
 // 日付フォーマット関数
+// Server ComponentはVercel上ではUTCで実行されるため、getHours()等の
+// ローカルgetterを使うとJSTから9時間ズレる。timeZoneを明示して変換する
 function formatDate(timestamp) {
   if (!timestamp) return "";
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  const hh = String(date.getHours()).padStart(2, "0");
-  const mm = String(date.getMinutes()).padStart(2, "0");
-  return `${y}年${m}月${d}日 ${hh}:${mm}`;
+  const parts = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const get = (type) => parts.find((p) => p.type === type)?.value;
+  return `${get("year")}年${get("month")}月${get("day")}日 ${get("hour")}:${get("minute")}`;
 }
 
 // 動的メタデータ生成
