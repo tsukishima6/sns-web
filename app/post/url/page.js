@@ -95,6 +95,15 @@ export default function PostUrlPage() {
         time: serverTimestamp(),
         picker: userDoc?.nowprofile || null,
         kaiwai: kaiwaiRef,
+        source: "user",
+        // 人が選んで投稿した記事は自動取得の「タイトル一致」相当以上に関連性が高いとみなす。
+        // scoreを持たないドキュメントはkaiwai詳細ページのorderBy("score","desc")から
+        // 除外されてしまう(Firestoreの仕様)ため、必ず設定する
+        relevanceScore: 50,
+        popularityScore: 0,
+        recencyScore: 10,
+        sourceCount: 1,
+        score: 60,
       });
       router.push(`/kaiwai/${selectedKaiwai.id}`);
     } catch (e) {

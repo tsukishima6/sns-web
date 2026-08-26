@@ -209,7 +209,7 @@ try {
   const newsSnap = await getDocs(
     query(
       collection(db, "kaiwai", kaiwaiID, "news"),
-      orderBy("time", "desc"),
+      orderBy("score", "desc"),
       limit(5)
     )
   );
