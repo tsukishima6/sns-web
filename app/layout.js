@@ -46,7 +46,7 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://kaiwai.vercel.app"),
+  metadataBase: new URL("https://kaiwai.space"),
   title: "kaiwai｜界隈の数だけ、SNSがあっていい",
   description:
     "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
@@ -60,7 +60,7 @@ export const metadata = {
     title: "kaiwai｜界隈の数だけ、SNSがあっていい",
     description:
       "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版です。",
-    url: "https://kaiwai.vercel.app",
+    url: "https://kaiwai.space",
     siteName: "kaiwai",
     images: [
       {

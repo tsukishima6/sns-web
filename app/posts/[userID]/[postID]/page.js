@@ -285,7 +285,7 @@ export default async function PostPage({ params }) {
         "image": post.postPhoto || undefined,
         "datePublished": post.timePosted ? post.timePosted.toDate().toISOString() : undefined,
         "author": profileData?.name ? { "@type": "Person", "name": profileData.name } : undefined,
-        "url": `https://kaiwai.vercel.app/posts/${userID}/${postID}`,
+        "url": `https://kaiwai.space/posts/${userID}/${postID}`,
         "commentCount": initialComments.length,
       }
     : null;

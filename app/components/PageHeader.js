@@ -28,7 +28,7 @@ export default function PageHeader({ kaiwaiName, kaiwaiID }) {
       >
         {/* ロゴ */}
         <div style={{ flexShrink: 0 }}>
-          <Link href="https://kaiwai.vercel.app/" style={{ display: "inline-block" }}>
+          <Link href="https://kaiwai.space/" style={{ display: "inline-block" }}>
             <Image
               src="https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/kaiwailogo.png?alt=media&token=9cea2404-8c0c-466e-b69f-091715e423ad"
               alt="KAIWAI Logo"

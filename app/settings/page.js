@@ -162,7 +162,7 @@ export default function SettingsPage() {
       {/* メニューセクション：サポート */}
       <MenuSection label="サポート">
         <MenuItem
-          href="https://kaiwai.vercel.app/terms"
+          href="https://kaiwai.space/terms"
           label="利用規約"
           icon={<DocIcon />}
           external

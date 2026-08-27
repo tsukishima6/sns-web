@@ -6,7 +6,7 @@ import { isPostIndexable, isBusinessIndexable, isEventIndexable } from "../lib/p
 export const revalidate = 3600;
 
 export default async function sitemap() {
-  const baseUrl = "https://kaiwai.vercel.app";
+  const baseUrl = "https://kaiwai.space";
 
   let kaiwaiUrls = [];
   try {

@@ -77,7 +77,7 @@ export default async function EventDetailPage({ params }) {
     "endDate": ev.event_end ? ev.event_end.toDate().toISOString() : undefined,
     "eventStatus": "https://schema.org/EventScheduled",
     "image": photos[0] || fallbackImg,
-    "url": `https://kaiwai.vercel.app/events/${eventID}`,
+    "url": `https://kaiwai.space/events/${eventID}`,
     ...(ev.event_location
       ? {
           "location": {

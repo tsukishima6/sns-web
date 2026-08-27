@@ -152,7 +152,7 @@ export default async function BusinessDetailPage({ params }) {
     "name": biz.display_name,
     "description": biz.discription || undefined,
     "image": photos[0] || fallbackImg,
-    "url": `https://kaiwai.vercel.app/business/${bizID}`,
+    "url": `https://kaiwai.space/business/${bizID}`,
     ...(biz.location_adress ? { "address": { "@type": "PostalAddress", "streetAddress": biz.location_adress } } : {}),
     ...(avgRating ? { "aggregateRating": { "@type": "AggregateRating", "ratingValue": avgRating, "reviewCount": ratingList.length } } : {}),
   };

@@ -12,7 +12,7 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "kaiwai",
-    "url": "https://kaiwai.vercel.app",
+    "url": "https://kaiwai.space",
     "description": "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS『kaiwai』のWeb版",
   },
   {
@@ -21,7 +21,7 @@ const jsonLd = [
     "name": "kaiwai",
     "applicationCategory": "SocialNetworkingApplication",
     "operatingSystem": "iOS, Android",
-    "url": "https://kaiwai.vercel.app",
+    "url": "https://kaiwai.space",
     "description": "趣味・地域・職種・・各界隈の情報にドップリ浸かる、新しい国産SNS",
     "downloadUrl": "https://apps.apple.com/jp/app/kaiwai/id6469412765",
     "offers": {

@@ -316,7 +316,7 @@ try {
     "@type": "WebPage",
     "name": `${kaiwai.name}界隈のSNS｜kaiwai`,
     "description": buildKaiwaiDescription(kaiwai),
-    "url": `https://kaiwai.vercel.app/kaiwai/${kaiwaiID}`,
+    "url": `https://kaiwai.space/kaiwai/${kaiwaiID}`,
     "dateModified": kaiwai.last_joined_at
       ? new Date(kaiwai.last_joined_at.seconds * 1000).toISOString()
       : undefined,
@@ -326,13 +326,13 @@ try {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "kaiwai", "item": "https://kaiwai.vercel.app/" },
-      { "@type": "ListItem", "position": 2, "name": "界隈を探す", "item": "https://kaiwai.vercel.app/explore" },
+      { "@type": "ListItem", "position": 1, "name": "kaiwai", "item": "https://kaiwai.space/" },
+      { "@type": "ListItem", "position": 2, "name": "界隈を探す", "item": "https://kaiwai.space/explore" },
       {
         "@type": "ListItem",
         "position": 3,
         "name": `${kaiwai.name}界隈`,
-        "item": `https://kaiwai.vercel.app/kaiwai/${kaiwaiID}`,
+        "item": `https://kaiwai.space/kaiwai/${kaiwaiID}`,
       },
     ],
   };
