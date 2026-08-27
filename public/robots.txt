@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://kaiwai.vercel.app
+Host: https://kaiwai.space
 
 # Sitemaps
-Sitemap: https://kaiwai.vercel.app/sitemap.xml
+Sitemap: https://kaiwai.space/sitemap.xml
