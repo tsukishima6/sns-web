@@ -20,6 +20,7 @@ import PageHeader from "../../components/PageHeader";
 import KaiwaiEditLink from "../../components/KaiwaiEditLink";
 import KaiwaiJoinButton from "../../components/KaiwaiJoinButton";
 import NewsQuoteEmbed from "../../components/NewsQuoteEmbed";
+import NewsThumbnail from "../../components/NewsThumbnail";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -511,20 +512,16 @@ try {
               flexDirection: "column",
             }}
           >
-            {n.img && (
-              <img
-                src={n.img}
-                alt={n.title || `${kaiwai.name}界隈のニュース`}
-                width={220}
-                height={120}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  height: "120px",
-                  objectFit: "cover",
-                }}
-              />
-            )}
+            <NewsThumbnail
+              src={n.img || "/news.jpg"}
+              alt={n.title || `${kaiwai.name}界隈のニュース`}
+              style={{
+                display: "block",
+                width: "100%",
+                height: "120px",
+                objectFit: "cover",
+              }}
+            />
 
             <div style={{ padding: "1.4rem" }}>
               <h3
