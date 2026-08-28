@@ -205,23 +205,35 @@ export default async function KaiwaiPage({ params }) {
   // 投稿取得
   let posts = [];
   // 🔹 news取得（最大5件）
+  // score(関連度+注目度+鮮度)は24時間を過ぎると鮮度加点が0になる旧仕様のせいで、
+  // 一度注目度加点を得た古い記事がscore上位に何ヶ月も居座り続けることがあった。
+  // 直近30日以内のみに絞ってからJS側でscore順にすることで、鮮度スコア自体を
+  // 全件遡って再計算しなくても「古すぎる記事が出続ける」問題を解消している
+  // (FirestoreはrangeフィルタとorderByが別フィールドの複合クエリを許可しないため)
 let newsList = [];
 try {
+  const NEWS_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+  const newsWindowStart = Timestamp.fromDate(new Date(Date.now() - NEWS_WINDOW_MS));
   const newsSnap = await getDocs(
     query(
       collection(db, "kaiwai", kaiwaiID, "news"),
-      orderBy("score", "desc"),
-      limit(5)
+      where("time", ">=", newsWindowStart),
+      orderBy("time", "desc"),
+      limit(30)
     )
   );
+
+  const recentNews = newsSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
+    .slice(0, 5);
 
   // Google News RSS由来のニュースはimgフィールドが空のことが多いため、
   // 無ければリンク先からog:imageを動的に取得する(最大5件なので同時実行のまま)
   newsList = await Promise.all(
-    newsSnap.docs.map(async (d) => {
-      const data = d.data();
+    recentNews.map(async (data) => {
       const img = data.img || (data.url ? (await fetchOgImage(data.url)) || "" : "");
-      return { id: d.id, ...data, img };
+      return { ...data, img };
     })
   );
 } catch (err) {

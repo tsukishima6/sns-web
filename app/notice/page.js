@@ -14,6 +14,7 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/AuthContext";
@@ -76,22 +77,29 @@ export default function NoticePage() {
 
   // ネイティブ(a_notice_widget.dart)は現在アクティブな界隈(kaiwai、単数)の
   // ニュースを最新5件、お知らせ画面の先頭に表示する
+  // 直近30日以内に絞ってからscore順にする理由は app/kaiwai/[kaiwaiID]/page.js と同じ
+  // (鮮度加点が24時間で頭打ちだった旧仕様により、古い記事が上位に残り続けるのを防ぐため)
   async function loadNews() {
     if (!userDoc?.kaiwai) {
       setNews([]);
       return;
     }
     try {
+      const NEWS_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+      const newsWindowStart = Timestamp.fromDate(new Date(Date.now() - NEWS_WINDOW_MS));
       const snap = await getDocs(
         query(
           collection(db, "kaiwai", userDoc.kaiwai.id, "news"),
-          orderBy("score", "desc"),
-          limit(5)
+          where("time", ">=", newsWindowStart),
+          orderBy("time", "desc"),
+          limit(30)
         )
       );
-      setNews(
-        snap.docs.map((d) => ({ id: d.id, kaiwaiId: userDoc.kaiwai.id, ...d.data() }))
-      );
+      const recentNews = snap.docs
+        .map((d) => ({ id: d.id, kaiwaiId: userDoc.kaiwai.id, ...d.data() }))
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 5);
+      setNews(recentNews);
     } catch (e) {
       console.error("notice news fetch error:", e);
     }
