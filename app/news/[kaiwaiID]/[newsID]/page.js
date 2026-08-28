@@ -12,6 +12,7 @@ import { fetchOgImage } from "../../../../lib/fetchOgImage";
 import { BOT_POST_ACCOUNT_UIDS } from "../../../../lib/postIndexing";
 import Link from "next/link";
 import PageHeader from "../../../components/PageHeader";
+import NewsThumbnail from "../../../components/NewsThumbnail";
 
 const fallbackProfilePhoto =
   "https://firebasestorage.googleapis.com/v0/b/tsukishima6-3d139.appspot.com/o/84549708.png?alt=media&token=642659d7-deb2-4d86-94a1-c43634e66d24";
@@ -133,7 +134,7 @@ export default async function NewsDetailPage({ params }) {
       <PageHeader kaiwaiName={kaiwaiName} kaiwaiID={kaiwaiID} />
 
       <div style={{ width: "100%", marginTop: "75px" }}>
-        <img
+        <NewsThumbnail
           src={news.img || "/news.jpg"}
           alt=""
           style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
