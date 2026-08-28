@@ -7,7 +7,6 @@ import {
   where,
   orderBy,
   getDocs,
-  getCountFromServer,
 } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import Image from "next/image";
@@ -22,7 +21,7 @@ import RepostEmbed from "../../../components/RepostEmbed";
 import NewsQuoteEmbed from "../../../components/NewsQuoteEmbed";
 import BizPostBadge from "../../../components/BizPostBadge";
 import BizQuoteEmbed from "../../../components/BizQuoteEmbed";
-import { isPostIndexable } from "../../../../lib/postIndexing";
+import { isPostIndexable, BOT_POST_ACCOUNT_UIDS } from "../../../../lib/postIndexing";
 
 // fallback画像
 const fallbackProfilePhoto =
@@ -69,11 +68,16 @@ export async function generateMetadata({ params }) {
   const description =
     `${profileData?.name || "ユーザー"}：${post.postDescription?.trim() || ""} @${kaiwaiName}kaiwai`;
 
-  // コメントが付いていれば内容が薄くても厚みがあるとみなす(件数のみ、集計クエリなので低コスト)
-  const commentCountSnap = await getCountFromServer(
+  // コメントが付いていれば内容が薄くても厚みがあるとみなす。
+  // ただしBotコメント(いいね/投稿/コメントBot共用アカウント)は評価に含めない
+  // (AI生成コメントだけで薄い投稿がindex対象になるのを防ぐため、件数のみのgetCountFromServerではなく
+  // 投稿者を判定できるgetDocsに切り替えている)
+  const commentsForIndexingSnap = await getDocs(
     query(collectionGroup(db, "postcomments"), where("post", "==", postRef))
   );
-  const commentCount = commentCountSnap.data().count;
+  const commentCount = commentsForIndexingSnap.docs.filter(
+    (d) => !BOT_POST_ACCOUNT_UIDS.includes(d.data().user?.id)
+  ).length;
 
   const indexable = isPostIndexable({ post, authorUid: userID, commentCount });
 
@@ -274,8 +278,13 @@ export default async function PostPage({ params }) {
 
   // 構造化データはrobotsメタでnoindexにしているページ(=薄いページ)には出さない。
   // noindexなページにDiscussionForumPostingを出しても評価対象にならないため無駄なだけでなく、
-  // 「中身が薄いのに構造化データだけ整っている」page品質のちぐはぐさを避ける
-  const indexable = isPostIndexable({ post, authorUid: userID, commentCount: initialComments.length });
+  // 「中身が薄いのに構造化データだけ整っている」page品質のちぐはぐさを避ける。
+  // 厚みの判定にはBotコメント(いいね/投稿/コメントBot共用アカウント)を含めない
+  // (jsonLd自体の"commentCount"は表示上の実件数のままでよいので、ここだけ別途フィルタする)
+  const nonBotCommentCount = initialComments.filter(
+    (c) => !BOT_POST_ACCOUNT_UIDS.includes(c.userID)
+  ).length;
+  const indexable = isPostIndexable({ post, authorUid: userID, commentCount: nonBotCommentCount });
   const jsonLd = indexable
     ? {
         "@context": "https://schema.org",
