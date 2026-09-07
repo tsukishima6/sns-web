@@ -126,43 +126,13 @@ export async function generateMetadata({ params }) {
   }
 }
 
-// --- ページ本体 ---
-export default async function KaiwaiPage({ params }) {
-  const { kaiwaiID } = params;
-
-  const kaiwaiRef = doc(db, "kaiwai", kaiwaiID);
-  const kaiwaiSnap = await getDoc(kaiwaiRef);
-
-  if (!kaiwaiSnap.exists()) {
-    return (
-      <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>
-        KAIWAIが見つかりません
-      </div>
-    );
-  }
-
-  const kaiwai = kaiwaiSnap.data();
-
-  // parent が DocumentReference なら追加で取得
-  let parentKaiwai = null;
-  if (kaiwai.parent) {
-    try {
-      const parentSnap = await getDoc(kaiwai.parent);
-      if (parentSnap.exists()) {
-        parentKaiwai = { id: parentSnap.id, ...parentSnap.data() };
-      }
-    } catch (err) {
-      console.error("parent fetch error:", err);
-    }
-  }
-
-  // 🔹 タグ一覧取得（kaiwai固有・準静的な語彙。posts/newsと違い投稿のたび変わらない）
-  // orderByをFirestoreクエリに持たせると`amount`フィールドが無いドキュメントが結果から
-  // 丸ごと消える(explore一覧の`orderBy("number")`と同じ既知の罠)ため、全件取得してJS側でソートする
-  let tags = [];
+// 🔹 タグ一覧取得（kaiwai固有・準静的な語彙。posts/newsと違い投稿のたび変わらない）
+// orderByをFirestoreクエリに持たせると`amount`フィールドが無いドキュメントが結果から
+// 丸ごと消える(explore一覧の`orderBy("number")`と同じ既知の罠)ため、全件取得してJS側でソートする
+async function fetchTags(kaiwaiID) {
   try {
     const tagsSnap = await getDocs(collection(db, "kaiwai", kaiwaiID, "category"));
-    tags = tagsSnap.docs
+    return tagsSnap.docs
       .map((d) => ({ id: d.id, name: d.data().category_name || "", amount: d.data().amount || 0 }))
       .filter((t) => t.name)
       // 選択回数(amount)が多い順。同数の場合は表示を安定させるため名前順にする
@@ -170,76 +140,50 @@ export default async function KaiwaiPage({ params }) {
       .slice(0, 10);
   } catch (err) {
     console.error("tags fetch error:", err);
+    return [];
   }
-
-  // 🔹 子kaiwai取得（自分がoya=trueの場合のサブkaiwai一覧）
-  let childKaiwaiList = [];
-  if (kaiwai.oya === true) {
-    try {
-      const childSnap = await getDocs(
-        query(collection(db, "kaiwai"), where("parent", "==", kaiwaiRef))
-      );
-      childKaiwaiList = childSnap.docs
-        .filter((d) => d.data().noindex !== true)
-        .map((d) => ({ id: d.id, name: d.data().name || "" }));
-    } catch (err) {
-      console.error("child kaiwai fetch error:", err);
-    }
-  }
-
-  // 🔹 兄弟kaiwai取得（親kaiwaiが同じで自分以外の子kaiwai）
-  let siblingKaiwaiList = [];
-  if (kaiwai.parent) {
-    try {
-      const siblingSnap = await getDocs(
-        query(collection(db, "kaiwai"), where("parent", "==", kaiwai.parent))
-      );
-      siblingKaiwaiList = siblingSnap.docs
-        .filter((d) => d.id !== kaiwaiID && d.data().noindex !== true)
-        .map((d) => ({ id: d.id, name: d.data().name || "" }));
-    } catch (err) {
-      console.error("sibling kaiwai fetch error:", err);
-    }
-  }
-
-  // 投稿取得
-  let posts = [];
-  // 🔹 news取得（最大5件）
-  // score(関連度+注目度+鮮度)は24時間を過ぎると鮮度加点が0になる旧仕様のせいで、
-  // 一度注目度加点を得た古い記事がscore上位に何ヶ月も居座り続けることがあった。
-  // 直近30日以内のみに絞ってからJS側でscore順にすることで、鮮度スコア自体を
-  // 全件遡って再計算しなくても「古すぎる記事が出続ける」問題を解消している
-  // (FirestoreはrangeフィルタとorderByが別フィールドの複合クエリを許可しないため)
-let newsList = [];
-try {
-  const NEWS_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
-  const newsWindowStart = Timestamp.fromDate(new Date(Date.now() - NEWS_WINDOW_MS));
-  const newsSnap = await getDocs(
-    query(
-      collection(db, "kaiwai", kaiwaiID, "news"),
-      where("time", ">=", newsWindowStart),
-      orderBy("time", "desc"),
-      limit(30)
-    )
-  );
-
-  const recentNews = newsSnap.docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .sort((a, b) => (b.score || 0) - (a.score || 0))
-    .slice(0, 5);
-
-  // Google News RSS由来のニュースはimgフィールドが空のことが多いため、
-  // 無ければリンク先からog:imageを動的に取得する(最大5件なので同時実行のまま)
-  newsList = await Promise.all(
-    recentNews.map(async (data) => {
-      const img = data.img || (data.url ? (await fetchOgImage(data.url)) || "" : "");
-      return { ...data, img };
-    })
-  );
-} catch (err) {
-  console.error("news fetch error:", err);
 }
 
+// 🔹 news取得（最大5件）
+// score(関連度+注目度+鮮度)は24時間を過ぎると鮮度加点が0になる旧仕様のせいで、
+// 一度注目度加点を得た古い記事がscore上位に何ヶ月も居座り続けることがあった。
+// 直近30日以内のみに絞ってからJS側でscore順にすることで、鮮度スコア自体を
+// 全件遡って再計算しなくても「古すぎる記事が出続ける」問題を解消している
+// (FirestoreはrangeフィルタとorderByが別フィールドの複合クエリを許可しないため)
+async function fetchNewsList(kaiwaiID) {
+  try {
+    const NEWS_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+    const newsWindowStart = Timestamp.fromDate(new Date(Date.now() - NEWS_WINDOW_MS));
+    const newsSnap = await getDocs(
+      query(
+        collection(db, "kaiwai", kaiwaiID, "news"),
+        where("time", ">=", newsWindowStart),
+        orderBy("time", "desc"),
+        limit(30)
+      )
+    );
+
+    const recentNews = newsSnap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
+      .slice(0, 5);
+
+    // Google News RSS由来のニュースはimgフィールドが空のことが多いため、
+    // 無ければリンク先からog:imageを動的に取得する(最大5件なので同時実行のまま)
+    return await Promise.all(
+      recentNews.map(async (data) => {
+        const img = data.img || (data.url ? (await fetchOgImage(data.url)) || "" : "");
+        return { ...data, img };
+      })
+    );
+  } catch (err) {
+    console.error("news fetch error:", err);
+    return [];
+  }
+}
+
+// 🔹 投稿取得
+async function fetchPosts(kaiwaiRef) {
   try {
     const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
     const ninetyDaysAgo = Timestamp.fromDate(new Date(Date.now() - NINETY_DAYS_MS));
@@ -257,8 +201,25 @@ try {
     );
     const postsSnap = await getDocs(q);
 
+    // 同じ投稿者(profile)や同じ引用ニュース(quote_news)を複数の投稿がreferenceしている
+    // ケースが多いため、ref.pathをキーにgetDoc結果をキャッシュし同一ドキュメントへの
+    // 重複読み取りをなくす(表示内容はdedup前と同一、Active CPU/読み取り回数だけ削減。2026-09-07)
+    const docCache = new Map();
+    function getDocCached(ref) {
+      if (!docCache.has(ref.path)) {
+        docCache.set(
+          ref.path,
+          getDoc(ref).catch((e) => {
+            console.error("doc fetch error", ref.path, e);
+            return null;
+          })
+        );
+      }
+      return docCache.get(ref.path);
+    }
+
     // 投稿ごとのpostUser_profile取得(getDoc)を無制限に同時実行しない(mapWithConcurrency参照)
-    posts = await mapWithConcurrency(postsSnap.docs, 10, async (d) => {
+    const posts = await mapWithConcurrency(postsSnap.docs, 10, async (d) => {
       const data = d.data();
       let userID = d.ref.parent.parent ? d.ref.parent.parent.id : null;
       // dataを丸ごとspreadしない: postUser/postUser_profile/kaiwai等のDocumentReference
@@ -275,54 +236,125 @@ try {
       };
 
       if (data.postUser_profile) {
-        try {
-          const profileSnap = await getDoc(data.postUser_profile);
-          if (profileSnap.exists()) {
-            const profileData = profileSnap.data() || {};
-            postObj.profile = {
-              id: profileSnap.id,
-              name: profileData.name || "",
-              photo: profileData.photo || "",
-              ID: profileData.ID || "",
-            };
-          }
-        } catch (e) {
-          console.error("profile fetch error for post", d.id, e);
+        const profileSnap = await getDocCached(data.postUser_profile);
+        if (profileSnap && profileSnap.exists()) {
+          const profileData = profileSnap.data() || {};
+          postObj.profile = {
+            id: profileSnap.id,
+            name: profileData.name || "",
+            photo: profileData.photo || "",
+            ID: profileData.ID || "",
+          };
         }
       }
 
       // ニュース引用元を取得(data.quote_newsが元ニュースへのDocumentReference、
       // app/posts/[userID]/[postID]/page.jsと同じ取得パターン)
       if (data.quote_news) {
-        try {
-          const newsSnap = await getDoc(data.quote_news);
-          if (newsSnap.exists()) {
-            const newsData = newsSnap.data();
-            postObj.quotedNews = {
-              id: newsSnap.id,
-              kaiwaiId: newsSnap.ref.parent.parent?.id || null,
-              title: newsData.title || "",
-              sitename: newsData.sitename || "",
-              img: newsData.img || "",
-              time: newsData.time
-                ? { seconds: newsData.time.seconds, nanoseconds: newsData.time.nanoseconds }
-                : null,
-            };
-          }
-        } catch (e) {
-          console.error("quote_news fetch error for post", d.id, e);
+        const newsSnap = await getDocCached(data.quote_news);
+        if (newsSnap && newsSnap.exists()) {
+          const newsData = newsSnap.data();
+          postObj.quotedNews = {
+            id: newsSnap.id,
+            kaiwaiId: newsSnap.ref.parent.parent?.id || null,
+            title: newsData.title || "",
+            sitename: newsData.sitename || "",
+            img: newsData.img || "",
+            time: newsData.time
+              ? { seconds: newsData.time.seconds, nanoseconds: newsData.time.nanoseconds }
+              : null,
+          };
         }
       }
 
       return postObj;
     });
 
-    posts = posts.filter((post) => post.profile);
-
-    console.log(`Kaiwai ${kaiwaiID} posts after filter:`, posts.length);
+    const filtered = posts.filter((post) => post.profile);
+    console.log(`Kaiwai ${kaiwaiRef.id} posts after filter:`, filtered.length);
+    return filtered;
   } catch (err) {
     console.error("posts fetch error:", err);
+    return [];
   }
+}
+
+// parent が DocumentReference なら追加で取得
+async function fetchParentKaiwai(kaiwai) {
+  if (!kaiwai.parent) return null;
+  try {
+    const parentSnap = await getDoc(kaiwai.parent);
+    if (parentSnap.exists()) {
+      return { id: parentSnap.id, ...parentSnap.data() };
+    }
+  } catch (err) {
+    console.error("parent fetch error:", err);
+  }
+  return null;
+}
+
+// 🔹 子kaiwai取得（自分がoya=trueの場合のサブkaiwai一覧）
+async function fetchChildKaiwaiList(kaiwai, kaiwaiRef) {
+  if (kaiwai.oya !== true) return [];
+  try {
+    const childSnap = await getDocs(
+      query(collection(db, "kaiwai"), where("parent", "==", kaiwaiRef))
+    );
+    return childSnap.docs
+      .filter((d) => d.data().noindex !== true)
+      .map((d) => ({ id: d.id, name: d.data().name || "" }));
+  } catch (err) {
+    console.error("child kaiwai fetch error:", err);
+    return [];
+  }
+}
+
+// 🔹 兄弟kaiwai取得（親kaiwaiが同じで自分以外の子kaiwai）
+async function fetchSiblingKaiwaiList(kaiwai, kaiwaiID) {
+  if (!kaiwai.parent) return [];
+  try {
+    const siblingSnap = await getDocs(
+      query(collection(db, "kaiwai"), where("parent", "==", kaiwai.parent))
+    );
+    return siblingSnap.docs
+      .filter((d) => d.id !== kaiwaiID && d.data().noindex !== true)
+      .map((d) => ({ id: d.id, name: d.data().name || "" }));
+  } catch (err) {
+    console.error("sibling kaiwai fetch error:", err);
+    return [];
+  }
+}
+
+// --- ページ本体 ---
+export default async function KaiwaiPage({ params }) {
+  const { kaiwaiID } = params;
+  const kaiwaiRef = doc(db, "kaiwai", kaiwaiID);
+  const kaiwaiSnap = await getDoc(kaiwaiRef);
+
+  if (!kaiwaiSnap.exists()) {
+    return (
+      <div style={{ padding: "2rem", fontSize: "1.5rem", color: "var(--fg-primary)" }}>
+        KAIWAIが見つかりません
+      </div>
+    );
+  }
+
+  const kaiwai = kaiwaiSnap.data();
+
+  // タグ・news・posts・parent/child/siblingは互いに依存しない(元は全部直列awaitで
+  // 待ち時間が積み上がっていた)ので並列取得する。kaiwaiの存在チェックは先に済ませてあるので、
+  // 存在しないkaiwaiID(無効アクセス)でこれらの重いクエリが無駄に走ることもない。
+  // Active CPU自体はI/O待ち中は課金されないが、Provisioned Memoryはインスタンス生存時間
+  // 全体に課金されるため、直列→並列化はTTFB短縮とコスト削減の両方に効く(2026-09-07)
+  const [tags, newsList, posts, parentKaiwai, childKaiwaiList, siblingKaiwaiList] =
+    await Promise.all([
+      fetchTags(kaiwaiID),
+      fetchNewsList(kaiwaiID),
+      fetchPosts(kaiwaiRef),
+      fetchParentKaiwai(kaiwai),
+      fetchChildKaiwaiList(kaiwai, kaiwaiRef),
+      fetchSiblingKaiwaiList(kaiwai, kaiwaiID),
+    ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
